@@ -1,0 +1,53 @@
+/*
+Explícame de forma sencilla cómo se juega al tres en raya (Tic Tac Toe).
+No utilices listas “complejas” ni markdown. Escríbelo con texto plano.
+*/
+
+¡title-ttt:
+^Instrucciones 'Tic-Tac-Toe'~
+
+¡content-ttt:
+^
+Tres en raya se juega en una cuadrícula de 3 por 3 casillas.
+Hay dos jugadores: uno usa X y el otro usa O.
+
+Por turnos, cada jugador pone su símbolo en una casilla vacía.
+
+El objetivo es conseguir que tus tres símbolos estén en línea, ya sea horizontal, vertical o diagonal.
+Si todos los espacios se llenan y nadie ha conseguido una línea de tres, el juego termina en empate.
+
+Es rápido y se trata de pensar un paso adelante del otro jugador para bloquearlo y formar tu línea.
+~
+
+/*
+Explícame de forma sencilla cómo se juega al ‘Super Tres en raya’ o ‘Último Tres en raya’.
+No utilices listas “complejas” ni markdown.
+Escríbelo con texto plano.
+*/
+¡title-sttt:
+^Instrucciones 'Super Tic-Tac-Toe'~
+
+¡content-sttt:
+^
+El ‘Super Tres en raya’ o ‘Último Tres en raya’ es como el tres en raya normal, pero con un giro.
+Imagina que tienes un tablero grande formado por nueve tableros pequeños de tres en raya.
+Cada jugador tiene un símbolo, normalmente X o O.
+
+El objetivo sigue siendo conseguir tres de tus símbolos en línea, pero esta vez hay que pensar en dos niveles:
+ganar en los tableros pequeños y al mismo tiempo en el tablero grande.
+Cuando colocas tu símbolo en un tablero pequeño, el lugar donde lo pones determina en qué tablero pequeño
+jugará tu oponente en su turno.
+Por ejemplo, si pones tu X en la esquina superior derecha del tablero pequeño, tu rival tendrá que jugar
+en el tablero pequeño que está en la esquina superior derecha del tablero grande.
+
+Si envías a tu oponente a un tablero pequeño que ya está completo, ya sea porque alguien lo ganó o porque
+terminó en empate, entonces el jugador puede elegir libremente cualquier otro tablero que todavía tenga espacios
+disponibles. No está obligado a jugar en un tablero específico en ese caso.
+Esto le da un poco más de libertad y puede cambiar la estrategia, porque a veces puedes “forzar” que tu rival
+tenga que ir a un tablero complicado, pero si ese tablero ya está lleno, pierde esa restricción.
+
+Gana quien consiga primero hacer tres tableros pequeños ganados en línea en el tablero grande.
+Si un tablero pequeño se llena sin que nadie gane, se considera empate y nadie puede reclamarlo como suyo.
+Es un juego que combina estrategia local (ganar tableros pequeños) con estrategia global (ganar el tablero grande).
+~
+
