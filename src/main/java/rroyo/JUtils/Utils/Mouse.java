@@ -40,6 +40,8 @@ public class Mouse {
      * @param component Componente a configurar
      */
     public static void configureMouse(Component component) {
+        if (component == null) throw new IllegalArgumentException("Component cannot be null");
+
         component.addMouseMotionListener(new MouseAdapter() {
             @Override
             public void mouseMoved(MouseEvent e) {
@@ -69,6 +71,9 @@ public class Mouse {
      * @param ma Listener a agregar
      */
     public static void addConfig(Component component, MouseAdapter ma) {
+        if (ma == null) throw new IllegalArgumentException("MouseAdapter cannot be null");
+        if (component == null) throw new IllegalArgumentException("Component cannot be null");
+
         component.addMouseListener(ma);
         component.addMouseMotionListener(ma);
     }

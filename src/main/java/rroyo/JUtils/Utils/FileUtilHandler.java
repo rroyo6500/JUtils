@@ -25,8 +25,8 @@ public class FileUtilHandler {
      * @return Contenido del archivo
      */
     public static String readFile(String src) {
-        File file = new File(src);
-        return readFile(file);
+        if (src == null || src.isBlank()) throw new IllegalArgumentException("Source path cannot be blank");
+        return readFile(new File(src));
     }
 
     /**
@@ -35,6 +35,12 @@ public class FileUtilHandler {
      * @return Contenido del archivo
      */
     public static String readFile(File file) {
+        if (file == null) throw new IllegalArgumentException("File cannot be null");
+        if (!file.exists()) throw new IllegalArgumentException("File does not exist");
+        if (file.isDirectory()) throw new IllegalArgumentException("File cannot be a directory");
+        if (!file.isFile()) throw new IllegalArgumentException("File is not a regular file");
+        if (!file.canRead()) throw new IllegalArgumentException("File cannot be read");
+
         String line, text = "";
         try {
             BufferedReader br = new BufferedReader(new java.io.FileReader(file));
@@ -57,6 +63,7 @@ public class FileUtilHandler {
      * @param msg Mensaje a escribir
      */
     public static void writeFile(String src, String msg) {
+        if (src == null || src.isBlank()) throw new IllegalArgumentException("Source path cannot be blank");
         writeFile(new File(src), msg, false);
     }
 
@@ -67,6 +74,7 @@ public class FileUtilHandler {
      * @param append Indica si se debe anexar el mensaje al final del archivo
      */
     public static void writeFile(String src, String msg, boolean append) {
+        if (src == null || src.isBlank()) throw new IllegalArgumentException("Source path cannot be blank");
         writeFile(new File(src), msg, append);
     }
 
@@ -86,6 +94,9 @@ public class FileUtilHandler {
      * @param append Indica si se debe anexar el mensaje al final del archivo
      */
     public static void writeFile(File file, String msg, boolean append) {
+        if (file == null) throw new IllegalArgumentException("File cannot be null");
+        if (file.isDirectory()) throw new IllegalArgumentException("File cannot be a directory");
+
         try {
             if (file.createNewFile() && log) System.out.println("File created: " + file.getName());
             BufferedWriter bw = new BufferedWriter(new FileWriter(file, append));

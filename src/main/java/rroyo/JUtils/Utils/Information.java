@@ -160,7 +160,7 @@ public class Information extends JFrame implements DataFileUtil {
             Color backgroundColor,
             Color foregroundColor
     ) {
-        if (filePath == null || filePath.isBlank()) throw new IllegalArgumentException("File path cannot be blank / null");
+        if (filePath == null || filePath.isBlank()) throw new IllegalArgumentException("File path cannot be blank");
         this(new File(filePath), titleKey, contentKey, titleFont, contentFont, backgroundColor, foregroundColor);
     }
 
@@ -189,7 +189,7 @@ public class Information extends JFrame implements DataFileUtil {
      * @throws IllegalArgumentException if the provided file path is blank or null.
      */
     public Information(String filePath, String titleKey, String contentKey) {
-        if (filePath == null || filePath.isBlank()) throw new IllegalArgumentException("File path cannot be blank / null");
+        if (filePath == null || filePath.isBlank()) throw new IllegalArgumentException("File path cannot be blank");
         this(new File(filePath), titleKey, contentKey, defaultFont, defaultFont, backgroundColor, foregroundColor);
     }
 

@@ -33,7 +33,7 @@ public interface CustomFonts {
      * @param size The desired size of the font in points.
      */
     static void addFont (String name, String path, float size) {
-        if (path == null || path.isBlank()) throw new IllegalArgumentException("Path cannot be blank / null");
+        if (path == null || path.isBlank()) throw new IllegalArgumentException("Path cannot be blank");
         addFont(name, new File(path), size);
     }
 

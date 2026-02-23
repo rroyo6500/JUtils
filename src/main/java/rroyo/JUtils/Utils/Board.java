@@ -137,7 +137,7 @@ public class Board <T> {
      * @return A deep copy of the board as a {@code List<List<T>>}.
      */
     public List<List<T>> getBoard () {
-        return new Board<>(this).board;
+        return board;
     }
 
     /**

@@ -25,7 +25,7 @@ public interface DataFileUtil {
      * @return Un mapa que contiene los pares clave-valor analizados del contenido del archivo.
      */
     static Map<String, String> readDataFile (String path) {
-        if (path == null || path.isBlank()) throw new IllegalArgumentException("Path cannot be blank / null");
+        if (path == null || path.isBlank()) throw new IllegalArgumentException("Path cannot be blank");
         return readDataFile(new File(path));
     }
 
@@ -40,12 +40,6 @@ public interface DataFileUtil {
      * @return Un mapa que contiene los pares clave-valor analizados del contenido del archivo.
      */
     static Map<String, String> readDataFile (File file) {
-        if (file == null) throw new IllegalArgumentException("File cannot be null");
-        if (!file.exists()) throw new IllegalArgumentException("File does not exist");
-        if (file.isDirectory()) throw new IllegalArgumentException("File cannot be a directory");
-        if (!file.isFile()) throw new IllegalArgumentException("File is not a regular file");
-        if (!file.canRead()) throw new IllegalArgumentException("File cannot be read");
-
         String content = FileUtilHandler.readFile(file);
 
         String[] splittedContent = content.replaceAll("(?s)/\\*.*?\\*/", "")
@@ -84,7 +78,7 @@ public interface DataFileUtil {
      * @param path The path of the target file where the data will be written. If blank, the method does nothing.
      */
     static void writeDataFile (Map<String, String> dataMap, String path) {
-        if (path == null || path.isBlank()) throw new IllegalArgumentException("Path cannot be blank / null");
+        if (path == null || path.isBlank()) throw new IllegalArgumentException("Path cannot be blank");
         writeDataFile(dataMap, new File(path));
     }
 
@@ -101,8 +95,6 @@ public interface DataFileUtil {
      */
     static void writeDataFile (Map<String, String> dataMap, File file) {
         if (dataMap == null) throw new IllegalArgumentException("Data map cannot be null");
-        if (file == null) throw new IllegalArgumentException("File cannot be null");
-        if (file.isDirectory()) throw new IllegalArgumentException("File cannot be a directory");
 
         String ls = System.lineSeparator();
         StringBuilder sb = new StringBuilder();
@@ -134,6 +126,8 @@ public interface DataFileUtil {
      * @throws IllegalArgumentException If the key or value contains reserved delimiter characters.
      */
     private static String getString(Map.Entry<String, String> e, String key) {
+        if (e == null) throw new NullPointerException("Map entry cannot be null");
+
         String value = e.getValue();
 
         if (key == null || value == null) {
@@ -156,7 +150,7 @@ public interface DataFileUtil {
      * @param path The file path as a string where example data will be written. If the path is blank, the operation is skipped.
      */
     static void writeExampleDataFile (String path) {
-        if (path.isBlank()) return;
+        if (path == null || path.isBlank()) throw new IllegalArgumentException("Path cannot be blank");
         writeExampleDataFile(new File(path));
     }
 
@@ -168,7 +162,6 @@ public interface DataFileUtil {
      * @param file The file to which the example data will be written. If null, no action is taken.
      */
     static void writeExampleDataFile (File file) {
-        if (file == null) return;
         String example = """
                 ¡<key>:
                 ^<value>~
