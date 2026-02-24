@@ -3,6 +3,7 @@ package rroyo.JUtils.Utils;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * A utility interface for reading and writing custom-formatted data files. The utility provides
@@ -27,7 +28,7 @@ public interface DataFileUtil {
 
         String[] splittedContent = data.replaceAll("(?s)/\\*.*?\\*/", "")
                 .trim()
-                .split("¡");
+                .split("(?s)\\s*¡(?=(?:[^\\^~]*\\^[^~]*~)*[^\\^~]*$)");
 
         Map<String, String> out = new HashMap<>();
 
@@ -126,7 +127,7 @@ public interface DataFileUtil {
         String ls = System.lineSeparator();
         StringBuilder sb = new StringBuilder();
 
-        for (var e : new java.util.TreeMap<>(dataMap).entrySet()) {
+        for (var e : new TreeMap<>(dataMap).entrySet()) {
             String key = e.getKey();
             String value = getString(e, key);
 
@@ -174,11 +175,8 @@ public interface DataFileUtil {
             throw new NullPointerException("Key or value is null");
         }
 
-        if (key.indexOf('¡') >= 0 || key.indexOf(':') >= 0 ||
-                key.indexOf('^') >= 0 || key.indexOf('~') >= 0 ||
-                value.indexOf('¡') >= 0 || value.indexOf(':') >= 0 ||
-                value.indexOf('^') >= 0 || value.indexOf('~') >= 0
-        ) throw new IllegalArgumentException("Key/value contains reserved delimiter characters: '¡', ':', '^', '~'");
+        if (key.indexOf('¡') >= 0 || key.indexOf(':') >= 0)
+            throw new IllegalArgumentException("Key contains reserved delimiter characters: '¡', ':'");
         return value;
     }
 
