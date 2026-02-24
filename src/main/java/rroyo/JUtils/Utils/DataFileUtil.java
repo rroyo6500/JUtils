@@ -16,9 +16,16 @@ import java.util.Map;
  */
 public interface DataFileUtil {
 
-    static Map<String, String> readData(String dataMessage) {
+    /**
+     * Reads and parses the given data string into a map of key-value pairs.
+     * The input data is expected to follow a specific format where each
+     * key-value pair is separated by the character `¡`, and the key and value
+     * are delineated using ':' and '^...~' respectively. Comments enclosed in
+     * `/* */
+    static Map<String, String> readData(String data) {
+        if (data == null || data.isBlank()) throw new IllegalArgumentException("Data cannot be blank");
 
-        String[] splittedContent = dataMessage.replaceAll("(?s)/\\*.*?\\*/", "")
+        String[] splittedContent = data.replaceAll("(?s)/\\*.*?\\*/", "")
                 .trim()
                 .split("¡");
 
@@ -46,14 +53,14 @@ public interface DataFileUtil {
     }
 
     /**
-     * Lee el contenido del archivo de instrucciones especificado y lo analiza en un mapa de pares clave-valor.
-     * Se espera que el contenido del archivo tenga secciones separadas por el carácter `!`, donde cada sección
-     * contiene un par clave-valor con el formato `clave:^valor$`.
-     * Format:
-     * {@code !key: ^value$}
+     * Reads the content of the specified file and parses it into a map of key-value pairs.
+     * The file's content is expected to be in a specific format that can be processed by
+     * the {@code readData} method.
      *
-     * @param file El archivo a leer y analizar.
-     * @return Un mapa que contiene los pares clave-valor analizados del contenido del archivo.
+     * @param file The file to read and parse. Must not be null.
+     * @return A map containing the parsed key-value pairs from the file's content.
+     *         Returns an empty map if the file is empty or its content cannot be parsed.
+     * @throws NullPointerException If the provided file is null.
      */
     static Map<String, String> readDataFile (File file) {
         String content = FileUtilHandler.readFile(file);
@@ -61,16 +68,45 @@ public interface DataFileUtil {
     }
 
     /**
-     * Lee el contenido del archivo de instrucciones especificado y lo analiza en un mapa de pares clave-valor.
-     * Se espera que el contenido del archivo tenga secciones separadas por el carácter `!`, donde cada sección
-     * contiene un par clave-valor con el formato `clave:^valor$`.
+     * Reads the content of a file located at the specified path and parses it into a map of key-value pairs.
+     * The file's content is expected to be in a specific format that can be processed by the {@code readData} method.
      *
-     * @param path La ruta del archivo a leer y analizar.
-     * @return Un mapa que contiene los pares clave-valor analizados del contenido del archivo.
+     * @param path The path of the file to be read and parsed. Must not be null or blank.
+     * @return A map containing the parsed key-value pairs from the file's content.
+     *         Returns an empty map if the file is empty or its content cannot be parsed.
+     * @throws IllegalArgumentException If the provided path is null or blank.
      */
     static Map<String, String> readDataFile (String path) {
         if (path == null || path.isBlank()) throw new IllegalArgumentException("Path cannot be blank");
         return readDataFile(new File(path));
+    }
+
+    /**
+     * Writes the specified data message to a file located at the given path.
+     * Throws an exception if the path is null or blank. Utilizes an overloaded
+     * method to handle file-based writing.
+     *
+     * @param path The file path where the data message will be written. Must not be null or blank.
+     * @param dataMessage The data message to write to the file. Can be null or blank,
+     *                    but the handling is delegated to the overloaded method.
+     * @throws IllegalArgumentException If the provided path is null or blank.
+     */
+    static void writeDataFile(String path, String dataMessage) {
+        if (path == null || path.isBlank()) throw new IllegalArgumentException("Path cannot be blank");
+        writeDataFile(new File(path), dataMessage);
+    }
+
+    /**
+     * Writes the given trimmed data to the specified file. Throws an exception if the data is
+     * null or blank. Utilizes the {@code FileUtilHandler.writeFile} method for file writing.
+     *
+     * @param file The file where the data will be written. Must not be null.
+     * @param data The data to write to the file. Must not be null or blank.
+     * @throws IllegalArgumentException If the provided data is null or blank.
+     */
+    static void writeDataFile(File file, String data) {
+        if (data == null || data.isBlank()) throw new IllegalArgumentException("Data cannot be blank");
+        FileUtilHandler.writeFile(file, data.trim());
     }
 
     /**
@@ -102,7 +138,7 @@ public interface DataFileUtil {
                     .append('~').append(ls).append(ls);
         }
 
-        writeData(file, sb.toString());
+        writeDataFile(file, sb.toString());
     }
 
     /**
@@ -117,51 +153,6 @@ public interface DataFileUtil {
         if (path == null || path.isBlank()) throw new IllegalArgumentException("Path cannot be blank");
         writeDataFile(dataMap, new File(path));
     }
-
-    static void writeData(String path, String dataMessage) {
-        if (path == null || path.isBlank()) throw new IllegalArgumentException("Path cannot be blank");
-        writeData(new File(path), dataMessage);
-    }
-
-    static void writeData(File file, String dataMessage) {
-        FileUtilHandler.writeFile(file, dataMessage.trim());
-    }
-
-    /**
-     * Writes example data to a file specified by its path. The data includes a comment section
-     * and syntax-related information for understanding the format. If the provided path is blank,
-     * the method does nothing.
-     *
-     * @param path The file path as a string where example data will be written. If the path is blank, the operation is skipped.
-     */
-    static void writeExampleDataFile (String path) {
-        if (path == null || path.isBlank()) throw new IllegalArgumentException("Path cannot be blank");
-        writeExampleDataFile(new File(path));
-    }
-
-    /**
-     * Writes example data to the specified file. The content includes a predefined
-     * template with syntax-related information and format guidance.
-     * This method does nothing if the provided file is null.
-     *
-     * @param file The file to which the example data will be written. If null, no action is taken.
-     */
-    static void writeExampleDataFile (File file) {
-        String example = """
-                ¡<key>:
-                ^<value>~
-                
-                /*comment*/
-                /*
-                ¡ -> Data separator
-                ^ -> Value start
-                ~ -> Value end
-                */
-                """.trim();
-
-        FileUtilHandler.writeFile(file, example);
-    }
-
 
     /**
      * Retrieves the value from the specified map entry if the provided key and value are valid.

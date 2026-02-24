@@ -28,31 +28,31 @@ public interface CustomFonts {
      * This method internally delegates the font addition task to another implementation
      * that operates with a File object.
      *
-     * @param name The identifier for the font to be added. This will be used when retrieving the font later.
+     * @param key The identifier for the font to be added. This will be used when retrieving the font later.
      * @param path The file system path pointing to the TrueType font file.
      * @param size The desired size of the font in points.
      */
-    static void addFont (String name, String path, float size) {
+    static void addFont (String key, String path, float size) {
         if (path == null || path.isBlank()) throw new IllegalArgumentException("Path cannot be blank");
-        addFont(name, new File(path), size);
+        addFont(key, new File(path), size);
     }
 
     /**
      * Adds a TrueType font to the internal font collection using a file object.
      * The font is identified by a unique name and can be derived to a specific size.
      *
-     * @param name The identifier for the font to be added. This name will be used for retrieving the font.
+     * @param key The identifier for the font to be added. This name will be used for retrieving the font.
      * @param file The File object pointing to the TrueType font file.
      * @param size The desired font size to derive from the base font.
      */
-    static void addFont (String name, File file, float size) {
+    static void addFont (String key, File file, float size) {
         if (file == null) throw new IllegalArgumentException("File cannot be null");
         if (!file.exists()) throw new IllegalArgumentException("File does not exist");
         if (file.isDirectory()) throw new IllegalArgumentException("File cannot be a directory");
         if (!file.isFile()) throw new IllegalArgumentException("File is not a regular file");
 
         try {
-            fonts.put(name, Font.createFont(Font.TRUETYPE_FONT, file).deriveFont(size));
+            fonts.put(key, Font.createFont(Font.TRUETYPE_FONT, file).deriveFont(size));
         } catch (FontFormatException | IOException e) {
             throw new RuntimeException(e);
         }
@@ -61,21 +61,21 @@ public interface CustomFonts {
     /**
      * Retrieves a font from the internal font collection based on its name.
      *
-     * @param name The name of the font to retrieve. This name serves as the unique identifier for the font in the collection.
+     * @param key The name of the font to retrieve. This name serves as the unique identifier for the font in the collection.
      * @return The Font object associated with the specified name, or null if no font with the given name is found.
      */
-    static Font getFont (String name) {
-        return fonts.get(name);
+    static Font getFont (String key) {
+        return fonts.get(key);
     }
 
     /**
      * Removes a font from the internal font collection based on its name.
      *
-     * @param name The name of the font to remove. This name serves as the unique identifier
+     * @param key The name of the font to remove. This name serves as the unique identifier
      *             for the font in the collection.
      */
-    static void removeFont (String name) {
-        fonts.remove(name);
+    static void removeFont (String key) {
+        fonts.remove(key);
     }
 
 }
