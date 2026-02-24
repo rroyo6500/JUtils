@@ -16,33 +16,9 @@ import java.util.Map;
  */
 public interface DataFileUtil {
 
-    /**
-     * Lee el contenido del archivo de instrucciones especificado y lo analiza en un mapa de pares clave-valor.
-     * Se espera que el contenido del archivo tenga secciones separadas por el carácter `!`, donde cada sección
-     * contiene un par clave-valor con el formato `clave:^valor$`.
-     *
-     * @param path La ruta del archivo a leer y analizar.
-     * @return Un mapa que contiene los pares clave-valor analizados del contenido del archivo.
-     */
-    static Map<String, String> readDataFile (String path) {
-        if (path == null || path.isBlank()) throw new IllegalArgumentException("Path cannot be blank");
-        return readDataFile(new File(path));
-    }
+    static Map<String, String> readData(String dataMessage) {
 
-    /**
-     * Lee el contenido del archivo de instrucciones especificado y lo analiza en un mapa de pares clave-valor.
-     * Se espera que el contenido del archivo tenga secciones separadas por el carácter `!`, donde cada sección
-     * contiene un par clave-valor con el formato `clave:^valor$`.
-     * Format:
-     * {@code !key: ^value$}
-     *
-     * @param file El archivo a leer y analizar.
-     * @return Un mapa que contiene los pares clave-valor analizados del contenido del archivo.
-     */
-    static Map<String, String> readDataFile (File file) {
-        String content = FileUtilHandler.readFile(file);
-
-        String[] splittedContent = content.replaceAll("(?s)/\\*.*?\\*/", "")
+        String[] splittedContent = dataMessage.replaceAll("(?s)/\\*.*?\\*/", "")
                 .trim()
                 .split("¡");
 
@@ -70,16 +46,31 @@ public interface DataFileUtil {
     }
 
     /**
-     * Writes the provided data map to a file. Each key-value pair in the map is formatted
-     * as {@code !key:^value$} and saved to the specified file path.
+     * Lee el contenido del archivo de instrucciones especificado y lo analiza en un mapa de pares clave-valor.
+     * Se espera que el contenido del archivo tenga secciones separadas por el carácter `!`, donde cada sección
+     * contiene un par clave-valor con el formato `clave:^valor$`.
+     * Format:
+     * {@code !key: ^value$}
      *
-     * @param dataMap A map containing the data to be written to the file. Each key-value pair
-     *                represents an entry to be saved. If null, the method does nothing.
-     * @param path The path of the target file where the data will be written. If blank, the method does nothing.
+     * @param file El archivo a leer y analizar.
+     * @return Un mapa que contiene los pares clave-valor analizados del contenido del archivo.
      */
-    static void writeDataFile (Map<String, String> dataMap, String path) {
+    static Map<String, String> readDataFile (File file) {
+        String content = FileUtilHandler.readFile(file);
+        return readData(content);
+    }
+
+    /**
+     * Lee el contenido del archivo de instrucciones especificado y lo analiza en un mapa de pares clave-valor.
+     * Se espera que el contenido del archivo tenga secciones separadas por el carácter `!`, donde cada sección
+     * contiene un par clave-valor con el formato `clave:^valor$`.
+     *
+     * @param path La ruta del archivo a leer y analizar.
+     * @return Un mapa que contiene los pares clave-valor analizados del contenido del archivo.
+     */
+    static Map<String, String> readDataFile (String path) {
         if (path == null || path.isBlank()) throw new IllegalArgumentException("Path cannot be blank");
-        writeDataFile(dataMap, new File(path));
+        return readDataFile(new File(path));
     }
 
     /**
@@ -111,35 +102,29 @@ public interface DataFileUtil {
                     .append('~').append(ls).append(ls);
         }
 
-        FileUtilHandler.writeFile(file, sb.toString().trim());
+        writeData(file, sb.toString());
     }
 
     /**
-     * Retrieves the value from the specified map entry if the provided key and value are valid.
-     * Validity is determined by ensuring neither the key nor the value is null, and neither contains
-     * any reserved delimiter characters: '¡', ':', '^', '~'.
+     * Writes the provided data map to a file. Each key-value pair in the map is formatted
+     * as {@code !key:^value$} and saved to the specified file path.
      *
-     * @param e The map entry containing the key-value pair.
-     * @param key The key to be validated alongside the value of the map entry.
-     * @return The value associated with the map entry if both the key and value are valid.
-     * @throws NullPointerException If either the provided key or the map entry's value is null.
-     * @throws IllegalArgumentException If the key or value contains reserved delimiter characters.
+     * @param dataMap A map containing the data to be written to the file. Each key-value pair
+     *                represents an entry to be saved. If null, the method does nothing.
+     * @param path The path of the target file where the data will be written. If blank, the method does nothing.
      */
-    private static String getString(Map.Entry<String, String> e, String key) {
-        if (e == null) throw new NullPointerException("Map entry cannot be null");
+    static void writeDataFile (Map<String, String> dataMap, String path) {
+        if (path == null || path.isBlank()) throw new IllegalArgumentException("Path cannot be blank");
+        writeDataFile(dataMap, new File(path));
+    }
 
-        String value = e.getValue();
+    static void writeData(String path, String dataMessage) {
+        if (path == null || path.isBlank()) throw new IllegalArgumentException("Path cannot be blank");
+        writeData(new File(path), dataMessage);
+    }
 
-        if (key == null || value == null) {
-            throw new NullPointerException("Key or value is null");
-        }
-
-        if (key.indexOf('¡') >= 0 || key.indexOf(':') >= 0 ||
-                key.indexOf('^') >= 0 || key.indexOf('~') >= 0 ||
-                value.indexOf('¡') >= 0 || value.indexOf(':') >= 0 ||
-                value.indexOf('^') >= 0 || value.indexOf('~') >= 0
-        ) throw new IllegalArgumentException("Key/value contains reserved delimiter characters: '¡', ':', '^', '~'");
-        return value;
+    static void writeData(File file, String dataMessage) {
+        FileUtilHandler.writeFile(file, dataMessage.trim());
     }
 
     /**
@@ -176,4 +161,34 @@ public interface DataFileUtil {
 
         FileUtilHandler.writeFile(file, example);
     }
+
+
+    /**
+     * Retrieves the value from the specified map entry if the provided key and value are valid.
+     * Validity is determined by ensuring neither the key nor the value is null, and neither contains
+     * any reserved delimiter characters: '¡', ':', '^', '~'.
+     *
+     * @param e The map entry containing the key-value pair.
+     * @param key The key to be validated alongside the value of the map entry.
+     * @return The value associated with the map entry if both the key and value are valid.
+     * @throws NullPointerException If either the provided key or the map entry's value is null.
+     * @throws IllegalArgumentException If the key or value contains reserved delimiter characters.
+     */
+    private static String getString(Map.Entry<String, String> e, String key) {
+        if (e == null) throw new NullPointerException("Map entry cannot be null");
+
+        String value = e.getValue();
+
+        if (key == null || value == null) {
+            throw new NullPointerException("Key or value is null");
+        }
+
+        if (key.indexOf('¡') >= 0 || key.indexOf(':') >= 0 ||
+                key.indexOf('^') >= 0 || key.indexOf('~') >= 0 ||
+                value.indexOf('¡') >= 0 || value.indexOf(':') >= 0 ||
+                value.indexOf('^') >= 0 || value.indexOf('~') >= 0
+        ) throw new IllegalArgumentException("Key/value contains reserved delimiter characters: '¡', ':', '^', '~'");
+        return value;
+    }
+
 }

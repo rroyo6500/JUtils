@@ -133,6 +133,7 @@ public class Information extends JFrame implements DataFileUtil {
         center.setPreferredSize(new Dimension(windowInnerWidth, centerPref.height));
 
         pack();
+        setMaximumSize(new Dimension(1500, 800));
         setLocationRelativeTo(null);
         setVisible(true);
     }
