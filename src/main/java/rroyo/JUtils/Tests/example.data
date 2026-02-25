@@ -1,7 +1,7 @@
-/*
+\*
 Explícame de forma sencilla cómo se juega al tres en raya (Tic Tac Toe).
 No utilices listas “complejas” ni markdown. Escríbelo con texto plano.
-*/
+*\
 
 ¡title-ttt:
 ^Instrucciones 'Tic-Tac-Toe'~
@@ -19,11 +19,11 @@ Si todos los espacios se llenan y nadie ha conseguido una línea de tres, el jue
 Es rápido y se trata de pensar un paso adelante del otro jugador para bloquearlo y formar tu línea.
 ~
 
-/*
+\*
 Explícame de forma sencilla cómo se juega al ‘Super Tres en raya’ o ‘Último Tres en raya’.
 No utilices listas “complejas” ni markdown.
 Escríbelo con texto plano.
-*/
+*\
 
 ¡title-sttt:
 ^Instrucciones 'Super Tic-Tac-Toe'~

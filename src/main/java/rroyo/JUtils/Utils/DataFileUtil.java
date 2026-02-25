@@ -15,18 +15,21 @@ import java.util.TreeMap;
  * @implNote Requires {@code FileUtilHandler} to works.
  * @see FileUtilHandler
  */
-public interface DataFileUtil {
+public final class DataFileUtil {
+
+    private DataFileUtil(){}
 
     /**
      * Reads and parses the given data string into a map of key-value pairs.
      * The input data is expected to follow a specific format where each
-     * key-value pair is separated by the character `¡`, and the key and value
+     * key-value pair is separated by the character `&iexcl;`, and the key and value
      * are delineated using ':' and '^...~' respectively. Comments enclosed in
-     * `/* */
-    static Map<String, String> readData(String data) {
+     * `\* *\`
+    */
+    public static Map<String, String> readData(String data) {
         if (data == null || data.isBlank()) throw new IllegalArgumentException("Data cannot be blank");
 
-        String[] splittedContent = data.replaceAll("(?s)/\\*.*?\\*/", "")
+        String[] splittedContent = data.replaceAll("(?s)\\\\\\*.*?\\*\\\\", "")
                 .trim()
                 .split("(?s)\\s*¡(?=(?:[^\\^~]*\\^[^~]*~)*[^\\^~]*$)");
 
@@ -63,7 +66,7 @@ public interface DataFileUtil {
      *         Returns an empty map if the file is empty or its content cannot be parsed.
      * @throws NullPointerException If the provided file is null.
      */
-    static Map<String, String> readDataFile (File file) {
+    public static Map<String, String> readDataFile (File file) {
         String content = FileUtilHandler.readFile(file);
         return readData(content);
     }
@@ -77,7 +80,7 @@ public interface DataFileUtil {
      *         Returns an empty map if the file is empty or its content cannot be parsed.
      * @throws IllegalArgumentException If the provided path is null or blank.
      */
-    static Map<String, String> readDataFile (String path) {
+    public static Map<String, String> readDataFile (String path) {
         if (path == null || path.isBlank()) throw new IllegalArgumentException("Path cannot be blank");
         return readDataFile(new File(path));
     }
@@ -92,7 +95,7 @@ public interface DataFileUtil {
      *                    but the handling is delegated to the overloaded method.
      * @throws IllegalArgumentException If the provided path is null or blank.
      */
-    static void writeDataFile(String path, String dataMessage) {
+    public static void writeDataFile(String path, String dataMessage) {
         if (path == null || path.isBlank()) throw new IllegalArgumentException("Path cannot be blank");
         writeDataFile(new File(path), dataMessage);
     }
@@ -105,7 +108,7 @@ public interface DataFileUtil {
      * @param data The data to write to the file. Must not be null or blank.
      * @throws IllegalArgumentException If the provided data is null or blank.
      */
-    static void writeDataFile(File file, String data) {
+    public static void writeDataFile(File file, String data) {
         if (data == null || data.isBlank()) throw new IllegalArgumentException("Data cannot be blank");
         FileUtilHandler.writeFile(file, data.trim());
     }
@@ -121,7 +124,7 @@ public interface DataFileUtil {
      * @param file    The file to which the formatted data is written.
      *                If null, the method does nothing.
      */
-    static void writeDataFile (Map<String, String> dataMap, File file) {
+    public static void writeDataFile (Map<String, String> dataMap, File file) {
         if (dataMap == null) throw new IllegalArgumentException("Data map cannot be null");
 
         String ls = System.lineSeparator();
@@ -129,7 +132,7 @@ public interface DataFileUtil {
 
         for (var e : new TreeMap<>(dataMap).entrySet()) {
             String key = e.getKey();
-            String value = getString(e, key);
+            String value = getString(e);
 
             sb.append('¡')
                     .append(key)
@@ -150,7 +153,7 @@ public interface DataFileUtil {
      *                represents an entry to be saved. If null, the method does nothing.
      * @param path The path of the target file where the data will be written. If blank, the method does nothing.
      */
-    static void writeDataFile (Map<String, String> dataMap, String path) {
+    public static void writeDataFile (Map<String, String> dataMap, String path) {
         if (path == null || path.isBlank()) throw new IllegalArgumentException("Path cannot be blank");
         writeDataFile(dataMap, new File(path));
     }
@@ -158,17 +161,17 @@ public interface DataFileUtil {
     /**
      * Retrieves the value from the specified map entry if the provided key and value are valid.
      * Validity is determined by ensuring neither the key nor the value is null, and neither contains
-     * any reserved delimiter characters: '¡', ':', '^', '~'.
+     * any reserved delimiter characters: '¡', ':'.
      *
      * @param e The map entry containing the key-value pair.
-     * @param key The key to be validated alongside the value of the map entry.
      * @return The value associated with the map entry if both the key and value are valid.
      * @throws NullPointerException If either the provided key or the map entry's value is null.
      * @throws IllegalArgumentException If the key or value contains reserved delimiter characters.
      */
-    private static String getString(Map.Entry<String, String> e, String key) {
+    private static String getString(Map.Entry<String, String> e) {
         if (e == null) throw new NullPointerException("Map entry cannot be null");
 
+        String key = e.getKey();
         String value = e.getValue();
 
         if (key == null || value == null) {
