@@ -55,7 +55,7 @@ public final class CustomFonts {
         if (size <= 0) throw new IllegalArgumentException("Size must be greater than zero");
 
         try {
-            Font prev = fonts.putIfAbsent(key, Font.createFont(Font.TRUETYPE_FONT, file).deriveFont(size));
+            Font prev = CustomFonts.fonts.putIfAbsent(key, Font.createFont(Font.TRUETYPE_FONT, file).deriveFont(size));
             if (prev != null) throw new IllegalArgumentException("Font key already exists: " + key);
         } catch (FontFormatException | IOException e) {
             throw new RuntimeException(e);
@@ -69,7 +69,9 @@ public final class CustomFonts {
      * @return The Font object associated with the specified name, or null if no font with the given name is found.
      */
     public static Font getFont (String key) {
-        return fonts.get(key);
+        if (key == null || key.isBlank()) throw new IllegalArgumentException("Key cannot be blank");
+        if (!CustomFonts.fonts.containsKey(key)) throw new IllegalArgumentException("Font key does not exist: " + key);
+        return CustomFonts.fonts.get(key);
     }
 
     /**
@@ -82,11 +84,13 @@ public final class CustomFonts {
      *         given name is found in the collection.
      */
     public static Font getFont (String key, Float size) {
-        return fonts.get(key).deriveFont(size);
+        if (key == null || key.isBlank()) throw new IllegalArgumentException("Key cannot be blank");
+        if (!CustomFonts.fonts.containsKey(key)) throw new IllegalArgumentException("Font key does not exist: " + key);
+        return CustomFonts.fonts.get(key).deriveFont(size);
     }
 
-    public static boolean containsFint(String key) {
-        return fonts.containsKey(key);
+    public static boolean containsFont(String key) {
+        return CustomFonts.fonts.containsKey(key);
     }
 
     /**
@@ -96,7 +100,9 @@ public final class CustomFonts {
      *             for the font in the collection.
      */
     public static void removeFont (String key) {
-        fonts.remove(key);
+        if (key == null || key.isBlank()) throw new IllegalArgumentException("Key cannot be blank");
+        if (!CustomFonts.fonts.containsKey(key)) throw new IllegalArgumentException("Font key does not exist: " + key);
+        CustomFonts.fonts.remove(key);
     }
 
 }

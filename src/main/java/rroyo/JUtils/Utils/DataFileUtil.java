@@ -6,26 +6,52 @@ import java.util.Map;
 import java.util.TreeMap;
 
 /**
- * A utility interface for reading and writing custom-formatted data files. The utility provides
- * methods to parse a file content into a key-value map and write a map's contents back to a file
- * using a predefined syntax.
+ * Utility class for reading and writing data using a custom text-based file format.
+ * This class provides methods to parse and generate files containing key-value pairs,
+ * where a specific format is required to store the data.
  *
- * @author _rroyo65_
+ * The custom format follows these rules:
+ * - `¡` is used as a section separator.
+ * - `:` separates keys from their values.
+ * - `^` marks the start of a value.
+ * - `~` marks the end of a value.
+ * - Comments within the files are enclosed between `\*Comment*\`.
  *
- * @implNote Requires {@code FileUtilHandler} to works.
- * @see FileUtilHandler
+ * This class is intended for static use and cannot be instantiated.
+ *
+ * Thread Safety:
+ * This class is thread-safe as it contains only static, stateless methods.
  */
 public final class DataFileUtil {
+
+    /*
+    ¡<key>:
+    ^<value>~
+
+    \*Comment*\
+    \*
+    ¡   -> Section Separator
+    :   -> Key - Value Separator
+    ^   -> Value Start
+    ~   -> Value End
+    *\
+     */
 
     private DataFileUtil(){}
 
     /**
-     * Reads and parses the given data string into a map of key-value pairs.
-     * The input data is expected to follow a specific format where each
-     * key-value pair is separated by the character `&iexcl;`, and the key and value
-     * are delineated using ':' and '^...~' respectively. Comments enclosed in
-     * `\* *\`
-    */
+     * Parses the given data string and extracts key-value pairs based on specific delimiters
+     * and formatting rules. The method removes comments, trims the content, and validates
+     * the structure of the data before constructing the output map.
+     *
+     * @param data The input string containing the raw data to be parsed. This string
+     *             must follow the expected format where each key-value pair is separated
+     *             by specific delimiters. It must not be null or blank.
+     * @return A map containing the parsed key-value pairs as strings. The keys and values
+     *         are trimmed and validated before being added to the map.
+     * @throws IllegalArgumentException If the input data is null, blank, or does not
+     *                                  conform to the expected formatting rules.
+     */
     public static Map<String, String> readData(String data) {
         if (data == null || data.isBlank()) throw new IllegalArgumentException("Data cannot be blank");
 
@@ -37,34 +63,38 @@ public final class DataFileUtil {
 
         for (String s : splittedContent) {
             s = s.trim();
-            if (s.isEmpty()) continue;
+            if (s.isEmpty()) throw new IllegalArgumentException("Data file error");
 
             int endT = s.indexOf(':');
             int startV = (endT >= 0) ? s.indexOf('^', endT + 1) : -1;
             int endV = s.lastIndexOf('~');
 
-            if (endT < 0 || startV < 0 || endV < 0 || endV <= startV) continue;
+            if (endT < 0 || startV < 0 || endV < 0 || endV <= startV)
+                throw new IllegalArgumentException("Data file error");
 
             String key = s.substring(0, endT).trim();
             String value = s.substring(startV + 1, endV).trim();
 
-            if (key.isEmpty()) continue;
+            if (key.isEmpty()) throw new IllegalArgumentException("Data file error");
 
-            out.put(key, value);
+            out.putIfAbsent(key, value);
         }
 
         return out;
     }
 
     /**
-     * Reads the content of the specified file and parses it into a map of key-value pairs.
-     * The file's content is expected to be in a specific format that can be processed by
-     * the {@code readData} method.
+     * Reads the content of the specified file and parses it to extract key-value pairs based on
+     * specific delimiters and formatting rules. The method internally utilizes the `readFile`
+     * method from `FileUtilHandler` to read the file contents as a string and the `readData`
+     * method to process and return the key-value mappings.
      *
-     * @param file The file to read and parse. Must not be null.
-     * @return A map containing the parsed key-value pairs from the file's content.
-     *         Returns an empty map if the file is empty or its content cannot be parsed.
-     * @throws NullPointerException If the provided file is null.
+     * @param file The file to read and parse. It must not be null, must exist, must
+     *             not be a directory, and must be readable.
+     * @return A map containing the parsed key-value pairs from the file. Both keys and values
+     *         are strings, trimmed of any unnecessary white spaces.
+     * @throws IllegalArgumentException If the input file is null, does not exist,
+     *                                  is a directory, or cannot be read.
      */
     public static Map<String, String> readDataFile (File file) {
         String content = FileUtilHandler.readFile(file);
@@ -72,13 +102,16 @@ public final class DataFileUtil {
     }
 
     /**
-     * Reads the content of a file located at the specified path and parses it into a map of key-value pairs.
-     * The file's content is expected to be in a specific format that can be processed by the {@code readData} method.
+     * Reads the content of the file at the specified path and parses it to extract key-value pairs
+     * based on specific delimiters and formatting rules. This method internally invokes the
+     * overloaded {@code readDataFile(File file)} method to perform the processing.
      *
-     * @param path The path of the file to be read and parsed. Must not be null or blank.
-     * @return A map containing the parsed key-value pairs from the file's content.
-     *         Returns an empty map if the file is empty or its content cannot be parsed.
-     * @throws IllegalArgumentException If the provided path is null or blank.
+     * @param path The path to the file to read and parse. It must not be null, must not be blank,
+     *             must point to a valid file, and the file must be readable.
+     * @return A map containing the parsed key-value pairs from the file. Both keys and values
+     *         are strings, trimmed of any unnecessary white spaces.
+     * @throws IllegalArgumentException If the path is null, blank, does not point to a valid file,
+     *                                  or the file cannot be read.
      */
     public static Map<String, String> readDataFile (String path) {
         if (path == null || path.isBlank()) throw new IllegalArgumentException("Path cannot be blank");
@@ -86,14 +119,14 @@ public final class DataFileUtil {
     }
 
     /**
-     * Writes the specified data message to a file located at the given path.
-     * Throws an exception if the path is null or blank. Utilizes an overloaded
-     * method to handle file-based writing.
+     * Writes the provided data string to a file specified by its path. If the path is blank
+     * or null, an exception will be thrown. Internally, this method delegates to
+     * the {@code writeDataFile(File file, String data)} method.
      *
-     * @param path The file path where the data message will be written. Must not be null or blank.
-     * @param dataMessage The data message to write to the file. Can be null or blank,
-     *                    but the handling is delegated to the overloaded method.
-     * @throws IllegalArgumentException If the provided path is null or blank.
+     * @param path The file path where the data will be written. It must not be null or blank.
+     *             The path must also point to a valid, writable file location.
+     * @param dataMessage The data to be written into the file. It must not be null or blank.
+     * @throws IllegalArgumentException If the path is null, blank, or if the dataMessage is null or blank.
      */
     public static void writeDataFile(String path, String dataMessage) {
         if (path == null || path.isBlank()) throw new IllegalArgumentException("Path cannot be blank");
@@ -101,12 +134,15 @@ public final class DataFileUtil {
     }
 
     /**
-     * Writes the given trimmed data to the specified file. Throws an exception if the data is
-     * null or blank. Utilizes the {@code FileUtilHandler.writeFile} method for file writing.
+     * Writes the provided data string to the specified file. The data will be trimmed
+     * before being written. If the data string is null or blank, an exception will be thrown.
+     * This method utilizes the {@code writeFile} method from {@code FileUtilHandler} to perform
+     * the file writing operation.
      *
-     * @param file The file where the data will be written. Must not be null.
-     * @param data The data to write to the file. Must not be null or blank.
-     * @throws IllegalArgumentException If the provided data is null or blank.
+     * @param file The file where the data will be written. It must not be null and must point
+     *             to a valid, writable file.
+     * @param data The data string to write into the file. It must not be null or blank.
+     * @throws IllegalArgumentException If the data is null or blank.
      */
     public static void writeDataFile(File file, String data) {
         if (data == null || data.isBlank()) throw new IllegalArgumentException("Data cannot be blank");
@@ -114,15 +150,18 @@ public final class DataFileUtil {
     }
 
     /**
-     * Writes the contents of a given map to the specified file. Each entry in the map is
-     * formatted as {@code !key:^value$} with a blank line separating the entries.
-     * If either the map or file is null, the method does nothing.
+     * Writes the contents of the provided map to the specified file. The map entries
+     * are sorted by their keys, formatted according to specific delimiters, and then
+     * written to the file in the required format. This method delegates the actual
+     * file-writing operation to the {@code writeDataFile(File, String)} method.
      *
-     * @param dataMap A map containing key-value pairs to be written to the file.
-     *                The key-value pairs represent the content to be saved.
-     *                If null, the method does nothing.
-     * @param file    The file to which the formatted data is written.
-     *                If null, the method does nothing.
+     * @param dataMap The map containing string key-value pairs to be written to the file.
+     *                Keys and values must not be null. The map itself must not be null.
+     * @param file    The file where the map data will be written. It must not be null
+     *                and must point to a valid, writable file.
+     * @throws IllegalArgumentException If the dataMap is null, if a map entry contains a
+     *                                  null key or value, or if a key contains reserved
+     *                                  delimiter characters ('¡', ':').
      */
     public static void writeDataFile (Map<String, String> dataMap, File file) {
         if (dataMap == null) throw new IllegalArgumentException("Data map cannot be null");
@@ -146,12 +185,16 @@ public final class DataFileUtil {
     }
 
     /**
-     * Writes the provided data map to a file. Each key-value pair in the map is formatted
-     * as {@code !key:^value$} and saved to the specified file path.
+     * Writes the contents of the provided map to a file specified by its path. The map entries
+     * are sorted by their keys, formatted according to specific delimiters, and then written
+     * to the file in the required format. This method delegates the actual file-writing operation
+     * to the {@code writeDataFile(File, String)} method.
      *
-     * @param dataMap A map containing the data to be written to the file. Each key-value pair
-     *                represents an entry to be saved. If null, the method does nothing.
-     * @param path The path of the target file where the data will be written. If blank, the method does nothing.
+     * @param dataMap The map containing string key-value pairs to be written to the file.
+     *                Keys and values must not be null. The map itself must not be null.
+     * @param path    The file path where the map data will be written. It must not be null,
+     *                blank, or point to an invalid location.
+     * @throws IllegalArgumentException If the path is null, blank, or if the dataMap is null.
      */
     public static void writeDataFile (Map<String, String> dataMap, String path) {
         if (path == null || path.isBlank()) throw new IllegalArgumentException("Path cannot be blank");
@@ -159,14 +202,15 @@ public final class DataFileUtil {
     }
 
     /**
-     * Retrieves the value from the specified map entry if the provided key and value are valid.
-     * Validity is determined by ensuring neither the key nor the value is null, and neither contains
-     * any reserved delimiter characters: '¡', ':'.
+     * Retrieves the value associated with the given map entry after validating the key and value.
+     * The method ensures that the key and value are non-null and verifies that the key does not
+     * contain reserved delimiter characters ('¡', ':').
      *
-     * @param e The map entry containing the key-value pair.
-     * @return The value associated with the map entry if both the key and value are valid.
-     * @throws NullPointerException If either the provided key or the map entry's value is null.
-     * @throws IllegalArgumentException If the key or value contains reserved delimiter characters.
+     * @param e The map entry containing the key-value pair. The entry must not be null, and both the key
+     *          and value must be non-null. The key must not contain the reserved delimiter characters ('¡', ':').
+     * @return The value associated with the map entry.
+     * @throws NullPointerException If the map entry is null, or if the key or value in the entry is null.
+     * @throws IllegalArgumentException If the key in the map entry contains reserved delimiter characters ('¡', ':').
      */
     private static String getString(Map.Entry<String, String> e) {
         if (e == null) throw new NullPointerException("Map entry cannot be null");

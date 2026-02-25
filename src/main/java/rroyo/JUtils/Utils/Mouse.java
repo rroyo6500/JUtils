@@ -12,16 +12,20 @@ import java.awt.event.MouseEvent;
  * @author _rroyo65_
  *
  * @see Component
+ * @see MouseAdapter
+ * @see MouseEvent
  */
-public class Mouse {
+public final class Mouse {
 
     /**
-     * Represents the current position of the mouse in a two-dimensional space.
-     * The position is stored as an array of two integers, where the first element
-     * represents the X-coordinate and the second element represents the Y-coordinate.
-     *
-     * The coordinates are relative to the top-left corner of a specific component
-     * and are updated dynamically as the mouse moves within the bounds of the component.
+     * Stores the current position of the mouse cursor on the X and Y axes.
+     * The first element in the array represents the X-coordinate, and the
+     * second element represents the Y-coordinate. The values are dynamically
+     * updated based on mouse movement events over a configured component.
+     * This variable is globally accessible and can be used to track the
+     * mouse cursor's location in GUI applications or components requiring
+     * pointer tracking or interaction.
+     * The array is initialized with a size of two and default values of zero.
      */
     public static final int[] mousePosition = new int[2];
 
@@ -29,7 +33,6 @@ public class Mouse {
      * Indicates whether a mouse click event has occurred. The value of this variable
      * is set to {@code true} when the mouse is pressed and is reset to {@code false}
      * when the mouse is released.
-     *
      * This variable is globally accessible and is primarily used to track the click
      * state of the mouse for UI components or interactions that depend on mouse input.
      */

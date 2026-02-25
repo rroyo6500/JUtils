@@ -25,50 +25,41 @@ import java.util.Map;
 public final class Information extends JFrame {
 
     /**
-     * Represents the background color of the application or component,
-     * used to provide a consistent visual appearance.
-     *
-     * This variable is immutable and initialized to a default color value.
-     * The selected color ensures improved readability and aesthetic design
-     * for UI elements.
-     *
-     * Potentially used in UI rendering components to maintain a uniform
-     * background style across different visual elements.
+     * The default background color for the Information class.
+     * This color is used as the base background for the UI components
+     * unless explicitly overridden by the constructor or other methods.
+     * It is set to {@code Color.WHITE} by default.
      */
     public static final Color backgroundColor = Color.WHITE;
     /**
-     * Represents the color used for the foreground elements in the user interface.
-     * This variable is immutable and serves as the default color for textual or visual
-     * content rendered in the foreground of the application window.
-     *
-     * The value is a constant and is initially set to {@code Color.BLACK}.
-     * It may be utilized by various components of the application to ensure consistency
-     * in the visual design and user experience.
+     * Represents the foreground color used within the {@code Information} class for rendering text
+     * or visual elements. This color is typically applied to ensure readability and visual consistency
+     * in the user interface. The default value is {@code Color.BLACK}.
      */
     public static final Color foregroundColor = Color.BLACK;
     /**
-     * Represents the default font used throughout the application for text rendering.
-     * This font is defined as "Arial" with a plain style and a size of 12 points.
-     * It provides a consistent appearance for textual content and ensures readability.
-     * Being final and static, the font cannot be modified and is shared across instances
-     * of the containing class.
+     * The default font used for rendering content within the Information class.
+     * This font is a plain 12-point Arial font, providing a simple and
+     * standardized appearance for textual elements.
      */
     public static final Font defaultFont = new Font("Arial", Font.PLAIN, 12);
 
     /**
-     * Constructs a new Information window displaying a title and a set of contents
-     * in a specified layout and style. This window is not resizable and is
-     * displayed centered relative to the screen.
+     * Constructs an Information window with a grid layout of text contents and a title.
+     * The window's appearance is customizable with specified fonts and colors.
      *
-     * @param title The title text to be displayed at the top of the window.
-     * @param contents An array of strings representing the contents to be displayed
-     *                 below the title.
-     * @param rows The number of rows in the layout.
-     * @param columns The number of columns in the layout.
-     * @param titleFont The font to be used for the title text.
-     * @param contentFont The font to be used for the content text.
-     * @param backgroundColor The background color of the window and its components.
-     * @param foregroundColor The foreground (text) color of the title and contents.
+     * @param title the title of the information window; cannot be null
+     * @param contents the array of text content to display in a grid; cannot be null or empty
+     * @param rows the number of rows in the grid layout; must be greater than 0
+     * @param columns the number of columns in the grid layout; must be greater than 0
+     * @param titleFont the font to use for the title; if null, a default font will be used
+     * @param contentFont the font to use for the content; if null, a default font will be used
+     * @param backgroundColor the background color of the window; if null, a default color will be used
+     * @param foregroundColor the foreground color (text color) of the window; if null, a default color will be used
+     * @throws IllegalArgumentException if title is null
+     * @throws IllegalArgumentException if contents is null or empty
+     * @throws IllegalArgumentException if rows or columns is less than 1
+     * @throws IllegalArgumentException if rows * columns does not equal the length of contents
      */
     public Information(
             String title,
@@ -80,6 +71,16 @@ public final class Information extends JFrame {
             Color backgroundColor,
             Color foregroundColor
     ) {
+        if (title == null) throw new IllegalArgumentException("Title cannot be null");
+        if (contents == null) throw new IllegalArgumentException("Contents cannot be null");
+        if (contents.length == 0) throw new IllegalArgumentException("Contents cannot be empty");
+        if (rows < 1) throw new IllegalArgumentException("Rows must be greater than 0");
+        if (columns < 1) throw new IllegalArgumentException("Columns must be greater than 0");
+        if (titleFont == null) titleFont = Information.defaultFont;
+        if (contentFont == null) contentFont = Information.defaultFont;
+        if (backgroundColor == null) backgroundColor = Information.backgroundColor;
+        if (foregroundColor == null) foregroundColor = Information.foregroundColor;
+
         if (rows * columns != contents.length) {
             throw new IllegalArgumentException(
                     "rows*columns (" + (rows * columns) + ") must match contents.length (" + contents.length + ")"
@@ -88,7 +89,7 @@ public final class Information extends JFrame {
 
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setResizable(false);
-        setTitle("Information");
+        setTitle("Information: " + title);
 
         int paddingX = 50;
         int paddingY = 20;
@@ -140,20 +141,19 @@ public final class Information extends JFrame {
 
         pack();
         setLocationRelativeTo(null);
-        setVisible(true);
     }
 
-
     /**
-     * Constructs an Information window with the specified title, content, fonts, and colors.
-     * This window displays a title and content text within a styled user interface.
+     * Constructs an Information instance with a single content value and customizable appearance.
      *
-     * @param title            the title text to be displayed at the top of the window.
-     * @param content          the main content text to be displayed in the window.
-     * @param titleFont        the font used to style the title text.
-     * @param contentFont      the font used to style the content text.
-     * @param backgroundColor  the background color of the window and its components.
-     * @param foregroundColor  the foreground color of the title and content text.
+     * @param title the title of the information window; cannot be null
+     * @param content the single text content to display in the window; cannot be null
+     * @param titleFont the font to use for the title; if null, a default font will be used
+     * @param contentFont the font to use for the content; if null, a default font will be used
+     * @param backgroundColor the background color of the window; if null, a default color will be used
+     * @param foregroundColor the foreground color (text color) of the window; if null, a default color will be used
+     * @throws IllegalArgumentException if title is null
+     * @throws IllegalArgumentException if content is null
      */
     public Information(
             String title,
@@ -167,306 +167,40 @@ public final class Information extends JFrame {
     }
 
     /**
-     * Constructs an Information window with the specified title and content.
-     * This constructor initializes the window with default fonts and colors.
-     * The window displays the provided title and content within a styled user interface.
+     * Constructs an Information instance with a single content value using default fonts and colors.
      *
-     * @param title   the title text to be displayed at the top of the window.
-     * @param content the main content text to be displayed in the window.
+     * @param title the title of the information window; cannot be null
+     * @param content the single text content to display in the window; cannot be null
+     * @throws IllegalArgumentException if title is null
+     * @throws IllegalArgumentException if content is null
      */
     public Information(String title, String content) {
-        this(title, new String[]{content}, 1, 1, defaultFont, defaultFont, backgroundColor, foregroundColor);
+        this(title, content, defaultFont, defaultFont, backgroundColor, foregroundColor);
     }
 
     /**
-     * Constructs an Information object with the specified title, contents, rows, and columns.
-     * Other attributes are initialized with default values for fonts and colors.
+     * Constructs an Information instance with a grid layout of text contents and a title,
+     * using default fonts and colors for appearance customization.
      *
-     * @param title the title of the information panel
-     * @param contents an array of strings representing the textual content
-     * @param rows the number of rows in the information panel
-     * @param columns the number of columns in the information panel
+     * @param title the title of the information window; cannot be null
+     * @param contents the array of text content to display in a grid; cannot be null or empty
+     * @param rows the number of rows in the grid layout; must be greater than 0
+     * @param columns the number of columns in the grid layout; must be greater than 0
+     * @throws IllegalArgumentException if title is null
+     * @throws IllegalArgumentException if contents is null or empty
+     * @throws IllegalArgumentException if rows or columns is less than 1
+     * @throws IllegalArgumentException if rows * columns does not equal the length of contents
      */
     public Information(String title, String[] contents, int rows, int columns) {
         this(title, contents, rows, columns, defaultFont, defaultFont, backgroundColor, foregroundColor);
     }
 
-    /**
-     * Constructs an Information window using data from a map and specified keys to retrieve the title and content.
-     * This constructor initializes the window with default fonts and colors.
-     * The window displays the title and content retrieved from the provided map.
-     *
-     * @param data       the map containing key-value pairs for the title and content text.
-     * @param titleKey   the key to retrieve the title text from the map.
-     * @param contentKey the key to retrieve the content text from the map.
-     * @throws IllegalArgumentException if the provided map is null.
-     */
-    public Information(Map<String,String> data, String titleKey, String contentKey) {
-        if (data == null) throw new IllegalArgumentException("Data cannot be null");
-        if (data.get(titleKey) == null || data.get(contentKey) == null)
-            throw new IllegalArgumentException("Data cannot be null");
-        this(data.get(titleKey), data.get(contentKey));
+    public void open () {
+        super.setVisible(true);
     }
 
-    /**
-     * Constructs an Information object using specified parameters. This constructor
-     * initializes the object with a title, contents, and a specific grid configuration
-     * (rows and columns).
-     *
-     * @param data       A map containing key-value pairs where the key represents the
-     *                   title or content identifiers, and the value represents the
-     *                   corresponding data.
-     * @param titleKey   The key used to retrieve the title from the data map.
-     * @param contentKeys An array of keys to retrieve content values from the data map.
-     * @param rows       The number of rows for the grid configuration.
-     * @param columns    The number of columns for the grid configuration.
-     * @throws IllegalArgumentException if the data map is null.
-     */
-    public Information(Map<String,String> data, String titleKey, String[] contentKeys, int rows, int columns) {
-        if (data == null) throw new IllegalArgumentException("Data cannot be null");
-        String[] contents = new String[contentKeys.length];
-        for (int i = 0; i < contentKeys.length; i++) {
-            if (data.get(titleKey) == null || data.get(contentKeys[i]) == null)
-                throw new IllegalArgumentException("Data cannot be null");
-            contents[i] = data.get(contentKeys[i]);
-        }
-        this(data.get(titleKey), contents, rows, columns);
-    }
-
-    /**
-     * Constructs an Information window using data from a map along with specific styling and color customization.
-     * This constructor initializes the window with title and content retrieved from the provided map keys,
-     * and styles the window using the specified fonts and colors.
-     *
-     * @param data             the map containing key-value pairs for the title and content text.
-     *                         Must not be null.
-     * @param titleKey         the key to retrieve the title text from the map.
-     * @param contentKey       the key to retrieve the content text from the map.
-     * @param titleFont        the font used to style the title text.
-     * @param contentFont      the font used to style the content text.
-     * @param backgroundColor  the background color of the window and its components.
-     * @param foregroundColor  the foreground color of the title and content text.
-     * @throws IllegalArgumentException if the provided map is null.
-     */
-    public Information(
-            Map<String, String> data,
-            String titleKey,
-            String contentKey,
-            Font titleFont,
-            Font contentFont,
-            Color backgroundColor,
-            Color foregroundColor
-    ) {
-        if (data == null) throw new IllegalArgumentException("Data cannot be null");
-        if (data.get(titleKey) == null || data.get(contentKey) == null)
-            throw new IllegalArgumentException("Data cannot be null");
-        this(data.get(titleKey), data.get(contentKey), titleFont, contentFont, backgroundColor, foregroundColor);
-    }
-
-    /**
-     * Constructs an Information instance with the specified properties and data mappings.
-     *
-     * @param data            A map containing key-value pairs where keys are used to retrieve
-     *                        title and content values.
-     * @param titleKey        The key used to fetch the title string from the data map.
-     * @param contentKeys     An array of keys used to fetch content strings from the data map.
-     * @param rows            The number of rows to be used for layout or display purposes.
-     * @param columns         The number of columns to be used for layout or display purposes.
-     * @param titleFont       The font used for rendering the title.
-     * @param contentFont     The font used for rendering the content.
-     * @param backgroundColor The background color of the Information display.
-     * @param foregroundColor The foreground (text) color of the Information display.
-     * @throws IllegalArgumentException If the data map is null.
-     */
-    public Information(
-            Map<String, String> data,
-            String titleKey,
-            String[] contentKeys,
-            int rows,
-            int columns,
-            Font titleFont,
-            Font contentFont,
-            Color backgroundColor,
-            Color foregroundColor
-    ) {
-        if (data == null) throw new IllegalArgumentException("Data cannot be null");
-        String[] contents = new String[contentKeys.length];
-        for (int i = 0; i < contentKeys.length; i++) {
-            if (data.get(titleKey) == null || data.get(contentKeys[i]) == null)
-                throw new IllegalArgumentException("Data cannot be null");
-            contents[i] = data.get(contentKeys[i]);
-        }
-        this(data.get(titleKey), contents, rows, columns, titleFont, contentFont, backgroundColor, foregroundColor);
-    }
-
-    /**
-     * Constructs an Information window with data loaded from a file and styled accordingly.
-     * This constructor retrieves the title and content text using keys from the specified file
-     * and initializes the window with the provided fonts and colors.
-     *
-     * @param file             the data file containing key-value pairs for the title and content text.
-     * @param titleKey         the key to retrieve the title text from the data file.
-     * @param contentKey       the key to retrieve the content text from the data file.
-     * @param titleFont        the font used to style the title text.
-     * @param contentFont      the font used to style the content text.
-     * @param backgroundColor  the background color of the window and its components.
-     * @param foregroundColor  the foreground color of the title and content text.
-     */
-    public Information(
-            File file,
-            String titleKey,
-            String contentKey,
-            Font titleFont,
-            Font contentFont,
-            Color backgroundColor,
-            Color foregroundColor
-    ) {
-        Map<String, String> data = DataFileUtil.readDataFile(file);
-        if (data.get(titleKey) == null || data.get(contentKey) == null)
-            throw new IllegalArgumentException("Data cannot be null");
-        this(data.get(titleKey), data.get(contentKey), titleFont, contentFont, backgroundColor, foregroundColor);
-    }
-
-    /**
-     * Constructs an Information object using the specified parameters.
-     *
-     * @param file             The file containing data to initialize the Information object.
-     * @param titleKey         The key used to retrieve the title from the data.
-     * @param contentKeys      An array of keys used to retrieve content from the data.
-     * @param rows             The number of rows for the information layout.
-     * @param columns          The number of columns for the information layout.
-     * @param titleFont        The font used for the title text.
-     * @param contentFont      The font used for the content text.
-     * @param backgroundColor  The background color of the information layout.
-     * @param foregroundColor  The foreground color (typically text color) of the information layout.
-     */
-    public Information(
-            File file,
-            String titleKey,
-            String[] contentKeys,
-            int rows,
-            int columns,
-            Font titleFont,
-            Font contentFont,
-            Color backgroundColor,
-            Color foregroundColor
-    ) {
-        Map<String, String> data = DataFileUtil.readDataFile(file);
-        this(data, titleKey, contentKeys, rows, columns, titleFont, contentFont, backgroundColor, foregroundColor);
-    }
-
-    /**
-     * Constructs an Information window with a specified file path, text keys, fonts, and colors.
-     * This window displays a title and content loaded from the provided data file.
-     *
-     * @param filePath        the path to the data file containing key-value pairs for the title
-     *                        and content text.
-     * @param titleKey        the key to retrieve the title text from the data file.
-     * @param contentKey      the key to retrieve the content text from the data file.
-     * @param titleFont       the font used to style the title text.
-     * @param contentFont     the font used to style the content text.
-     * @param backgroundColor the background color of the window and its components.
-     * @param foregroundColor the foreground color of the title and content text.
-     * @throws IllegalArgumentException if the provided file path is blank or null.
-     */
-    public Information(
-            String filePath,
-            String titleKey,
-            String contentKey,
-            Font titleFont,
-            Font contentFont,
-            Color backgroundColor,
-            Color foregroundColor
-    ) {
-        if (filePath == null || filePath.isBlank()) throw new IllegalArgumentException("File path cannot be blank");
-        this(new File(filePath), titleKey, contentKey, titleFont, contentFont, backgroundColor, foregroundColor);
-    }
-
-    /**
-     * Constructs an Information instance using the specified file path and other details.
-     * Validates that the file path is not null or blank before proceeding.
-     * Delegates initialization to another constructor that accepts a File object.
-     *
-     * @param filePath the path to the file as a string; must not be null or blank
-     * @param titleKey the key used to retrieve the title
-     * @param contentKeys an array of keys used to retrieve the content
-     * @param rows the number of rows to be used in the associated structure
-     * @param columns the number of columns to be used in the associated structure
-     * @param titleFont the Font object used for styling the title
-     * @param contentFont the Font object used for styling the content
-     * @param backgroundColor the Color object used for the background
-     * @param foregroundColor the Color object used for the foreground
-     */
-    public Information(
-            String filePath,
-            String titleKey,
-            String[] contentKeys,
-            int rows,
-            int columns,
-            Font titleFont,
-            Font contentFont,
-            Color backgroundColor,
-            Color foregroundColor
-    ) {
-        if (filePath == null || filePath.isBlank()) throw new IllegalArgumentException("File path cannot be blank");
-        this(new File(filePath), titleKey, contentKeys, rows, columns, titleFont, contentFont, backgroundColor, foregroundColor);
-    }
-
-    /**
-     * Constructs an Information window with a specified file, title key, and content key.
-     * This constructor initializes the window with default fonts and colors.
-     * The window displays a title and content loaded from the provided data file.
-     *
-     * @param file      the data file containing key-value pairs for the title and content text.
-     * @param titleKey  the key to retrieve the title text from the data file.
-     * @param contentKey the key to retrieve the content text from the data file.
-     */
-    public Information(File file, String titleKey, String contentKey) {
-        this(file, titleKey, contentKey, defaultFont, defaultFont, backgroundColor, foregroundColor);
-    }
-
-    /**
-     * Constructs an Information object with the specified parameters.
-     *
-     * @param file        the file to be processed.
-     * @param titleKey    the key used to identify the title.
-     * @param contentKeys an array of keys used to identify the content.
-     * @param rows        the number of rows in the layout.
-     * @param columns     the number of columns in the layout.
-     */
-    public Information(File file, String titleKey, String[] contentKeys, int rows, int columns) {
-        this(file, titleKey, contentKeys, rows, columns, defaultFont, defaultFont, backgroundColor, foregroundColor);
-    }
-
-    /**
-     * Constructs an Information window with a specified file path, title key, and content key.
-     * This constructor initializes the window with default fonts and colors.
-     * The window displays a title and content loaded from the provided data file.
-     *
-     * @param filePath   the path to the data file containing key-value pairs for the title and
-     *                   content text.
-     * @param titleKey   the key to retrieve the title text from the data file.
-     * @param contentKey the key to retrieve the content text from the data file.
-     * @throws IllegalArgumentException if the provided file path is blank or null.
-     */
-    public Information(String filePath, String titleKey, String contentKey) {
-        if (filePath == null || filePath.isBlank()) throw new IllegalArgumentException("File path cannot be blank");
-        this(new File(filePath), titleKey, contentKey);
-    }
-
-    /**
-     * Constructs an Information object with the specified parameters.
-     *
-     * @param filePath the path to the file that contains the information; cannot be null or blank
-     * @param titleKey the key used to identify the title in the data
-     * @param contentKeys an array of keys used to identify the content in the data
-     * @param rows the number of rows in the information data structure
-     * @param columns the number of columns in the information data structure
-     * @throws IllegalArgumentException if the filePath is null or blank
-     */
-    public Information(String filePath, String titleKey, String[] contentKeys, int rows, int columns) {
-        if (filePath == null || filePath.isBlank()) throw new IllegalArgumentException("File path cannot be blank");
-        this(new File(filePath), titleKey, contentKeys, rows, columns);
+    public void close () {
+        super.setVisible(false);
     }
 
 }
