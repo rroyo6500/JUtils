@@ -19,14 +19,14 @@ public class Board <T> {
      * Represents a two-dimensional grid structure where each element of the board
      * is stored as a list of rows, and each row is represented as a list of elements
      * of type {@code T}.
-     *
+     * <p>
      * The board is implemented as a list of lists to allow flexible access and
      * manipulation of the elements. Each sub-list corresponds to a row in the grid.
-     *
+     * <p>
      * This variable is the primary data structure for holding the state of the board
      * and supports operations defined in the containing class for interacting with
      * its elements.
-     *
+     * <p>
      * The board is initialized as an empty {@code ArrayList} and is populated using
      * the methods provided in the containing class.
      */
