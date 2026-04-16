@@ -63,7 +63,7 @@ public final class DataFileUtil {
 
         for (String s : splittedContent) {
             s = s.trim();
-            if (s.isEmpty()) throw new IllegalArgumentException("Data file error");
+            if (s.isEmpty()) continue;
 
             int endT = s.indexOf(':');
             int startV = (endT >= 0) ? s.indexOf('^', endT + 1) : -1;
