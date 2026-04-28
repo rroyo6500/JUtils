@@ -1,12 +1,12 @@
-package rroyo.JUtils.Utils;
+package rroyo.JUtils.Utils.BBDD;
 
 import java.sql.*;
 
-public class BBDDConection {
+public class BBDDConnection {
 
     private final Connection conexion;
 
-    public BBDDConection(String url, String user, String pass) {
+    public BBDDConnection(String url, String user, String pass) {
         try {
             conexion = DriverManager.getConnection(url, user, pass);
         } catch (SQLException e) {
@@ -20,7 +20,9 @@ public class BBDDConection {
             for (int i = 0; i < params.length; i++) {
                 pstmt.setObject(i + 1, params[i]);
             }
-            return pstmt.executeQuery();
+            ResultSet r = pstmt.executeQuery();
+            pstmt.close();
+            return r;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -33,6 +35,7 @@ public class BBDDConection {
                 pstmt.setObject(i + 1, params[i]);
             }
             pstmt.executeUpdate();
+            pstmt.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
