@@ -1,10 +1,11 @@
-package rroyo.JUtils.Utils;
+package rroyo.JUtils.Utils.Interfaces;
+
+import rroyo.JUtils.Utils.Data.DataFileUtil;
+import rroyo.JUtils.Utils.Validator;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.io.File;
-import java.util.Map;
 
 /**
  * Represents a styled information window that displays a title and content text.
@@ -71,21 +72,20 @@ public final class Information extends JFrame {
             Color backgroundColor,
             Color foregroundColor
     ) {
-        if (title == null) throw new IllegalArgumentException("Title cannot be null");
-        if (contents == null) throw new IllegalArgumentException("Contents cannot be null");
-        if (contents.length == 0) throw new IllegalArgumentException("Contents cannot be empty");
-        if (rows < 1) throw new IllegalArgumentException("Rows must be greater than 0");
-        if (columns < 1) throw new IllegalArgumentException("Columns must be greater than 0");
+        Validator.notNull(title, "Title cannot be null");
+        Validator.notNull(contents, "Contents cannot be null");
+        Validator.isPositive(contents.length, "Contents cannot be empty");
+        Validator.isPositive(rows, "Rows must be greater than 0");
+        Validator.isPositive(columns, "Columns must be greater than 0");
         if (titleFont == null) titleFont = Information.defaultFont;
         if (contentFont == null) contentFont = Information.defaultFont;
         if (backgroundColor == null) backgroundColor = Information.backgroundColor;
         if (foregroundColor == null) foregroundColor = Information.foregroundColor;
 
-        if (rows * columns != contents.length) {
-            throw new IllegalArgumentException(
-                    "rows*columns (" + (rows * columns) + ") must match contents.length (" + contents.length + ")"
-            );
-        }
+        Validator.condition(
+                rows * columns != contents.length,
+                "rows*columns (" + (rows * columns) + ") must match contents.length (" + contents.length + ")"
+        );
 
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setResizable(false);

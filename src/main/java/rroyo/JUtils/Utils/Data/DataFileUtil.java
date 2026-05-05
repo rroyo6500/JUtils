@@ -1,6 +1,9 @@
-package rroyo.JUtils.Utils;
+package rroyo.JUtils.Utils.Data;
+
+import rroyo.JUtils.Utils.Validator;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
@@ -53,7 +56,7 @@ public final class DataFileUtil {
      *                                  conform to the expected formatting rules.
      */
     public static Map<String, String> readData(String data) {
-        if (data == null || data.isBlank()) throw new IllegalArgumentException("Data cannot be blank");
+        Validator.notBlank(data, "Data cannot be blank");
 
         String[] splittedContent = data.replaceAll("(?s)\\\\\\*.*?\\*\\\\", "")
                 .trim()
@@ -69,13 +72,12 @@ public final class DataFileUtil {
             int startV = (endT >= 0) ? s.indexOf('^', endT + 1) : -1;
             int endV = s.lastIndexOf('~');
 
-            if (endT < 0 || startV < 0 || endV < 0 || endV <= startV)
-                throw new IllegalArgumentException("Data file error");
+            Validator.condition(endT < 0 || startV < 0 || endV < 0 || endV <= startV, "Data file error");
 
             String key = s.substring(0, endT).trim();
             String value = s.substring(startV + 1, endV).trim();
 
-            if (key.isEmpty()) throw new IllegalArgumentException("Data file error");
+            Validator.notBlank(key, "Data file error");
 
             out.putIfAbsent(key, value);
         }
@@ -96,7 +98,7 @@ public final class DataFileUtil {
      * @throws IllegalArgumentException If the input file is null, does not exist,
      *                                  is a directory, or cannot be read.
      */
-    public static Map<String, String> readDataFile (File file) {
+    public static Map<String, String> readDataFile (File file) throws IOException {
         String content = FileUtilHandler.readFile(file);
         return readData(content);
     }
@@ -113,8 +115,8 @@ public final class DataFileUtil {
      * @throws IllegalArgumentException If the path is null, blank, does not point to a valid file,
      *                                  or the file cannot be read.
      */
-    public static Map<String, String> readDataFile (String path) {
-        if (path == null || path.isBlank()) throw new IllegalArgumentException("Path cannot be blank");
+    public static Map<String, String> readDataFile (String path) throws IOException {
+        Validator.notBlank(path, "Path cannot be blank");
         return readDataFile(new File(path));
     }
 
@@ -128,8 +130,8 @@ public final class DataFileUtil {
      * @param dataMessage The data to be written into the file. It must not be null or blank.
      * @throws IllegalArgumentException If the path is null, blank, or if the dataMessage is null or blank.
      */
-    public static void writeDataFile(String path, String dataMessage) {
-        if (path == null || path.isBlank()) throw new IllegalArgumentException("Path cannot be blank");
+    public static void writeDataFile(String path, String dataMessage) throws IOException {
+        Validator.notBlank(path, "Path cannot be blank");
         writeDataFile(new File(path), dataMessage);
     }
 
@@ -144,8 +146,8 @@ public final class DataFileUtil {
      * @param data The data string to write into the file. It must not be null or blank.
      * @throws IllegalArgumentException If the data is null or blank.
      */
-    public static void writeDataFile(File file, String data) {
-        if (data == null || data.isBlank()) throw new IllegalArgumentException("Data cannot be blank");
+    public static void writeDataFile(File file, String data) throws IOException {
+        Validator.notBlank(data, "Data cannot be blank");
         FileUtilHandler.writeFile(file, data.trim());
     }
 
@@ -163,8 +165,8 @@ public final class DataFileUtil {
      *                                  null key or value, or if a key contains reserved
      *                                  delimiter characters ('¡', ':').
      */
-    public static void writeDataFile (Map<String, String> dataMap, File file) {
-        if (dataMap == null) throw new IllegalArgumentException("Data map cannot be null");
+    public static void writeDataFile (Map<String, String> dataMap, File file) throws IOException {
+        Validator.notNull(dataMap, "DataMap cannot be null");
 
         String ls = System.lineSeparator();
         StringBuilder sb = new StringBuilder();
@@ -196,8 +198,8 @@ public final class DataFileUtil {
      *                blank, or point to an invalid location.
      * @throws IllegalArgumentException If the path is null, blank, or if the dataMap is null.
      */
-    public static void writeDataFile (Map<String, String> dataMap, String path) {
-        if (path == null || path.isBlank()) throw new IllegalArgumentException("Path cannot be blank");
+    public static void writeDataFile (Map<String, String> dataMap, String path) throws IOException {
+        Validator.notBlank(path, "Path cannot be blank");
         writeDataFile(dataMap, new File(path));
     }
 
@@ -213,17 +215,14 @@ public final class DataFileUtil {
      * @throws IllegalArgumentException If the key in the map entry contains reserved delimiter characters ('¡', ':').
      */
     private static String getString(Map.Entry<String, String> e) {
-        if (e == null) throw new NullPointerException("Map entry cannot be null");
+        Validator.notNull(e, "Map entry cannot be null");
 
         String key = e.getKey();
         String value = e.getValue();
 
-        if (key == null || value == null) {
-            throw new NullPointerException("Key or value is null");
-        }
+        Validator.condition(key == null || value == null, "Key or value is null");
 
-        if (key.indexOf('¡') >= 0 || key.indexOf(':') >= 0)
-            throw new IllegalArgumentException("Key contains reserved delimiter characters: '¡', ':'");
+        Validator.condition(key.indexOf('¡') >= 0 || key.indexOf(':') >= 0, "Key contains reserved delimiter characters: '¡', ':'");
         return value;
     }
 

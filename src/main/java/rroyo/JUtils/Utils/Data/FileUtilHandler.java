@@ -1,7 +1,9 @@
-package rroyo.JUtils.Utils;
+package rroyo.JUtils.Utils.Data;
+
+import rroyo.JUtils.Utils.Logging.LoggerAux;
+import rroyo.JUtils.Utils.Validator;
 
 import java.io.*;
-import java.util.Optional;
 
 /**
  * The FileUtilHandler interface provides utility methods for reading from and writing to files.
@@ -32,8 +34,8 @@ public final class FileUtilHandler {
      * @return The content of the file as a String.
      * @throws IllegalArgumentException if the source path is null, blank, or does not resolve to a valid file.
      */
-    public static String readFile(String src) {
-        if (src == null || src.isBlank()) throw new IllegalArgumentException("Source path cannot be blank");
+    public static String readFile(String src) throws IOException {
+        Validator.notBlank(src, "Source path cannot be blank");
         return readFile(new File(src));
     }
 
@@ -46,21 +48,20 @@ public final class FileUtilHandler {
      * @throws IllegalArgumentException if the file is null, does not exist, is a directory,
      *                                  is not a regular file, or cannot be read.
      */
-    public static String readFile(File file) {
-        if (file == null) throw new IllegalArgumentException("File cannot be null");
-        if (!file.exists()) throw new IllegalArgumentException("File does not exist");
-        if (file.isDirectory()) throw new IllegalArgumentException("File cannot be a directory");
-        if (!file.isFile()) throw new IllegalArgumentException("File is not a regular file");
-        if (!file.canRead()) throw new IllegalArgumentException("File cannot be read");
+    public static String readFile(File file) throws IOException {
+        Validator.notNull(file, "File cannot be null");
+        Validator.condition(!file.exists(), "File does not exist");
+        Validator.condition(file.isDirectory(), "File cannot be a directory");
+        Validator.condition(!file.isFile(), "File is not a regular file");
+        Validator.condition(!file.canRead(), "File cannot be read");
 
         String line;
         StringBuilder text = new StringBuilder();
-        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-            while ((line = br.readLine()) != null)
-                text.append(line).append("\n");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+
+        BufferedReader br = new BufferedReader(new FileReader(file));
+        while ((line = br.readLine()) != null)
+            text.append(line).append("\n");
+
         return text.toString().trim();
     }
 
@@ -74,8 +75,8 @@ public final class FileUtilHandler {
      * @param msg The message to be written to the file. It must not be null.
      * @throws IllegalArgumentException if the source path is null, blank, or invalid.
      */
-    public static void writeFile(String src, String msg) {
-        if (src == null || src.isBlank()) throw new IllegalArgumentException("Source path cannot be blank");
+    public static void writeFile(String src, String msg) throws IOException {
+        Validator.notBlank(src, "Source path cannot be blank");
         writeFile(new File(src), msg, false);
     }
 
@@ -89,8 +90,8 @@ public final class FileUtilHandler {
      *               existing content (if any) will be overwritten.
      * @throws IllegalArgumentException if the source path is null, blank, or invalid.
      */
-    public static void writeFile(String src, String msg, boolean append) {
-        if (src == null || src.isBlank()) throw new IllegalArgumentException("Source path cannot be blank");
+    public static void writeFile(String src, String msg, boolean append) throws IOException {
+        Validator.notBlank(src, "Source path cannot be blank");
         writeFile(new File(src), msg, append);
     }
 
@@ -103,7 +104,7 @@ public final class FileUtilHandler {
      * @throws IllegalArgumentException if the file is null or is a directory.
      * @throws RuntimeException if an I/O error occurs during the file operation.
      */
-    public static void writeFile(File file, String msg) {
+    public static void writeFile(File file, String msg) throws IOException {
         writeFile(file, msg, false);
     }
 
@@ -119,16 +120,13 @@ public final class FileUtilHandler {
      * @throws IllegalArgumentException if the file is null or is a directory.
      * @throws RuntimeException if an I/O error occurs during the file operation.
      */
-    public static void writeFile(File file, String msg, boolean append) {
-        if (file == null) throw new IllegalArgumentException("File cannot be null");
-        if (file.isDirectory()) throw new IllegalArgumentException("File cannot be a directory");
+    public static void writeFile(File file, String msg, boolean append) throws IOException {
+        Validator.notNull(file, "File cannot be null");
+        Validator.condition(file.isDirectory(), "File cannot be a directory");
 
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(file, append))) {
-            if (file.createNewFile() && logging) System.out.println("File created: " + file.getName());
-            bw.write(msg);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        BufferedWriter bw = new BufferedWriter(new FileWriter(file, append));
+        if (file.createNewFile() && logging) LoggerAux.info("File created: " + file.getName());
+        bw.write(msg);
     }
 
 }

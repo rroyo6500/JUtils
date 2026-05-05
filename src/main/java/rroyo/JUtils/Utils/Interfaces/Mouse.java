@@ -1,4 +1,6 @@
-package rroyo.JUtils.Utils;
+package rroyo.JUtils.Utils.Interfaces;
+
+import rroyo.JUtils.Utils.Validator;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -16,6 +18,8 @@ import java.awt.event.MouseEvent;
  * @see MouseEvent
  */
 public final class Mouse {
+
+    private Mouse(){}
 
     /**
      * Stores the current position of the mouse cursor on the X and Y axes.
@@ -46,7 +50,7 @@ public final class Mouse {
      * @throws IllegalArgumentException if the specified component is null
      */
     public static void configureMouse(Component component) {
-        if (component == null) throw new IllegalArgumentException("Component cannot be null");
+        Validator.notNull(component, "Component cannot be null");
 
         component.addMouseMotionListener(new MouseAdapter() {
             @Override
@@ -81,8 +85,8 @@ public final class Mouse {
      * @throws IllegalArgumentException if the specified MouseAdapter is null
      */
     public static void addConfig(Component component, MouseAdapter ma) {
-        if (ma == null) throw new IllegalArgumentException("MouseAdapter cannot be null");
-        if (component == null) throw new IllegalArgumentException("Component cannot be null");
+        Validator.notNull(ma, "MouseAdapter cannot be null");
+        Validator.notNull(component, "Component cannot be null");
 
         component.addMouseListener(ma);
         component.addMouseMotionListener(ma);

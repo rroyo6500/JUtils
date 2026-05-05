@@ -1,9 +1,10 @@
-package rroyo.JUtils.Utils;
+package rroyo.JUtils.Utils.Interfaces;
+
+import rroyo.JUtils.Utils.Validator;
 
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -33,8 +34,8 @@ public final class CustomFonts {
      * @param path The file system path pointing to the TrueType font file.
      * @param size The desired size of the font in points.
      */
-    public static void addFont (String key, String path, float size) {
-        if (path == null || path.isBlank()) throw new IllegalArgumentException("Path cannot be blank");
+    public static void addFont (String key, String path, float size) throws FontFormatException, IOException {
+        Validator.notBlank(path, "Path cannot be blank");
         addFont(key, new File(path), size);
     }
 
@@ -46,20 +47,16 @@ public final class CustomFonts {
      * @param file The File object pointing to the TrueType font file.
      * @param size The desired font size to derive from the base font.
      */
-    public static void addFont (String key, File file, float size) {
-        if (file == null) throw new IllegalArgumentException("File cannot be null");
-        if (!file.exists()) throw new IllegalArgumentException("File does not exist");
-        if (file.isDirectory()) throw new IllegalArgumentException("File cannot be a directory");
-        if (!file.isFile()) throw new IllegalArgumentException("File is not a regular file");
-        if (key == null || key.isBlank()) throw new IllegalArgumentException("Key cannot be blank");
-        if (size <= 0) throw new IllegalArgumentException("Size must be greater than zero");
+    public static void addFont (String key, File file, float size) throws FontFormatException, IOException {
+        Validator.notNull(file, "File cannot be null");
+        Validator.condition(!file.exists(), "File does not exist");
+        Validator.condition(file.isDirectory(), "File cannot be a directory");
+        Validator.condition(!file.isFile(), "File is not a regular file");
+        Validator.notBlank(key, "Key cannot be blank");
+        Validator.inRange(size, 1, 90, "Size must be in range");
 
-        try {
-            Font prev = CustomFonts.fonts.putIfAbsent(key, Font.createFont(Font.TRUETYPE_FONT, file).deriveFont(size));
-            if (prev != null) throw new IllegalArgumentException("Font key already exists: " + key);
-        } catch (FontFormatException | IOException e) {
-            throw new RuntimeException(e);
-        }
+        Font prev = CustomFonts.fonts.putIfAbsent(key, Font.createFont(Font.TRUETYPE_FONT, file).deriveFont(size));
+        Validator.condition(prev != null, "Font key already exists: " + key);
     }
 
     /**
@@ -69,7 +66,7 @@ public final class CustomFonts {
      * @return The Font object associated with the specified name, or null if no font with the given name is found.
      */
     public static Font getFont (String key) {
-        if (key == null || key.isBlank()) throw new IllegalArgumentException("Key cannot be blank");
+        Validator.notBlank(key, "Key cannot be blank");
         if (!CustomFonts.fonts.containsKey(key)) throw new IllegalArgumentException("Font key does not exist: " + key);
         return CustomFonts.fonts.get(key);
     }
@@ -84,8 +81,8 @@ public final class CustomFonts {
      *         given name is found in the collection.
      */
     public static Font getFont (String key, Float size) {
-        if (key == null || key.isBlank()) throw new IllegalArgumentException("Key cannot be blank");
-        if (!CustomFonts.fonts.containsKey(key)) throw new IllegalArgumentException("Font key does not exist: " + key);
+        Validator.notBlank(key, "Key cannot be blank");
+        Validator.condition(!CustomFonts.fonts.containsKey(key), "Font key does not exist: " + key);
         return CustomFonts.fonts.get(key).deriveFont(size);
     }
 
@@ -100,8 +97,8 @@ public final class CustomFonts {
      *             for the font in the collection.
      */
     public static void removeFont (String key) {
-        if (key == null || key.isBlank()) throw new IllegalArgumentException("Key cannot be blank");
-        if (!CustomFonts.fonts.containsKey(key)) throw new IllegalArgumentException("Font key does not exist: " + key);
+        Validator.notBlank(key, "Key cannot be blank");
+        Validator.condition(!CustomFonts.fonts.containsKey(key), "Font key does not exist: " + key);
         CustomFonts.fonts.remove(key);
     }
 
