@@ -17,7 +17,7 @@ import java.util.*;
  *
  * @author rroyo
  */
-public class ResultTable {
+public final class ResultTable {
 
     /**
      * Internal data structure representing the table.

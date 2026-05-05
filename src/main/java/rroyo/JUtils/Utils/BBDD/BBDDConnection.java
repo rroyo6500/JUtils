@@ -1,8 +1,10 @@
 package rroyo.JUtils.Utils.BBDD;
 
 import rroyo.JUtils.Utils.Core.Validator;
+import rroyo.JUtils.Utils.Logging.LoggerAux;
 
 import java.sql.*;
+import java.util.List;
 
 /**
  * Utility class to manage database connection and SQL statement execution
@@ -30,6 +32,7 @@ public final class BBDDConnection implements AutoCloseable {
         Validator.notBlank(url, "URL cannot be empty");
         Validator.notBlank(user, "Database user cannot be empty");
         conexion = DriverManager.getConnection(url, user, pass);
+        LoggerAux.debug("Connection established");
     }
 
     /**
@@ -46,6 +49,15 @@ public final class BBDDConnection implements AutoCloseable {
         for (int i = 0; i < params.length; i++) {
             pstmt.setObject(i + 1, params[i]);
         }
+        LoggerAux.debug(String.format("""
+                SQL query executed:
+                
+                %s--------
+                %s
+                """,
+                sql,
+                List.of(params)
+        ));
         return pstmt.executeQuery();
     }
 
@@ -67,6 +79,14 @@ public final class BBDDConnection implements AutoCloseable {
             }
             pstmt.executeUpdate();
         }
+        LoggerAux.debug(String.format("""
+                SQL update executed:
+                ```
+                %s
+                ```
+                """,
+                sql
+        ));
     }
 
     /**
@@ -79,6 +99,7 @@ public final class BBDDConnection implements AutoCloseable {
         if (conexion != null && !conexion.isClosed()) {
             conexion.close();
         }
+        LoggerAux.debug("Connection closed");
     }
 
     /**

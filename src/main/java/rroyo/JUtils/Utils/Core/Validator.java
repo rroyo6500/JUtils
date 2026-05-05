@@ -1,6 +1,7 @@
 package rroyo.JUtils.Utils.Core;
 
 import rroyo.JUtils.Utils.Console.TStyle;
+import rroyo.JUtils.Utils.Logging.LoggerAux;
 
 /**
  * Utility class for data validation and constraint enforcement.
@@ -28,8 +29,11 @@ public final class Validator {
      * @throws IllegalArgumentException if the object is null.
      */
     public static void notNull(Object obj, String msg) {
-        if (obj == null)
-            throw new IllegalArgumentException(TStyle.red(msg));
+        IllegalArgumentException iae = new IllegalArgumentException(msg);
+        if (obj == null) {
+            LoggerAux.error(iae);
+            throw iae;
+        }
     }
 
     /**
@@ -40,8 +44,11 @@ public final class Validator {
      * @throws IllegalArgumentException if the string is null, empty, or only whitespace.
      */
     public static void notBlank(String str, String msg) {
-        if (str == null || str.trim().isEmpty())
-            throw new IllegalArgumentException(TStyle.red(msg));
+        IllegalArgumentException iae = new IllegalArgumentException(msg);
+        if (str == null || str.trim().isEmpty()) {
+            LoggerAux.error(iae);
+            throw iae;
+        }
     }
 
     /**
@@ -54,10 +61,13 @@ public final class Validator {
      * @throws IllegalArgumentException if the value is outside the specified range.
      */
     public static void inRange(int value, int min, int max, String msg) {
-        if (value < min || value > max)
-            throw new IllegalArgumentException(
-                    TStyle.red(String.format("%s (Value: %d, Range: [%d - %d])", msg, value, min, max))
-            );
+        IllegalArgumentException iae = new IllegalArgumentException(
+                String.format("%s (Value: %d, Range: [%d - %d])", msg, value, min, max)
+        );
+        if (value < min || value > max) {
+            LoggerAux.error(iae);
+            throw iae;
+        }
     }
 
     /**
@@ -70,10 +80,13 @@ public final class Validator {
      * @throws IllegalArgumentException if the value is outside the specified range.
      */
     public static void inRange(double value, double min, double max, String msg) {
-        if (value < min || value > max)
-            throw new IllegalArgumentException(
-                    TStyle.red(String.format("%s (Value: %.1f | Range: [%.1f - %.1f])", msg, value, min, max))
-            );
+        IllegalArgumentException iae = new IllegalArgumentException(
+                String.format("%s (Value: %.1f | Range: [%.1f - %.1f])", msg, value, min, max)
+        );
+        if (value < min || value > max) {
+            LoggerAux.error(iae);
+            throw iae;
+        }
     }
 
     /**
@@ -84,8 +97,11 @@ public final class Validator {
      * @throws IllegalArgumentException if the value is not positive.
      */
     public static void isPositive(double value, String msg) {
-        if (value <= 0)
-            throw new IllegalArgumentException(TStyle.red(msg));
+        IllegalArgumentException iae = new IllegalArgumentException(msg);
+        if (value <= 0) {
+            LoggerAux.error(iae);
+            throw iae;
+        }
     }
 
     /**
@@ -96,8 +112,11 @@ public final class Validator {
      * @throws IllegalArgumentException if the condition evaluates to false.
      */
     public static void assertTrue(boolean condition, String msg) {
-        if (!condition)
-            throw new IllegalArgumentException(TStyle.red(msg));
+        IllegalArgumentException iae = new IllegalArgumentException(msg);
+        if (!condition) {
+            LoggerAux.error(iae);
+            throw iae;
+        }
     }
 
     /**

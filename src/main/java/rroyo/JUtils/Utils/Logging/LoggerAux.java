@@ -25,19 +25,32 @@ public final class LoggerAux {
     /**
      * Enumerates the severity levels supported by the logger.
      */
-    private enum LogType {
-        /** General information about program flow. */
-        INFO,
-        /** Warnings about unexpected non-critical situations. */
-        WARNING,
-        /** Errors that prevent the correct execution of an operation. */
-        ERROR
-    }
+    private enum LogType {INFO, WARNING, ERROR, DEBUG}
 
     private static File logDirectory;
 
+    private static boolean debugEnabled = true;
+    private static boolean consoleOutputEnabled = true;
+
     /** Standard date and time formatter (Year-Month-Day Hour:Minute:Second). */
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+    /**
+     * Enables or disables debug level messages in the console.
+     * @param enabled True to show debug logs, false to hide them.
+     */
+    public static void setDebugEnabled(boolean enabled) {
+        debugEnabled = enabled;
+    }
+
+    /**
+     * Enables or disables all log output to the system console.
+     * Note: This does not affect file logging.
+     * @param enabled True to show logs in console, false to silence them.
+     */
+    public static void setConsoleOutputEnabled(boolean enabled) {
+        consoleOutputEnabled = enabled;
+    }
 
     public static void setLogDirectory(String path) {
         Validator.notBlank(path, "Path cannot be blank");
@@ -49,6 +62,8 @@ public final class LoggerAux {
         Validator.assertTrue(directory.isDirectory(), "Require an Directory");
 
         logDirectory = directory;
+
+        debug("LogDirectory added [" + directory.getAbsolutePath() + "]");
     }
 
     /**
@@ -69,6 +84,17 @@ public final class LoggerAux {
      */
     public static String warn(String msg) {
         return log(LogType.WARNING, msg);
+    }
+
+    /**
+     * Logs a debug message visualized in cyan color.
+     * Only displayed if debug is enabled.
+     *
+     * @param msg The technical message for debugging.
+     * @return The log message
+     */
+    public static String debug(String msg) {
+        return log(LogType.DEBUG, msg);
     }
 
     /**
@@ -127,19 +153,25 @@ public final class LoggerAux {
     private static String log(LogType logType, String msg) {
         Validator.notNull(logType, "LogType cannot be null");
         Validator.notBlank(msg, "Message is blank");
-        System.out.printf("[%s] [%s] %s%n%n",
-                LocalDateTime.now().format(formatter),
-                switch (logType) {
-                    case INFO -> TStyle.italic(logType);
-                    case WARNING -> TStyle.italic(TStyle.yellow(logType));
-                    case ERROR -> TStyle.italic(TStyle.red(logType));
-                },
-                switch (logType) {
-                    case WARNING -> TStyle.yellow(msg);
-                    case ERROR -> TStyle.red(msg);
-                    default -> msg;
-                }
-        );
+        if (consoleOutputEnabled) {
+            if (logType != LogType.DEBUG || debugEnabled) {
+                System.out.printf("[%s] [%s] %s%n",
+                        LocalDateTime.now().format(formatter),
+                        switch (logType) {
+                            case INFO -> TStyle.italic(logType);
+                            case WARNING -> TStyle.italic(TStyle.yellow(logType));
+                            case ERROR -> TStyle.italic(TStyle.red(logType));
+                            case DEBUG -> TStyle.italic(TStyle.cyan(logType));
+                        },
+                        switch (logType) {
+                            case WARNING -> TStyle.yellow(msg);
+                            case ERROR -> TStyle.red(msg);
+                            case DEBUG -> TStyle.cyan(msg);
+                            default -> msg;
+                        }
+                );
+            }
+        }
         String log = String.format(
                 "[%s] [%s] %s%n",
                 LocalDateTime.now().format(formatter),
@@ -148,13 +180,16 @@ public final class LoggerAux {
         );
         if (logDirectory != null) {
             File logFile = new File(String.format("%s%sLog_%s.log",
-                            logDirectory.getAbsolutePath(),
-                            File.separator,
-                            LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+                    logDirectory.getAbsolutePath(),
+                    File.separator,
+                    LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
             ));
-            try {
-                FileUtilHandler.writeFile(logFile, log, true);
-            } catch (IOException _) {}
+
+            try (java.io.FileWriter fw = new java.io.FileWriter(logFile, true)) {
+                fw.write(log);
+            } catch (IOException ignored) {
+                System.err.println("Critical: Could not write to log file.");
+            }
         }
         return log;
     }
