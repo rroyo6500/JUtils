@@ -1,6 +1,6 @@
 package rroyo.JUtils.Utils.BBDD;
 
-import rroyo.JUtils.Utils.Validator;
+import rroyo.JUtils.Utils.Core.Validator;
 
 import java.sql.*;
 

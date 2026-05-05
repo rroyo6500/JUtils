@@ -1,6 +1,6 @@
-package rroyo.JUtils.Utils.Data;
+package rroyo.JUtils.Utils.IO;
 
-import rroyo.JUtils.Utils.Validator;
+import rroyo.JUtils.Utils.Core.Validator;
 
 import java.io.File;
 import java.io.IOException;
@@ -72,7 +72,7 @@ public final class DataFileUtil {
             int startV = (endT >= 0) ? s.indexOf('^', endT + 1) : -1;
             int endV = s.lastIndexOf('~');
 
-            Validator.condition(endT < 0 || startV < 0 || endV < 0 || endV <= startV, "Data file error");
+            Validator.assertFalse(endT < 0 || startV < 0 || endV < 0 || endV <= startV, "Data file error");
 
             String key = s.substring(0, endT).trim();
             String value = s.substring(startV + 1, endV).trim();
@@ -220,9 +220,10 @@ public final class DataFileUtil {
         String key = e.getKey();
         String value = e.getValue();
 
-        Validator.condition(key == null || value == null, "Key or value is null");
+        Validator.assertFalse(key == null || value == null, "Key or value is null");
 
-        Validator.condition(key.indexOf('¡') >= 0 || key.indexOf(':') >= 0, "Key contains reserved delimiter characters: '¡', ':'");
+        assert key != null;
+        Validator.assertFalse(key.indexOf('¡') >= 0 || key.indexOf(':') >= 0, "Key contains reserved delimiter characters: '¡', ':'");
         return value;
     }
 

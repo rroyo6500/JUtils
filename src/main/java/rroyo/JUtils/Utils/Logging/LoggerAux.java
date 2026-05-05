@@ -1,7 +1,11 @@
 package rroyo.JUtils.Utils.Logging;
 
-import rroyo.JUtils.Utils.Validator;
+import rroyo.JUtils.Utils.Console.TStyle;
+import rroyo.JUtils.Utils.IO.FileUtilHandler;
+import rroyo.JUtils.Utils.Core.Validator;
 
+import java.io.File;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -30,8 +34,22 @@ public final class LoggerAux {
         ERROR
     }
 
+    private static File logDirectory;
+
     /** Standard date and time formatter (Year-Month-Day Hour:Minute:Second). */
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+    public static void setLogDirectory(String path) {
+        Validator.notBlank(path, "Path cannot be blank");
+        setLogDirectory(new File(path));
+    }
+
+    public static void setLogDirectory(File directory) {
+        Validator.notNull(directory, "Directory cannot be null");
+        Validator.assertTrue(directory.isDirectory(), "Require an Directory");
+
+        logDirectory = directory;
+    }
 
     /**
      * Logs an information message to the console.
@@ -50,7 +68,7 @@ public final class LoggerAux {
      * @return The log message
      */
     public static String warn(String msg) {
-        return log(LogType.WARNING, TStyle.yellow(msg));
+        return log(LogType.WARNING, msg);
     }
 
     /**
@@ -60,7 +78,7 @@ public final class LoggerAux {
      * @return The log message
      */
     public static String error(String msg) {
-        return log(LogType.ERROR, TStyle.red(msg));
+        return log(LogType.ERROR, msg);
     }
 
     /**
@@ -72,10 +90,10 @@ public final class LoggerAux {
      */
     public static String error(String msg, Exception exception) {
         Validator.notNull(exception, "Exception cannot be null");
-        return log(LogType.ERROR, TStyle.red(String.format("%s%n%s", msg,
+        return log(LogType.ERROR, String.format("%s%n%s", msg,
                 (exception.getMessage() != null)
                         ? exception.getMessage() : exception.toString()
-        )));
+        ));
     }
 
     /**
@@ -92,9 +110,7 @@ public final class LoggerAux {
      */
     public static String error(Exception exception) {
         Validator.notNull(exception, "Exception cannot be null");
-        return log(LogType.ERROR, TStyle.red(
-                exception.toString()
-        ));
+        return log(LogType.ERROR, exception.toString());
     }
 
     /**
@@ -109,18 +125,37 @@ public final class LoggerAux {
      * @return The log message
      */
     private static String log(LogType logType, String msg) {
+        Validator.notNull(logType, "LogType cannot be null");
         Validator.notBlank(msg, "Message is blank");
-        String str = String.format(
-                "[%s] [%s] %s%n%n",
+        System.out.printf("[%s] [%s] %s%n%n",
                 LocalDateTime.now().format(formatter),
                 switch (logType) {
                     case INFO -> TStyle.italic(logType);
                     case WARNING -> TStyle.italic(TStyle.yellow(logType));
                     case ERROR -> TStyle.italic(TStyle.red(logType));
                 },
+                switch (logType) {
+                    case WARNING -> TStyle.yellow(msg);
+                    case ERROR -> TStyle.red(msg);
+                    default -> msg;
+                }
+        );
+        String log = String.format(
+                "[%s] [%s] %s%n",
+                LocalDateTime.now().format(formatter),
+                logType,
                 msg
         );
-        System.out.println(str);
-        return str;
+        if (logDirectory != null) {
+            File logFile = new File(String.format("%s%sLog_%s.log",
+                            logDirectory.getAbsolutePath(),
+                            File.separator,
+                            LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+            ));
+            try {
+                FileUtilHandler.writeFile(logFile, log, true);
+            } catch (IOException _) {}
+        }
+        return log;
     }
 }

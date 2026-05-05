@@ -1,6 +1,6 @@
-package rroyo.JUtils.Utils;
+package rroyo.JUtils.Utils.Core;
 
-import rroyo.JUtils.Utils.Logging.TStyle;
+import rroyo.JUtils.Utils.Console.TStyle;
 
 /**
  * Utility class for data validation and constraint enforcement.
@@ -91,13 +91,24 @@ public final class Validator {
     /**
      * Validates a custom boolean condition.
      *
+     * @param condition The condition to evaluate. If false, an exception is thrown.
+     * @param msg The error message to display if the condition is NOT met.
+     * @throws IllegalArgumentException if the condition evaluates to false.
+     */
+    public static void assertTrue(boolean condition, String msg) {
+        if (!condition)
+            throw new IllegalArgumentException(TStyle.red(msg));
+    }
+
+    /**
+     * Validates a custom boolean condition.
+     *
      * @param condition The condition to evaluate. If true, an exception is thrown.
-     * @param msg       The error message to display if the condition is met.
+     * @param msg The error message to display if the condition IS met.
      * @throws IllegalArgumentException if the condition evaluates to true.
      */
-    public static void condition(boolean condition, String msg) {
-        if (condition)
-            throw new IllegalArgumentException(TStyle.red(msg));
+    public static void assertFalse(boolean condition, String msg) {
+        assertTrue(!condition, msg);
     }
 
 }

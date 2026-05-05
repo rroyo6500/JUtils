@@ -1,6 +1,6 @@
-package rroyo.JUtils.Utils.Interfaces;
+package rroyo.JUtils.Utils.GUI;
 
-import rroyo.JUtils.Utils.Validator;
+import rroyo.JUtils.Utils.Core.Validator;
 
 import java.awt.*;
 import java.io.File;
@@ -49,14 +49,14 @@ public final class CustomFonts {
      */
     public static void addFont (String key, File file, float size) throws FontFormatException, IOException {
         Validator.notNull(file, "File cannot be null");
-        Validator.condition(!file.exists(), "File does not exist");
-        Validator.condition(file.isDirectory(), "File cannot be a directory");
-        Validator.condition(!file.isFile(), "File is not a regular file");
+        Validator.assertTrue(!file.exists(), "File does not exist");
+        Validator.assertFalse(file.isDirectory(), "File cannot be a directory");
+        Validator.assertTrue(file.isFile(), "File is not a regular file");
         Validator.notBlank(key, "Key cannot be blank");
         Validator.inRange(size, 1, 90, "Size must be in range");
 
         Font prev = CustomFonts.fonts.putIfAbsent(key, Font.createFont(Font.TRUETYPE_FONT, file).deriveFont(size));
-        Validator.condition(prev != null, "Font key already exists: " + key);
+        Validator.assertFalse(prev != null, "Font key already exists: " + key);
     }
 
     /**
@@ -82,7 +82,7 @@ public final class CustomFonts {
      */
     public static Font getFont (String key, Float size) {
         Validator.notBlank(key, "Key cannot be blank");
-        Validator.condition(!CustomFonts.fonts.containsKey(key), "Font key does not exist: " + key);
+        Validator.assertTrue(CustomFonts.fonts.containsKey(key), "Font key does not exist: " + key);
         return CustomFonts.fonts.get(key).deriveFont(size);
     }
 
@@ -98,7 +98,7 @@ public final class CustomFonts {
      */
     public static void removeFont (String key) {
         Validator.notBlank(key, "Key cannot be blank");
-        Validator.condition(!CustomFonts.fonts.containsKey(key), "Font key does not exist: " + key);
+        Validator.assertTrue(CustomFonts.fonts.containsKey(key), "Font key does not exist: " + key);
         CustomFonts.fonts.remove(key);
     }
 

@@ -3,7 +3,7 @@ package rroyo.JUtils.Utils.BBDD;
 import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
-import rroyo.JUtils.Utils.Validator;
+import rroyo.JUtils.Utils.Core.Validator;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

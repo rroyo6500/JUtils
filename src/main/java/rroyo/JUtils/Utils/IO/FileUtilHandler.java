@@ -1,7 +1,7 @@
-package rroyo.JUtils.Utils.Data;
+package rroyo.JUtils.Utils.IO;
 
 import rroyo.JUtils.Utils.Logging.LoggerAux;
-import rroyo.JUtils.Utils.Validator;
+import rroyo.JUtils.Utils.Core.Validator;
 
 import java.io.*;
 
@@ -50,17 +50,18 @@ public final class FileUtilHandler {
      */
     public static String readFile(File file) throws IOException {
         Validator.notNull(file, "File cannot be null");
-        Validator.condition(!file.exists(), "File does not exist");
-        Validator.condition(file.isDirectory(), "File cannot be a directory");
-        Validator.condition(!file.isFile(), "File is not a regular file");
-        Validator.condition(!file.canRead(), "File cannot be read");
+        Validator.assertTrue(file.exists(), "File does not exist");
+        Validator.assertFalse(file.isDirectory(), "File cannot be a directory");
+        Validator.assertTrue(file.isFile(), "File is not a regular file");
+        Validator.assertTrue(file.canRead(), "File cannot be read");
 
         String line;
         StringBuilder text = new StringBuilder();
 
-        BufferedReader br = new BufferedReader(new FileReader(file));
-        while ((line = br.readLine()) != null)
-            text.append(line).append("\n");
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+            while ((line = br.readLine()) != null)
+                text.append(line).append("\n");
+        }
 
         return text.toString().trim();
     }
@@ -122,11 +123,12 @@ public final class FileUtilHandler {
      */
     public static void writeFile(File file, String msg, boolean append) throws IOException {
         Validator.notNull(file, "File cannot be null");
-        Validator.condition(file.isDirectory(), "File cannot be a directory");
+        Validator.assertFalse(file.isDirectory(), "File cannot be a directory");
 
-        BufferedWriter bw = new BufferedWriter(new FileWriter(file, append));
-        if (file.createNewFile() && logging) LoggerAux.info("File created: " + file.getName());
-        bw.write(msg);
+        if (!file.exists() && logging) LoggerAux.info("File created: " + file.getName());
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(file, append))) {
+            bw.write(msg);
+        }
     }
 
 }

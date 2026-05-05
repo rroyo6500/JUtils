@@ -1,6 +1,6 @@
-package rroyo.JUtils.Utils.Interfaces;
+package rroyo.JUtils.Utils.GUI;
 
-import rroyo.JUtils.Utils.Validator;
+import rroyo.JUtils.Utils.Core.Validator;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;
