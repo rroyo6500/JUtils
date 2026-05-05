@@ -37,3 +37,4 @@ La biblioteca se divide en varios paquetes especializados:
 ### 🗄️ BBDD (Bases de Datos)
 *   **`BBDDConnection.java`**: Una abstracción de JDBC para gestionar conexiones a bases de datos. Facilita la ejecución de consultas (`SELECT`) y actualizaciones (`INSERT`, `UPDATE`, `DELETE`) mediante *PreparedStatements* para evitar inyecciones SQL.
 *   **`DSLContextGenerator.java`**: Utilidad específica para proyectos que usen **jOOQ**. Simplifica la creación del `DSLContext` necesario para realizar consultas fluidas, permitiendo configurar el dialecto SQL (MySQL, PostgreSQL, etc.) fácilmente.
+*   **`ResultTable.java`**: Estructura de datos que transforma un `ResultSet` de JDBC en una tabla en memoria. Permite cerrar la conexión a la base de datos inmediatamente y ofrece una visualización en formato ASCII profesional y optimizada, manejando automáticamente alineaciones, valores nulos y casos de tablas sin resultados.
