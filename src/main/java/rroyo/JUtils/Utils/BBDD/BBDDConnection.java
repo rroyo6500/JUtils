@@ -20,9 +20,7 @@ public class BBDDConnection {
             for (int i = 0; i < params.length; i++) {
                 pstmt.setObject(i + 1, params[i]);
             }
-            ResultSet r = pstmt.executeQuery();
-            pstmt.close();
-            return r;
+            return pstmt.executeQuery();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
