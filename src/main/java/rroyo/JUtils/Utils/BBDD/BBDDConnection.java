@@ -32,7 +32,7 @@ public final class BBDDConnection implements AutoCloseable {
         Validator.notBlank(url, "URL cannot be empty");
         Validator.notBlank(user, "Database user cannot be empty");
         conexion = DriverManager.getConnection(url, user, pass);
-        LoggerAux.debug("Connection established");
+        LoggerAux.info("Connection established [" + url + "]");
     }
 
     /**
@@ -45,11 +45,14 @@ public final class BBDDConnection implements AutoCloseable {
      */
     public ResultSet executeQuery(String sql, Object... params) throws SQLException {
         Validator.notBlank(sql, "SQL cannot be blank");
-        PreparedStatement pstmt = conexion.prepareStatement(sql);
+        PreparedStatement pstmt = conexion.prepareStatement(sql,
+                ResultSet.TYPE_SCROLL_INSENSITIVE,
+                ResultSet.CONCUR_READ_ONLY
+        );
         for (int i = 0; i < params.length; i++) {
             pstmt.setObject(i + 1, params[i]);
         }
-        LoggerAux.debug(String.format("""
+        LoggerAux.info(String.format("""
                 SQL query executed:
                 
                 %s--------
@@ -79,7 +82,7 @@ public final class BBDDConnection implements AutoCloseable {
             }
             pstmt.executeUpdate();
         }
-        LoggerAux.debug(String.format("""
+        LoggerAux.info(String.format("""
                 SQL update executed:
                 ```
                 %s
@@ -96,10 +99,11 @@ public final class BBDDConnection implements AutoCloseable {
      */
     @Override
     public void close() throws SQLException {
-        if (conexion != null && !conexion.isClosed()) {
+        assert conexion != null;
+        if (!conexion.isClosed()) {
+            LoggerAux.info("Connection closed [" + conexion.getMetaData().getURL() + "]");
             conexion.close();
         }
-        LoggerAux.debug("Connection closed");
     }
 
     /**

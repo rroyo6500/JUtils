@@ -1,6 +1,7 @@
 package rroyo.JUtils.Utils.GUI;
 
 import rroyo.JUtils.Utils.Core.Validator;
+import rroyo.JUtils.Utils.Logging.LoggerAux;
 
 import java.awt.*;
 import java.io.File;
@@ -57,6 +58,8 @@ public final class CustomFonts {
 
         Font prev = CustomFonts.fonts.putIfAbsent(key, Font.createFont(Font.TRUETYPE_FONT, file).deriveFont(size));
         Validator.assertFalse(prev != null, "Font key already exists: " + key);
+
+        LoggerAux.info("Font " + key + " added to font list");
     }
 
     /**
@@ -100,6 +103,8 @@ public final class CustomFonts {
         Validator.notBlank(key, "Key cannot be blank");
         Validator.assertTrue(CustomFonts.fonts.containsKey(key), "Font key does not exist: " + key);
         CustomFonts.fonts.remove(key);
+
+        LoggerAux.info("Font " + key + " removed from the font list");
     }
 
 }

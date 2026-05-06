@@ -1,4 +1,4 @@
-package rroyo.JUtils.Utils.Objects;
+package rroyo.JUtils.Objects;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -52,25 +52,24 @@ public final class Mouse {
     public static void configureMouse(Component component) {
         Validator.notNull(component, "Component cannot be null");
 
-        component.addMouseMotionListener(new MouseAdapter() {
-            @Override
-            public void mouseMoved(MouseEvent e) {
-                super.mouseMoved(e);
-                mousePosition[0] = e.getX();
-                mousePosition[1] = e.getY();
-            }
-        });
-
-        component.addMouseListener(new MouseAdapter() {
+        addConfig(component, new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
                 isClicked = true;
             }
+
             @Override
             public void mouseReleased(MouseEvent e) {
                 super.mouseReleased(e);
                 isClicked = false;
+            }
+
+            @Override
+            public void mouseMoved(MouseEvent e) {
+                super.mouseMoved(e);
+                mousePosition[0] = e.getX();
+                mousePosition[1] = e.getY();
             }
         });
     }

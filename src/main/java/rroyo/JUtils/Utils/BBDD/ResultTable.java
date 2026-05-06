@@ -45,6 +45,11 @@ public final class ResultTable {
      * @throws SQLException If a database access error occurs.
      */
     public ResultTable(ResultSet resultSet, boolean closeResultSet) throws SQLException {
+        Validator.assertTrue(resultSet.getType() == ResultSet.TYPE_SCROLL_INSENSITIVE,
+                "ResultTable requires a ResultSet - 'TYPE_SCROLL_INSENSITIVE");
+
+        resultSet.beforeFirst();
+
         ResultSetMetaData rsmd = resultSet.getMetaData();
         int columnCount = rsmd.getColumnCount();
 

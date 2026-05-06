@@ -1,5 +1,6 @@
 package rroyo.JUtils.Utils.Logging;
 
+import rroyo.JUtils.Utils.Console.TStyle;
 import rroyo.JUtils.Utils.Core.Validator;
 import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryMXBean;
@@ -20,20 +21,19 @@ public final class Benchmark {
      */
     public static void start(String name) {
         Validator.notBlank(name, "Benchmark name cannot be blank");
-        LoggerAux.debug("Benchmark " + name + " started");
+        LoggerAux.debug("[BENCHMARK: " + TStyle.bold(TStyle.underline(name)) + "] ●");
         activeBenchmarks.put(name, new BenchData());
     }
 
     /**
      * Stops the benchmark and prints the results to the console.
      */
-    public static void stop(String name) {
+    public static String stop(String name) {
         BenchData data = activeBenchmarks.remove(name);
         Validator.notNull(data, "No active benchmark found with name: " + name);
 
         long endTime = System.currentTimeMillis();
 
-        // Captura de métricas finales
         MemoryMXBean memBean = ManagementFactory.getMemoryMXBean();
         ThreadMXBean threadBean = ManagementFactory.getThreadMXBean();
 
@@ -41,20 +41,23 @@ public final class Benchmark {
         double memUsedMB = (memBean.getHeapMemoryUsage().getUsed() - data.startMem) / (1024.0 * 1024.0);
         long cpuTimeNs = threadBean.getCurrentThreadCpuTime() - data.startCpuTime;
 
-        LoggerAux.debug(
-                String.format("""
-                        [BENCHMARK: %s]
-                        \t> Time:  \t%d ms
-                        \t> CPU:   \t%.2f ms (Thread time)
-                        \t> Memory:\t%+.2f MB (Heap Variation)
+        String benchStr = String.format("""
+                        [BENCHMARK: %s] ▶
+                        %s
                         """,
-                        name,
-                        duration,
-                        cpuTimeNs / 1_000_000.0,
-                        memUsedMB
-                )
+                TStyle.bold(TStyle.underline(name)),
+                TStyle.white(String.format("""
+                                \t> Time:  \t%s ms
+                                \t> CPU:   \t%s ms (Thread time)
+                                \t> Memory:\t%s MB (Heap Variation)
+                                """,
+                        TStyle.bold(TStyle.blue(duration)),
+                        TStyle.bold(TStyle.green(String.format("%.2f", cpuTimeNs / 1_000_000.0))),
+                        TStyle.bold(TStyle.magenta(String.format("%+.2f", memUsedMB)))
+                ))
         );
-
+        LoggerAux.debug(benchStr);
+        return benchStr;
     }
 
     /**

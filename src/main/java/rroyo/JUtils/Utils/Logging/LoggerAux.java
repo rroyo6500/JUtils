@@ -75,15 +75,15 @@ public final class LoggerAux {
             FileUtilHandler.writeFile(logFile, String.format("""
                     \n+--------------------------------------------------------------+
                     | %s |
-                    +--------------------------------------------------------------+
+                    +--------------------------------------------------------------+%n
                     """,
-                    String.format("Execution log started at %s", TextFormatter.center(LocalDateTime.now().format(formatter), 35))
+                    String.format("Execution log started at: %s", TextFormatter.center(LocalDateTime.now().format(formatter), 34))
                     ), true);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
-        debug("LogDirectory added [" + directory.getAbsolutePath() + "]");
+        info("LogDirectory added [" + directory.getAbsolutePath() + "]");
     }
 
     /**

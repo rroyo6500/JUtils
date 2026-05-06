@@ -4,6 +4,7 @@ import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
 import rroyo.JUtils.Utils.Core.Validator;
+import rroyo.JUtils.Utils.Logging.LoggerAux;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -59,7 +60,7 @@ public final class DSLContextGenerator {
      * @param connection Active {@link Connection} to the database.
      * @return A configured {@link DSLContext} instance.
      */
-    public static DSLContext createDSLContext (Connection connection) {
+    public static DSLContext createDSLContext (Connection connection) throws SQLException {
         return createDSLContext(connection, defaultDialect);
     }
 
@@ -70,8 +71,10 @@ public final class DSLContextGenerator {
      * @param dialect    Specific SQL dialect.
      * @return A configured {@link DSLContext} instance.
      */
-    public static DSLContext createDSLContext (Connection connection, SQLDialect dialect) {
+    public static DSLContext createDSLContext (Connection connection, SQLDialect dialect) throws SQLException {
         Validator.notNull(connection, "Database Connection cannot be null");
+        assert connection != null;
+        LoggerAux.info("Connection established [" + connection.getMetaData().getURL() + "]");
         return DSL.using(connection, dialect);
     }
 }
