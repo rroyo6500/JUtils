@@ -50,7 +50,7 @@ public final class CustomFonts {
      */
     public static void addFont (String key, File file, float size) throws FontFormatException, IOException {
         Validator.notNull(file, "File cannot be null");
-        Validator.assertTrue(!file.exists(), "File does not exist");
+        Validator.assertTrue(file.exists(), "File does not exist");
         Validator.assertFalse(file.isDirectory(), "File cannot be a directory");
         Validator.assertTrue(file.isFile(), "File is not a regular file");
         Validator.notBlank(key, "Key cannot be blank");
