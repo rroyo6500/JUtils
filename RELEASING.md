@@ -1,3 +1,40 @@
+## How to use JUtils in your project
+
+1. **Add the repository to your `pom.xml`**:
+   ```xml
+   <repositories>
+       <repository>
+           <id>github</id>
+           <url>https://maven.pkg.github.com/rroyo6500/JUtils</url>
+           <snapshots>
+               <enabled>true</enabled>
+           </snapshots>
+       </repository>
+   </repositories>
+   ```
+
+2. **Configure your credentials**:
+   Create or edit your `~/.m2/settings.xml` file with a [GitHub Personal Access Token](https://github.com/settings/tokens) (classic) with `read:packages` scope:
+   ```xml
+   <settings>
+     <servers>
+       <server>
+         <id>github</id>
+         <username>YOUR_GITHUB_USERNAME</username>
+         <password>YOUR_PERSONAL_ACCESS_TOKEN</password>
+       </server>
+     </servers>
+   </settings>
+   ```
+
+## Troubleshooting
+If Maven cannot find the artifact after a version update, try forcing a refresh of the dependencies:
+```bash
+mvn clean install -U
+```
+
+---
+
 # Publishing JUtils
 
 JUtils is published to GitHub Packages as:
@@ -30,31 +67,3 @@ git push origin v1.0.0
 ```
 
 The workflow removes the leading `v` and publishes version `1.0.0`.
-
-## How consumers use it
-
-Consumers need the GitHub Packages repository in their `pom.xml`:
-
-```xml
-<repositories>
-    <repository>
-        <id>github</id>
-        <url>https://maven.pkg.github.com/rroyo6500/JUtils</url>
-        <snapshots>
-            <enabled>true</enabled>
-        </snapshots>
-    </repository>
-</repositories>
-```
-
-Then they can add the dependency:
-
-```xml
-<dependency>
-    <groupId>rroyo.jutils</groupId>
-    <artifactId>jutils</artifactId>
-    <version>1.0.0</version>
-</dependency>
-```
-
-If GitHub asks for authentication, the consumer needs a GitHub personal access token with `read:packages` in `~/.m2/settings.xml`.
