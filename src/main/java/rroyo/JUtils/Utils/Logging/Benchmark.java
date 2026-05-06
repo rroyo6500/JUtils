@@ -1,6 +1,5 @@
 package rroyo.JUtils.Utils.Logging;
 
-import rroyo.JUtils.Utils.Console.TStyle;
 import rroyo.JUtils.Utils.Core.Validator;
 import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryMXBean;
@@ -12,7 +11,7 @@ import java.util.Map;
  * Utility to measure execution time and resource consumption (CPU/Memory).
  * Designed for simple profiling in development environments.
  */
-public class Benchmark {
+public final class Benchmark {
 
     private static final Map<String, BenchData> activeBenchmarks = new HashMap<>();
 
