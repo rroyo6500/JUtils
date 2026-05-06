@@ -15,7 +15,7 @@ import java.io.IOException;
  *
  * @author rroyo
  */
-public class CSystem {
+public final class CSystem {
 
     /**
      * Clears the current console screen.

@@ -12,7 +12,7 @@ import rroyo.JUtils.Utils.Core.Validator;
  *
  * @author rroyo
  */
-public class TextFormatter {
+public final class TextFormatter {
 
     /**
      * Aligns the text in the center of a block of the specified width.
