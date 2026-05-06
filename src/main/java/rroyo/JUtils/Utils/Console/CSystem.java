@@ -92,7 +92,7 @@ public final class CSystem {
      *
      * @param title The new title string.
      * @throws IllegalArgumentException if the title is null.
-     * @note Support for this feature depends on the terminal emulator's capabilities.
+     * <p>Support for this feature depends on the terminal emulator's capabilities.</p>
      */
     public static void setConsoleTitle(String title) {
         Validator.notNull(title, "Title cannot be null");

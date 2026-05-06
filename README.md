@@ -41,3 +41,52 @@ La biblioteca se divide en varios paquetes especializados:
 *   **`BBDDConnection.java`**: Una abstracción de JDBC para gestionar conexiones a bases de datos. Facilita la ejecución de consultas (`SELECT`) y actualizaciones (`INSERT`, `UPDATE`, `DELETE`) mediante *PreparedStatements* para evitar inyecciones SQL.
 *   **`DSLContextGenerator.java`**: Utilidad específica para proyectos que usen **jOOQ**. Simplifica la creación del `DSLContext` necesario para realizar consultas fluidas, permitiendo configurar el dialecto SQL (MySQL, PostgreSQL, etc.) fácilmente.
 *   **`ResultTable.java`**: Estructura de datos que transforma un `ResultSet` de JDBC en una tabla en memoria. Permite cerrar la conexión a la base de datos inmediatamente y ofrece una visualización en formato ASCII profesional y optimizada, manejando automáticamente alineaciones, valores nulos y casos de tablas sin resultados.
+
+## Usar JUtils como dependencia Maven
+
+Para generar el artefacto de la libreria e instalarlo en el repositorio Maven local:
+
+```bash
+mvn clean install
+```
+
+Esto publica localmente:
+
+* `rroyo.jutils:jutils:1.0.0-SNAPSHOT`
+* el JAR compilado
+* el JAR de fuentes
+* el JAR de Javadocs
+
+Despues, cualquier otro proyecto Maven de la misma maquina puede usarlo asi:
+
+```xml
+<dependency>
+    <groupId>rroyo.jutils</groupId>
+    <artifactId>jutils</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+</dependency>
+```
+
+Las utilidades de base de datos que dependen de jOOQ o del driver de MySQL se mantienen como dependencias opcionales. Si un proyecto consumidor va a usar `DSLContextGenerator` o conexiones MySQL, debe declarar tambien las dependencias que necesite:
+
+```xml
+<dependency>
+    <groupId>org.jooq</groupId>
+    <artifactId>jooq</artifactId>
+    <version>3.21.2</version>
+</dependency>
+
+<dependency>
+    <groupId>com.mysql</groupId>
+    <artifactId>mysql-connector-j</artifactId>
+    <version>9.7.0</version>
+</dependency>
+```
+
+Para generar solo los artefactos sin instalarlos:
+
+```bash
+mvn clean verify
+```
+
+Para publicar nuevas versiones en GitHub Packages, revisa [RELEASING.md](RELEASING.md).
