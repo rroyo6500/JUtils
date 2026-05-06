@@ -1,6 +1,8 @@
 package rroyo.JUtils.Utils.Logging;
 
+import org.w3c.dom.Text;
 import rroyo.JUtils.Utils.Console.TStyle;
+import rroyo.JUtils.Utils.Console.TextFormatter;
 import rroyo.JUtils.Utils.IO.FileUtilHandler;
 import rroyo.JUtils.Utils.Core.Validator;
 
@@ -62,6 +64,24 @@ public final class LoggerAux {
         Validator.assertTrue(directory.isDirectory(), "Require an Directory");
 
         logDirectory = directory;
+
+        File logFile = new File(String.format("%s%sLog_%s.log",
+                logDirectory.getAbsolutePath(),
+                File.separator,
+                LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+        ));
+
+        try {
+            FileUtilHandler.writeFile(logFile, String.format("""
+                    \n+--------------------------------------------------------------+
+                    | %s |
+                    +--------------------------------------------------------------+
+                    """,
+                    String.format("Execution log started at %s", TextFormatter.center(LocalDateTime.now().format(formatter), 35))
+                    ), true);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         debug("LogDirectory added [" + directory.getAbsolutePath() + "]");
     }
@@ -153,31 +173,27 @@ public final class LoggerAux {
     private static String log(LogType logType, String msg) {
         Validator.notNull(logType, "LogType cannot be null");
         Validator.notBlank(msg, "Message is blank");
+        String log = String.format(
+                "[%s]\t[%s]  \t%s%n",
+                LocalDateTime.now().format(formatter),
+                switch (logType) {
+                    case INFO -> TStyle.italic(logType);
+                    case WARNING -> TStyle.italic(TStyle.yellow(logType));
+                    case ERROR -> TStyle.italic(TStyle.red(logType));
+                    case DEBUG -> TStyle.italic(TStyle.cyan(logType));
+                },
+                switch (logType) {
+                    case WARNING -> TStyle.yellow(msg);
+                    case ERROR -> TStyle.red(msg);
+                    case DEBUG -> TStyle.cyan(msg);
+                    default -> msg;
+                }
+        );
         if (consoleOutputEnabled) {
             if (logType != LogType.DEBUG || debugEnabled) {
-                System.out.printf("[%s] [%s] %s%n",
-                        LocalDateTime.now().format(formatter),
-                        switch (logType) {
-                            case INFO -> TStyle.italic(logType);
-                            case WARNING -> TStyle.italic(TStyle.yellow(logType));
-                            case ERROR -> TStyle.italic(TStyle.red(logType));
-                            case DEBUG -> TStyle.italic(TStyle.cyan(logType));
-                        },
-                        switch (logType) {
-                            case WARNING -> TStyle.yellow(msg);
-                            case ERROR -> TStyle.red(msg);
-                            case DEBUG -> TStyle.cyan(msg);
-                            default -> msg;
-                        }
-                );
+                System.out.print(log);
             }
         }
-        String log = String.format(
-                "[%s] [%s] %s%n",
-                LocalDateTime.now().format(formatter),
-                logType,
-                msg
-        );
         if (logDirectory != null) {
             File logFile = new File(String.format("%s%sLog_%s.log",
                     logDirectory.getAbsolutePath(),
@@ -186,7 +202,7 @@ public final class LoggerAux {
             ));
 
             try (java.io.FileWriter fw = new java.io.FileWriter(logFile, true)) {
-                fw.write(log);
+                fw.write(TStyle.clearStyle(log));
             } catch (IOException ignored) {
                 System.err.println("Critical: Could not write to log file.");
             }

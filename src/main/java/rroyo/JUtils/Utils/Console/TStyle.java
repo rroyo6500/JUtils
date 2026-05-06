@@ -68,6 +68,28 @@ public final class TStyle {
     }
 
     /**
+     * Removes all ANSI escape codes (colors, italics, etc.) from a string.
+     * <p>
+     * This is essential for calculating the "real" length of a string when
+     * printing tables or writing to files where styles are not supported.
+     * </p>
+     *
+     * @param msg The object or string containing ANSI styles.
+     * @return A clean string with only the plain text.
+     */
+    public static String clearStyle(Object msg) {
+        if (msg == null) return "";
+        String text = msg.toString();
+
+        // Improved Regex:
+        // \u001B    -> Matches the ESC character
+        // \[        -> Matches the '[' character
+        // [0-9;]*   -> Matches any number of digits or semicolons (parameters)
+        // [mK]      -> Matches the terminator 'm' (styles) or 'K' (clear line)
+        return text.replaceAll("\u001B\\[[0-9;]*[mK]", "");
+    }
+
+    /**
      * Applies red color to the provided object.
      * @param msg Object to style.
      * @return String with applied format and style closure.

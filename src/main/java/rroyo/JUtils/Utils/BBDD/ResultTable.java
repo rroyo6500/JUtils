@@ -48,14 +48,12 @@ public final class ResultTable {
         ResultSetMetaData rsmd = resultSet.getMetaData();
         int columnCount = rsmd.getColumnCount();
 
-        // Extract column names and initialize the map structure
         String[] colNames = new String[columnCount];
         for (int i = 1; i <= columnCount; i++) {
-            colNames[i-1] = rsmd.getColumnName(i);
+            colNames[i-1] = rsmd.getColumnLabel(i);
             table.put(colNames[i-1], new ArrayList<>());
         }
 
-        // Populate the lists with row data
         while (resultSet.next()) {
             for (String colName : colNames) {
                 table.get(colName).add(resultSet.getObject(colName));
