@@ -20,16 +20,24 @@ public final class ScannerAux {
     /** Single Scanner instance linked to system standard input. */
     private static Scanner in = new Scanner(System.in);
 
+    public static String readString (String prompt) {
+        return readString(prompt, true);
+    }
+
     /**
      * Displays a prompt and reads a full line of text.
      *
      * @param prompt The message to show the user.
      * @return The entered string.
      */
-    public static String readString (String prompt) {
+    public static String readString (String prompt, boolean promptSeparator) {
         Validator.notBlank(prompt, "Prompt cannot be blank");
-        System.out.print(prompt + ": ");
+        System.out.print(prompt + ((promptSeparator) ? ": " : ""));
         return in.nextLine();
+    }
+
+    public static int readInt (String prompt) {
+        return readInt(prompt, true);
     }
 
     /**
@@ -38,12 +46,16 @@ public final class ScannerAux {
      * @param prompt The message to show the user.
      * @return The entered integer.
      */
-    public static int readInt (String prompt) {
+    public static int readInt (String prompt, boolean promptSeparator) {
         Validator.notBlank(prompt, "Prompt cannot be blank");
-        System.out.print(prompt + ": ");
+        System.out.print(prompt + ((promptSeparator) ? ": " : ""));
         int value = in.nextInt();
         in.nextLine();
         return value;
+    }
+
+    public static double readDouble (String prompt) {
+        return readDouble(prompt, true);
     }
 
     /**
@@ -52,12 +64,16 @@ public final class ScannerAux {
      * @param prompt The message to show the user.
      * @return The entered double.
      */
-    public static double readDouble (String prompt) {
+    public static double readDouble (String prompt, boolean promptSeparator) {
         Validator.notBlank(prompt, "Prompt cannot be blank");
-        System.out.print(prompt + ": ");
+        System.out.print(prompt + ((promptSeparator) ? ": " : ""));
         double value = in.nextDouble();
         in.nextLine();
         return value;
+    }
+
+    public static boolean readBoolean (String prompt) {
+        return readBoolean(prompt, true);
     }
 
     /**
@@ -66,10 +82,14 @@ public final class ScannerAux {
      * @param prompt The message to show the user.
      * @return The entered boolean.
      */
-    public static boolean readBoolean (String prompt) {
+    public static boolean readBoolean (String prompt, boolean promptSeparator) {
         Validator.notBlank(prompt, "Prompt cannot be blank");
-        System.out.print(prompt + ": ");
+        System.out.print(prompt + ((promptSeparator) ? ": " : ""));
         return in.nextBoolean();
+    }
+
+    public static char readChar (String prompt) {
+        return readChar(prompt, true);
     }
 
     /**
@@ -78,9 +98,9 @@ public final class ScannerAux {
      * @param prompt The message to show the user.
      * @return The first character entered.
      */
-    public static char readChar (String prompt) {
+    public static char readChar (String prompt, boolean promptSeparator) {
         Validator.notBlank(prompt, "Prompt cannot be blank");
-        System.out.print(prompt + ": ");
+        System.out.print(prompt + ((promptSeparator) ? ": " : ""));
         return in.next().charAt(0);
     }
 }
