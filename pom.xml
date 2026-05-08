@@ -6,7 +6,7 @@
 
     <groupId>rroyo.jutils</groupId>
     <artifactId>jutils</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.4</version>
     <packaging>jar</packaging>
 
     <name>JUtils</name>
