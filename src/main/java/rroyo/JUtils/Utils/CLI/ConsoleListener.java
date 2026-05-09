@@ -15,16 +15,15 @@ public class ConsoleListener implements Runnable{
 
     private boolean running = true;
 
-    private final String prompt = ":> ";
+    private String prompt = ":> ";
 
-    public static record CommandData(Object instance, Method method, String description) {}
+    public record CommandData(Object instance, Method method, String description) {}
 
     public ConsoleListener() {}
 
     public ConsoleListener(Object provider) {
         registerCommands(provider);
     }
-
 
     /**
      * Escanea un objeto buscando métodos con @JCommand y los registra.
@@ -181,4 +180,12 @@ public class ConsoleListener implements Runnable{
         System.out.println("---------------------------\n");
     }
 
+    public String getPrompt() {
+        return prompt;
+    }
+
+    public ConsoleListener setPrompt(String prompt) {
+        this.prompt = prompt;
+        return this;
+    }
 }
