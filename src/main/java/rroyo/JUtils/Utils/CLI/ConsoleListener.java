@@ -9,74 +9,87 @@ import rroyo.JUtils.Utils.Logging.LoggerAux;
 import java.lang.reflect.Method;
 import java.util.*;
 
-public class ConsoleListener implements Runnable{
+/**
+ * Class that listens and handles commands in the console, allowing user interaction
+ * through a registered command system.
+ */
+public final class ConsoleListener implements Runnable{
 
+    /** Map that stores registered commands, key: command name in lowercase. */
     private final Map<String, CommandData> commands = new HashMap<>();
 
-    private boolean running = true;
+    /** Indicates if the listener is running. */
+    private volatile boolean running = false;
 
+    /** The prompt displayed in the console. */
     private String prompt = ":> ";
 
+    /**
+     * Represents the data of a registered command in the CLI system.
+     * @param instance The instance of the object containing the method.
+     * @param method The method annotated with @JCommand.
+     * @param description The description of the command.
+     */
     public record CommandData(Object instance, Method method, String description) {}
 
-    public ConsoleListener() {}
-
-    public ConsoleListener(Object provider) {
+    /**
+     * Constructor that registers commands from the given providers.
+     * @param provider The objects providing commands.
+     */
+    public ConsoleListener(Object... provider) {
         registerCommands(provider);
     }
 
     /**
-     * Escanea un objeto buscando métodos con @JCommand y los registra.
+     * Starts the listener in a new thread and returns the instance for chaining.
+     * @return The listener instance.
      */
-    public void registerCommands(Object provider) {
-        for (Method method : provider.getClass().getDeclaredMethods()) {
-            if (method.isAnnotationPresent(JCommand.class)) {
-                JCommand ann = method.getAnnotation(JCommand.class);
-                method.setAccessible(true);
-                commands.put(ann.name().toLowerCase(), new CommandData(provider, method, ann.description()));
+    public synchronized ConsoleListener start() {
+        if (!running) {
+            running = true;
+            Thread t = new Thread(this, "ConsoleListenerThread");
+            t.setDaemon(true);
+            t.start();
+        }
+        return this;
+    }
+    
+    /**
+     * Scans an object for methods annotated with @JCommand and registers them.
+     * @param provider The objects providing commands.
+     * @return The listener instance for chaining.
+     */
+    public ConsoleListener registerCommands(Object... provider) {
+        for (Object o : provider) {
+            for (Method method : o.getClass().getDeclaredMethods()) {
+                if (method.isAnnotationPresent(JCommand.class)) {
+                    JCommand ann = method.getAnnotation(JCommand.class);
+                    method.setAccessible(true);
+                    commands.put(ann.name().toLowerCase(), new CommandData(o, method, ann.description()));
+                }
             }
         }
-        new Thread(this).start();
+        return this;
     }
 
+    /**
+     * Main method of the thread that handles user input.
+     */
     @Override
     public void run() {
         LoggerAux.info("CLI System started");
         LoggerAux.setConsoleOutputEnabled(false);
 
         while (running) {
-            String input = ScannerAux.readString(prompt, false).trim();
-            if (input.isEmpty()) continue;
-
-            List<String> matchList = new ArrayList<>();
-
-            java.util.regex.Matcher m = java.util.regex.Pattern.compile("([\"'])(?:(?=(\\\\?))\\2.)*?\\1|\\S+").matcher(input);
-
-            while (m.find()) {
-                String arg = m.group();
-                if (arg.startsWith("\"") || arg.startsWith("'")) {
-                    arg = arg.substring(1, arg.length() - 1);
-                }
-                matchList.add(arg);
-            }
-
-            if (matchList.isEmpty()) continue;
-
-            String commandName = matchList.get(0).toLowerCase();
-            String[] args = matchList.subList(1, matchList.size()).toArray(new String[0]);
-
-            if (commandName.equals("exit")) {
-                running = false;
-                LoggerAux.setConsoleOutputEnabled(true);
-                LoggerAux.info("CLI System stopped");
-            } else if (commandName.equals("help")) {
-                showHelp();
-            } else {
-                executeCommand(commandName, args);
-            }
+            processInput(ScannerAux.readString(prompt, false));
         }
     }
 
+    /**
+     * Executes the specified command with the given arguments.
+     * @param name The name of the command.
+     * @param args The arguments for the command.
+     */
     private void executeCommand(String name, String[] args) {
         CommandData data = commands.get(name);
         if (data == null) {
@@ -154,12 +167,19 @@ public class ConsoleListener implements Runnable{
         }
     }
 
+    /**
+     * Displays an error message in the console.
+     * @param message The error message.
+     */
     private void showError(String message) {
         LoggerAux.setConsoleOutputEnabled(true);
         LoggerAux.error(message);
         LoggerAux.setConsoleOutputEnabled(false);
     }
 
+    /**
+     * Displays the help menu with available commands.
+     */
     private void showHelp() {
         System.out.println("\n--- Comandos Disponibles ---");
         commands.forEach((name, data) -> {
@@ -180,12 +200,72 @@ public class ConsoleListener implements Runnable{
         System.out.println("---------------------------\n");
     }
 
+    /**
+     * Gets the current prompt.
+     * @return The current prompt.
+     */
     public String getPrompt() {
         return prompt;
     }
 
+    /**
+     * Sets the prompt and returns the instance for chaining.
+     * @param prompt The new prompt.
+     * @return The listener instance.
+     */
     public ConsoleListener setPrompt(String prompt) {
         this.prompt = prompt;
         return this;
+    }
+
+    /**
+     * Processes the input string by parsing it into command name and arguments.
+     * <p>
+     * Supports quoted arguments (both single and double quotes) and handles special
+     * escape sequences within quoted strings. The method then executes the appropriate
+     * command or performs built-in actions (exit, help).
+     * </p>
+     * <p>
+     * Built-in commands:
+     * <ul>
+     *   <li>"exit": Stops the CLI system and closes the listener.</li>
+     *   <li>"help": Displays the help menu with all available commands.</li>
+     * </ul>
+     * </p>
+     *
+     * @param input The raw input string from the user. Can contain quoted arguments
+     *              and multiple space-separated arguments.
+     * @see #executeCommand(String, String[])
+     * @see #showHelp()
+     */
+    public void processInput(String input) {
+        input = input.trim();
+        if (input.isEmpty()) return;
+
+        List<String> matchList = new ArrayList<>();
+        java.util.regex.Matcher m = java.util.regex.Pattern.compile("([\"'])(?:(?=(\\\\?))\\2.)*?\\1|\\S+").matcher(input);
+
+        while (m.find()) {
+            String arg = m.group();
+            if (arg.startsWith("\"") || arg.startsWith("'")) {
+                arg = arg.substring(1, arg.length() - 1);
+            }
+            matchList.add(arg);
+        }
+
+        if (matchList.isEmpty()) return;
+
+        String commandName = matchList.get(0).toLowerCase();
+        String[] args = matchList.subList(1, matchList.size()).toArray(new String[0]);
+
+        if (commandName.equals("exit")) {
+            running = false;
+            LoggerAux.setConsoleOutputEnabled(true);
+            LoggerAux.info("CLI System stopped");
+        } else if (commandName.equals("help")) {
+            showHelp();
+        } else {
+            executeCommand(commandName, args);
+        }
     }
 }

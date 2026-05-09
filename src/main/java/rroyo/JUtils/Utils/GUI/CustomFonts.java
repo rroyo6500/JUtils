@@ -89,6 +89,12 @@ public final class CustomFonts {
         return CustomFonts.fonts.get(key).deriveFont(size);
     }
 
+    /**
+     * Checks if a font with the specified key exists in the internal font collection.
+     *
+     * @param key The identifier for the font whose existence is to be checked.
+     * @return True if a font with the given key exists in the collection, false otherwise.
+     */
     public static boolean containsFont(String key) {
         return CustomFonts.fonts.containsKey(key);
     }

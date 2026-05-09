@@ -18,6 +18,7 @@ import java.util.List;
  */
 public final class BBDDConnection implements AutoCloseable {
 
+    /** The underlying JDBC connection object. */
     private final Connection conexion;
 
     /**

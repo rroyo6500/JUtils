@@ -11,17 +11,26 @@ import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Test class for FileUtilHandler utility.
+ */
 class FileUtilHandlerTest {
 
     @TempDir
     Path tempDir;
 
+    /**
+     * Silences loggers before each test.
+     */
     @BeforeEach
     void silenceLoggers() {
         LoggerAux.setConsoleOutputEnabled(false);
         FileUtilHandler.setLogging(false);
     }
 
+    /**
+     * Verifies that writeFile creates and overwrites content.
+     */
     @Test
     void writeFileCreatesAndOverwritesContent() throws IOException {
         File file = tempDir.resolve("sample.txt").toFile();
@@ -32,6 +41,9 @@ class FileUtilHandlerTest {
         assertEquals("second", FileUtilHandler.readFile(file));
     }
 
+    /**
+     * Verifies that writeFile can append content.
+     */
     @Test
     void writeFileCanAppendContent() throws IOException {
         File file = tempDir.resolve("append.txt").toFile();
@@ -42,6 +54,9 @@ class FileUtilHandlerTest {
         assertEquals("ab", FileUtilHandler.readFile(file));
     }
 
+    /**
+     * Verifies that readFile trims trailing whitespace.
+     */
     @Test
     void readFileTrimsTrailingWhitespace() throws IOException {
         File file = tempDir.resolve("trim.txt").toFile();
@@ -51,6 +66,9 @@ class FileUtilHandlerTest {
         assertEquals("line 1\nline 2", FileUtilHandler.readFile(file));
     }
 
+    /**
+     * Verifies that invalid inputs throw IllegalArgumentException.
+     */
     @Test
     void invalidInputsThrowIllegalArgumentException() {
         File directory = tempDir.toFile();

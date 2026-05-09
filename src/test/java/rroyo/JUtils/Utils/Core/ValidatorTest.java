@@ -6,13 +6,22 @@ import rroyo.JUtils.Utils.Logging.LoggerAux;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Test class for Validator utility.
+ */
 class ValidatorTest {
 
+    /**
+     * Silences the logger before each test.
+     */
     @BeforeEach
     void silenceLogger() {
         LoggerAux.setConsoleOutputEnabled(false);
     }
 
+    /**
+     * Verifies that notNull accepts objects and rejects null.
+     */
     @Test
     void notNullAcceptsObjectsAndRejectsNull() {
         assertDoesNotThrow(() -> Validator.notNull("value", "must exist"));
@@ -24,6 +33,9 @@ class ValidatorTest {
         assertEquals("must exist", exception.getMessage());
     }
 
+    /**
+     * Verifies that notBlank rejects null, empty, and whitespace.
+     */
     @Test
     void notBlankRejectsNullEmptyAndWhitespace() {
         assertDoesNotThrow(() -> Validator.notBlank(" value ", "required"));
@@ -35,6 +47,9 @@ class ValidatorTest {
         );
     }
 
+    /**
+     * Verifies that inRange is inclusive for integers and doubles.
+     */
     @Test
     void inRangeIsInclusiveForIntegersAndDoubles() {
         assertAll(
@@ -52,6 +67,9 @@ class ValidatorTest {
         );
     }
 
+    /**
+     * Verifies that boolean and positive guards use expected truth tables.
+     */
     @Test
     void booleanAndPositiveGuardsUseExpectedTruthTables() {
         assertAll(
