@@ -13,17 +13,26 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Test class for DataFileUtil utility.
+ */
 class DataFileUtilTest {
 
     @TempDir
     Path tempDir;
 
+    /**
+     * Silences loggers before each test.
+     */
     @BeforeEach
     void silenceLoggers() {
         LoggerAux.setConsoleOutputEnabled(false);
         FileUtilHandler.setLogging(false);
     }
 
+    /**
+     * Verifies that readData parses entries and ignores comments.
+     */
     @Test
     void readDataParsesEntriesAndIgnoresComments() {
         String data = """
@@ -40,6 +49,9 @@ class DataFileUtilTest {
         assertEquals(Map.of("name", "Alice", "city", "Madrid"), result);
     }
 
+    /**
+     * Verifies that readData keeps first value for duplicate keys.
+     */
     @Test
     void readDataKeepsFirstValueForDuplicateKeys() {
         String data = """
@@ -54,6 +66,9 @@ class DataFileUtilTest {
         assertEquals("first", result.get("key"));
     }
 
+    /**
+     * Verifies that writeDataFile sorts keys and round trips through parser.
+     */
     @Test
     void writeDataFileSortsKeysAndRoundTripsThroughParser() throws IOException {
         File file = tempDir.resolve("data.jutils").toFile();
@@ -68,6 +83,9 @@ class DataFileUtilTest {
         assertEquals(Map.of("alpha", "first", "zeta", "last"), DataFileUtil.readDataFile(file));
     }
 
+    /**
+     * Verifies that invalid data and reserved keys throw exceptions.
+     */
     @Test
     void invalidDataAndReservedKeysThrow() {
         Map<String, String> invalidKey = Map.of("bad:key", "value");

@@ -25,9 +25,7 @@ public final class ResultTable {
      */
     private final Map<String, ArrayList<Object>> table = new LinkedHashMap<>();
 
-    /**
-     * Formatted ASCCI table
-     */
+    /** Formatted ASCII table string. */
     private final String strTable;
 
     public ResultTable(ResultSet resultSet) throws SQLException {

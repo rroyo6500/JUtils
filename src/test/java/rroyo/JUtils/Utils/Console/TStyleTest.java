@@ -4,8 +4,14 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Test class for TStyle utility.
+ */
 class TStyleTest {
 
+    /**
+     * Verifies that color methods wrap text and clearStyle removes ANSI codes.
+     */
     @Test
     void colorMethodsWrapTextAndClearStyleRemovesAnsiCodes() {
         String styled = TStyle.red("error");
@@ -14,6 +20,9 @@ class TStyleTest {
         assertEquals("error", TStyle.clearStyle(styled));
     }
 
+    /**
+     * Verifies that clearStyle handles null and mixed styles.
+     */
     @Test
     void clearStyleHandlesNullAndMixedStyles() {
         String styled = TStyle.bold(TStyle.green("ok"));
@@ -22,6 +31,9 @@ class TStyleTest {
         assertEquals("ok", TStyle.clearStyle(styled));
     }
 
+    /**
+     * Verifies that nested style reapplies parent after inner reset.
+     */
     @Test
     void nestedStyleReappliesParentAfterInnerReset() {
         String nested = TStyle.red("before " + TStyle.bold("strong") + " after");

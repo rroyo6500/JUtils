@@ -4,6 +4,9 @@ import rroyo.JUtils.Enums.CLI.DataTypes;
 
 import java.lang.annotation.*;
 
+/**
+ * Annotation to define CLI options for command parameters.
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.PARAMETER)
 public @interface JOption {

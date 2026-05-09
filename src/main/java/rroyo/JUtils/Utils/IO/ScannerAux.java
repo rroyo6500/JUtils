@@ -20,6 +20,12 @@ public final class ScannerAux {
     /** Single Scanner instance linked to system standard input. */
     private static Scanner in = new Scanner(System.in);
 
+    /**
+     * Displays a prompt and reads a full line of text with default separator.
+     *
+     * @param prompt The message to show the user.
+     * @return The entered string.
+     */
     public static String readString (String prompt) {
         return readString(prompt, true);
     }
@@ -36,6 +42,12 @@ public final class ScannerAux {
         return in.nextLine();
     }
 
+    /**
+     * Displays a prompt and reads an integer with default separator.
+     *
+     * @param prompt The message to show the user.
+     * @return The entered integer.
+     */
     public static int readInt (String prompt) {
         return readInt(prompt, true);
     }
@@ -54,6 +66,12 @@ public final class ScannerAux {
         return value;
     }
 
+    /**
+     * Displays a prompt and reads a double with default separator.
+     *
+     * @param prompt The message to show the user.
+     * @return The entered double.
+     */
     public static double readDouble (String prompt) {
         return readDouble(prompt, true);
     }
@@ -72,6 +90,12 @@ public final class ScannerAux {
         return value;
     }
 
+    /**
+     * Displays a prompt and reads a boolean with default separator.
+     *
+     * @param prompt The message to show the user.
+     * @return The entered boolean.
+     */
     public static boolean readBoolean (String prompt) {
         return readBoolean(prompt, true);
     }
@@ -88,6 +112,12 @@ public final class ScannerAux {
         return in.nextBoolean();
     }
 
+    /**
+     * Displays a prompt and reads a char with default separator.
+     *
+     * @param prompt The message to show the user.
+     * @return The first character entered.
+     */
     public static char readChar (String prompt) {
         return readChar(prompt, true);
     }

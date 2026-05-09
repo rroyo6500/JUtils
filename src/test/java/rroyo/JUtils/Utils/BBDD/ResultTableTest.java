@@ -12,13 +12,22 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Test class for ResultTable utility.
+ */
 class ResultTableTest {
 
+    /**
+     * Silences the logger before each test.
+     */
     @BeforeEach
     void silenceLogger() {
         LoggerAux.setConsoleOutputEnabled(false);
     }
 
+    /**
+     * Verifies that ResultTable reads rows, preserves column order, and closes ResultSet.
+     */
     @Test
     void resultTableReadsRowsPreservesColumnOrderAndClosesResultSet() throws SQLException {
         FakeResultSet fake = new FakeResultSet(
@@ -36,6 +45,9 @@ class ResultTableTest {
         assertTrue(table.toString().contains("Alice"));
     }
 
+    /**
+     * Verifies that getValue validates column and one-based row index.
+     */
     @Test
     void getValueValidatesColumnAndOneBasedRowIndex() throws SQLException {
         ResultTable table = new ResultTable(new FakeResultSet(
@@ -51,6 +63,9 @@ class ResultTableTest {
         );
     }
 
+    /**
+     * Verifies that constructor requires scroll insensitive ResultSet.
+     */
     @Test
     void constructorRequiresScrollInsensitiveResultSet() {
         FakeResultSet fake = new FakeResultSet(List.of("id"), List.of(List.of(1)));
@@ -59,18 +74,35 @@ class ResultTableTest {
         assertThrows(IllegalArgumentException.class, () -> new ResultTable(fake.proxy()));
     }
 
+    /**
+     * Fake ResultSet implementation for testing.
+     */
     private static final class FakeResultSet {
+        /** List of column names. */
         private final List<String> columns;
+        /** List of rows, each row is a list of objects. */
         private final List<List<Object>> rows;
+        /** Current cursor position. */
         private int cursor = -1;
+        /** ResultSet type. */
         private int type = ResultSet.TYPE_SCROLL_INSENSITIVE;
+        /** Whether the ResultSet is closed. */
         private boolean closed;
 
+        /**
+         * Constructor for FakeResultSet.
+         * @param columns List of column names.
+         * @param rows List of rows.
+         */
         private FakeResultSet(List<String> columns, List<List<Object>> rows) {
             this.columns = columns;
             this.rows = rows;
         }
 
+        /**
+         * Creates a proxy for the ResultSet.
+         * @return Proxy ResultSet.
+         */
         private ResultSet proxy() {
             return (ResultSet) Proxy.newProxyInstance(
                     ResultTableTest.class.getClassLoader(),
@@ -93,6 +125,10 @@ class ResultTableTest {
             );
         }
 
+        /**
+         * Creates a proxy for ResultSetMetaData.
+         * @return Proxy ResultSetMetaData.
+         */
         private ResultSetMetaData metaDataProxy() {
             return (ResultSetMetaData) Proxy.newProxyInstance(
                     ResultTableTest.class.getClassLoader(),
