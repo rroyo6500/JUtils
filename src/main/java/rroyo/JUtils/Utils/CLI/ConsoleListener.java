@@ -48,7 +48,6 @@ public final class ConsoleListener implements Runnable{
         if (!running) {
             running = true;
             Thread t = new Thread(this, "ConsoleListenerThread");
-            t.setDaemon(true);
             t.start();
         }
         return this;
