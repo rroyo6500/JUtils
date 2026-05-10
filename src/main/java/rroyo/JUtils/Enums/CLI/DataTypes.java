@@ -5,7 +5,9 @@ package rroyo.JUtils.Enums.CLI;
  */
 public enum DataTypes {
     STRING,
+    CHAR,
     INT,
+    LONG,
     DOUBLE,
     FLOAT,
     BOOLEAN

@@ -4,8 +4,10 @@ import rroyo.JUtils.Anotations.CLI.JCommand;
 import rroyo.JUtils.Anotations.CLI.JOption;
 import rroyo.JUtils.Enums.CLI.DataTypes;
 import rroyo.JUtils.Utils.IO.ScannerAux;
+import rroyo.JUtils.Utils.Logging.Benchmark;
 import rroyo.JUtils.Utils.Logging.LoggerAux;
 
+import javax.xml.crypto.Data;
 import java.lang.reflect.Method;
 import java.util.*;
 
@@ -37,6 +39,7 @@ public final class ConsoleListener implements Runnable{
      * @param provider The objects providing commands.
      */
     public ConsoleListener(Object... provider) {
+        registerCommands(new DefaultCommands());
         registerCommands(provider);
     }
 
@@ -118,9 +121,11 @@ public final class ConsoleListener implements Runnable{
                             try {
                                 values[i] = switch (opt.type()) {
                                     case INT -> Integer.parseInt(opt.defaultValue());
+                                    case LONG -> Long.parseLong(opt.defaultValue());
                                     case DOUBLE -> Double.parseDouble(opt.defaultValue());
                                     case FLOAT -> Float.parseFloat(opt.defaultValue());
                                     case STRING -> opt.defaultValue();
+                                    case CHAR -> opt.defaultValue().charAt(0);
                                     case BOOLEAN -> Boolean.parseBoolean(opt.defaultValue());
                                 };
                             } catch (Exception e) {
@@ -141,9 +146,11 @@ public final class ConsoleListener implements Runnable{
                         try {
                             values[i] = switch (opt.type()) {
                                 case INT -> Integer.parseInt(rawValue);
+                                case LONG -> Long.parseLong(rawValue);
                                 case DOUBLE -> Double.parseDouble(rawValue);
                                 case FLOAT -> Float.parseFloat(rawValue);
                                 case STRING -> rawValue;
+                                case CHAR -> rawValue.charAt(0);
                                 default -> null;
                             };
                         } catch (NumberFormatException e) {
@@ -182,7 +189,7 @@ public final class ConsoleListener implements Runnable{
     private void showHelp() {
         System.out.println("\n--- Comandos Disponibles ---");
         commands.forEach((name, data) -> {
-            System.out.print(String.format("- %-10s : %s", name, data.description()));
+            System.out.printf("- %-10s : %s", name, data.description());
 
             // Listar las opciones del comando si existen
             for (java.lang.reflect.Parameter p : data.method().getParameters()) {
@@ -194,8 +201,6 @@ public final class ConsoleListener implements Runnable{
             }
             System.out.println();
         });
-        System.out.println("\n- help       : Muestra este menú");
-        System.out.println("- exit       : Cierra la consola");
         System.out.println("---------------------------\n");
     }
 
@@ -227,15 +232,13 @@ public final class ConsoleListener implements Runnable{
      * <p>
      * Built-in commands:
      * <ul>
-     *   <li>"exit": Stops the CLI system and closes the listener.</li>
+     *   <li>"exit": Stops the CLI system ot he entire application and closes the listener.</li>
      *   <li>"help": Displays the help menu with all available commands.</li>
      * </ul>
      * </p>
      *
      * @param input The raw input string from the user. Can contain quoted arguments
      *              and multiple space-separated arguments.
-     * @see #executeCommand(String, String[])
-     * @see #showHelp()
      */
     public void processInput(String input) {
         input = input.trim();
@@ -254,17 +257,60 @@ public final class ConsoleListener implements Runnable{
 
         if (matchList.isEmpty()) return;
 
-        String commandName = matchList.get(0).toLowerCase();
+        String commandName = matchList.getFirst().toLowerCase();
         String[] args = matchList.subList(1, matchList.size()).toArray(new String[0]);
 
-        if (commandName.equals("exit")) {
+        executeCommand(commandName, args);
+    }
+
+    /**
+     * Provides the default command implementations for the CLI system.
+     * This class includes basic operations such as displaying help information
+     * and terminating the execution flow.
+     */
+    private class DefaultCommands {
+
+        /**
+         * Triggers the display of the help menu.
+         * This command provides users with a list of available commands and their descriptions.
+         */
+        @JCommand(name = "help", description = "Shows this help menu")
+        public void help() {
+            showHelp();
+        }
+
+        /**
+         * Handles the exit logic for the CLI system or the entire application.
+         *
+         * @param systemExit A boolean flag indicating whether the entire JVM should
+         *                   be terminated (true) or just the CLI loop (false).
+         */
+        @JCommand(name = "exit", description = "Exits the CLI system or the entire application")
+        public void exit(
+                @JOption(name = "sE", description = "Stops the program", type = DataTypes.BOOLEAN)
+                boolean systemExit
+        ) {
             running = false;
             LoggerAux.setConsoleOutputEnabled(true);
             LoggerAux.info("CLI System stopped");
-        } else if (commandName.equals("help")) {
-            showHelp();
-        } else {
-            executeCommand(commandName, args);
+            if (systemExit) {
+                LoggerAux.info("Exiting application...");
+                System.exit(0);
+            }
         }
+
+        @JCommand(name = "benchmark", description = "Starts a simple benchmark with the specified name")
+        public void Benchmark(
+                @JOption(name = "n", description = "Name of the benchmark", defaultValue = "CLI_Benchmark")
+                String name,
+                @JOption(name = "s", description = "Whether to stop the benchmark", type = DataTypes.BOOLEAN)
+                boolean stop
+        ) {
+            Benchmark.start(name);
+            if (stop) {
+                Benchmark.stop(name);
+            }
+        }
+
     }
 }
