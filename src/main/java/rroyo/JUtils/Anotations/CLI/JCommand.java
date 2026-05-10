@@ -13,4 +13,5 @@ import java.lang.annotation.Target;
 public @interface JCommand {
     String name();
     String description() default "";
+    boolean showInHelp() default true;
 }

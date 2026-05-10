@@ -189,18 +189,26 @@ public final class ConsoleListener implements Runnable{
     private void showHelp() {
         System.out.println("\n--- Comandos Disponibles ---");
         commands.forEach((name, data) -> {
-            System.out.printf("- %-10s : %s", name, data.description());
+            JCommand m = data.method().getAnnotation(JCommand.class);
 
-            // Listar las opciones del comando si existen
-            for (java.lang.reflect.Parameter p : data.method().getParameters()) {
-                if (p.isAnnotationPresent(JOption.class)) {
-                    JOption opt = p.getAnnotation(JOption.class);
-                    String flag = opt.name().startsWith("-") ? opt.name() : "-" + opt.name();
-                    System.out.print("\n    [" + flag + " (" + opt.type() + ")] " + opt.description());
+            if (m.showInHelp()) {
+                System.out.printf("- %-10s : %s", name, data.description());
+                for (java.lang.reflect.Parameter p : data.method().getParameters()) {
+                    if (p.isAnnotationPresent(JOption.class)) {
+                        JOption opt = p.getAnnotation(JOption.class);
+                        String flag = opt.name().startsWith("-") ? opt.name() : "-" + opt.name();
+                        System.out.print("\n    [" + flag + " (" + opt.type() + ")] " + opt.description());
+                    }
                 }
+                System.out.println();
             }
-            System.out.println();
         });
+        System.out.println("- benchmark  : Starts a simple benchmark with the specified name");
+        System.out.println("    [-n (STRING)] Name of the benchmark");
+        System.out.println("    [-stop (BOOLEAN)] Whether to stop the benchmark");
+        System.out.println("- exit       : Exits the CLI system or the entire application");
+        System.out.println("    [-sE (BOOLEAN)] Stops the program");
+        System.out.println("- help       : Shows this help menu");
         System.out.println("---------------------------\n");
     }
 
@@ -274,7 +282,11 @@ public final class ConsoleListener implements Runnable{
          * Triggers the display of the help menu.
          * This command provides users with a list of available commands and their descriptions.
          */
-        @JCommand(name = "help", description = "Shows this help menu")
+        @JCommand(
+                name = "help",
+                description = "Shows this help menu",
+                showInHelp = false
+        )
         public void help() {
             showHelp();
         }
@@ -285,7 +297,11 @@ public final class ConsoleListener implements Runnable{
          * @param systemExit A boolean flag indicating whether the entire JVM should
          *                   be terminated (true) or just the CLI loop (false).
          */
-        @JCommand(name = "exit", description = "Exits the CLI system or the entire application")
+        @JCommand(
+                name = "exit",
+                description = "Exits the CLI system or the entire application",
+                showInHelp = false
+        )
         public void exit(
                 @JOption(name = "sE", description = "Stops the program", type = DataTypes.BOOLEAN)
                 boolean systemExit
@@ -299,11 +315,15 @@ public final class ConsoleListener implements Runnable{
             }
         }
 
-        @JCommand(name = "benchmark", description = "Starts a simple benchmark with the specified name")
+        @JCommand(
+                name = "benchmark",
+                description = "Starts a simple benchmark with the specified name",
+                showInHelp = false
+        )
         public void Benchmark(
                 @JOption(name = "n", description = "Name of the benchmark", defaultValue = "CLI_Benchmark")
                 String name,
-                @JOption(name = "s", description = "Whether to stop the benchmark", type = DataTypes.BOOLEAN)
+                @JOption(name = "stop", description = "Whether to stop the benchmark", type = DataTypes.BOOLEAN)
                 boolean stop
         ) {
             if (stop) Benchmark.stop(name);
