@@ -306,10 +306,8 @@ public final class ConsoleListener implements Runnable{
                 @JOption(name = "s", description = "Whether to stop the benchmark", type = DataTypes.BOOLEAN)
                 boolean stop
         ) {
-            Benchmark.start(name);
-            if (stop) {
-                Benchmark.stop(name);
-            }
+            if (stop) Benchmark.stop(name);
+            else Benchmark.start(name);
         }
 
     }
