@@ -15,12 +15,18 @@ import java.util.Map;
 public final class Benchmark {
 
     /**
+     * Private constructor to prevent instantiation of this utility class.
+     */
+    private Benchmark() {}
+
+    /**
      * Map that stores active benchmarks, associating each benchmark name with its BenchData.
      */
     private static final Map<String, BenchData> activeBenchmarks = new HashMap<>();
 
     /**
      * Starts a benchmark with a specific name.
+     * @param name The name of the benchmark to start.
      */
     public static void start(String name) {
         Validator.notBlank(name, "Benchmark name cannot be blank");
@@ -30,6 +36,8 @@ public final class Benchmark {
 
     /**
      * Stops the benchmark and prints the results to the console.
+     * @param name The name of the benchmark to stop.
+     * @return A formatted string with the benchmark results.
      */
     public static String stop(String name) {
         BenchData data = activeBenchmarks.remove(name);

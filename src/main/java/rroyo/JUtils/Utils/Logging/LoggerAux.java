@@ -53,7 +53,7 @@ public final class LoggerAux {
     private static boolean consoleOutputEnabled = true;
 
     /** Standard date and time formatter (Year-Month-Day Hour:Minute:Second). */
-    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
 
     /**
      * Enables or disables debug level messages in the console.
@@ -97,15 +97,9 @@ public final class LoggerAux {
         String logsStr = logs.toString();
         logs.delete(0, logs.length());
 
-        logs.append(String.format("""
-                    \n+--------------------------------------------------------------+
-                    | %s |
-                    +--------------------------------------------------------------+%n
-                    """,
-                String.format("Execution log started at: %s", TextFormatter.center(logsStr.substring(1, 20), 34))
-        )).append(logsStr);
+        logs.append("\n----------------------------------------------------------------\n").append(logsStr);
 
-        info("LogDirectory added [" + directory.getAbsolutePath() + "]");
+        info("LogDirectory setted [" + directory.getAbsolutePath() + "]");
     }
 
     /**
@@ -254,6 +248,7 @@ public final class LoggerAux {
             } catch (IOException ignored) {
                 System.err.println("Critical: Could not write to log file.");
             }
+
         }
         return log;
     }

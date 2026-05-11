@@ -253,7 +253,6 @@ public final class ConsoleListener implements Runnable{
      *   <li>"exit": Stops the CLI system ot he entire application and closes the listener.</li>
      *   <li>"help": Displays the help menu with all available commands.</li>
      * </ul>
-     * </p>
      *
      * @param input The raw input string from the user. Can contain quoted arguments
      *              and multiple space-separated arguments.

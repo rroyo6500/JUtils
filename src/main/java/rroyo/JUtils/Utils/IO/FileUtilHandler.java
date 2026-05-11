@@ -22,6 +22,29 @@ public final class FileUtilHandler {
      */
     private FileUtilHandler(){}
 
+    /**
+     * Flag to control whether logging is enabled for file operations.
+     */
+    private static boolean logging = true;
+
+    /**
+     * Checks if logging is enabled for file operations.
+     *
+     * @return true if logging is enabled, false otherwise.
+     */
+    public static boolean isLogging() {
+        return logging;
+    }
+
+    /**
+     * Sets whether logging should be enabled for file operations.
+     *
+     * @param logging true to enable logging, false to disable.
+     */
+    public static void setLogging(boolean logging) {
+        FileUtilHandler.logging = logging;
+    }
+
     // Read
 
     /**
@@ -30,6 +53,7 @@ public final class FileUtilHandler {
      * @param src The path to the file to read. It must not be null, empty, or blank.
      * @return The content of the file as a String.
      * @throws IllegalArgumentException if the source path is null, blank, or does not resolve to a valid file.
+     * @throws IOException if an I/O error occurs while reading the file.
      */
     public static String readFile(String src) throws IOException {
         Validator.notBlank(src, "Source path cannot be blank");
@@ -44,6 +68,7 @@ public final class FileUtilHandler {
      * @return The content of the file as a String. The returned string is trimmed of any trailing whitespace.
      * @throws IllegalArgumentException if the file is null, does not exist, is a directory,
      *                                  is not a regular file, or cannot be read.
+     * @throws IOException if an I/O error occurs while reading the file.
      */
     public static String readFile(File file) throws IOException {
         Validator.notNull(file, "File cannot be null");
@@ -72,6 +97,7 @@ public final class FileUtilHandler {
      * @param src The path of the file where the message should be written. It must not be null, empty, or blank.
      * @param msg The message to be written to the file. It must not be null.
      * @throws IllegalArgumentException if the source path is null, blank, or invalid.
+     * @throws IOException if an I/O error occurs while writing to the file.
      */
     public static void writeFile(String src, String msg) throws IOException {
         Validator.notBlank(src, "Source path cannot be blank");
@@ -87,6 +113,7 @@ public final class FileUtilHandler {
      * @param append A flag indicating whether the message should be appended to the file. If false, the file's
      *               existing content (if any) will be overwritten.
      * @throws IllegalArgumentException if the source path is null, blank, or invalid.
+     * @throws IOException if an I/O error occurs while writing to the file.
      */
     public static void writeFile(String src, String msg, boolean append) throws IOException {
         Validator.notBlank(src, "Source path cannot be blank");
@@ -100,7 +127,7 @@ public final class FileUtilHandler {
      * @param file The file where the message will be written. It must not be null and must not be a directory.
      * @param msg The message to be written to the file. It must not be null.
      * @throws IllegalArgumentException if the file is null or is a directory.
-     * @throws RuntimeException if an I/O error occurs during the file operation.
+     * @throws IOException if an I/O error occurs while writing to the file.
      */
     public static void writeFile(File file, String msg) throws IOException {
         writeFile(file, msg, false);
@@ -116,13 +143,13 @@ public final class FileUtilHandler {
      * @param append A flag indicating whether the message should be appended to the file.
      *               If false, the existing content of the file (if any) will be overwritten.
      * @throws IllegalArgumentException if the file is null or is a directory.
-     * @throws RuntimeException if an I/O error occurs during the file operation.
+     * @throws IOException if an I/O error occurs while writing to the file.
      */
     public static void writeFile(File file, String msg, boolean append) throws IOException {
         Validator.notNull(file, "File cannot be null");
         Validator.assertFalse(file.isDirectory(), "File cannot be a directory");
 
-        if (!file.exists()) LoggerAux.info("File created: " + file.getName());
+        if (!file.exists() && logging) LoggerAux.info("File created: " + file.getName());
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(file, append))) {
             bw.write(msg);
         }

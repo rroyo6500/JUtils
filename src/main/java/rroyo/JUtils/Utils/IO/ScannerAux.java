@@ -37,6 +37,7 @@ public final class ScannerAux {
      * Displays a prompt and reads a full line of text.
      *
      * @param prompt The message to show the user.
+     * @param promptSeparator Whether to add a default separator (": ") after the prompt.
      * @return The entered string.
      */
     public static String readString (String prompt, boolean promptSeparator) {
@@ -59,6 +60,7 @@ public final class ScannerAux {
      * Displays a prompt and reads an integer.
      *
      * @param prompt The message to show the user.
+     * @param promptSeparator Whether to add a default separator (": ") after the prompt.
      * @return The entered integer.
      */
     public static int readInt (String prompt, boolean promptSeparator) {
@@ -83,6 +85,7 @@ public final class ScannerAux {
      * Displays a prompt and reads a floating-point number (double).
      *
      * @param prompt The message to show the user.
+     * @param promptSeparator Whether to add a default separator (": ") after the prompt.
      * @return The entered double.
      */
     public static double readDouble (String prompt, boolean promptSeparator) {
@@ -107,6 +110,7 @@ public final class ScannerAux {
      * Displays a prompt and reads a boolean value.
      *
      * @param prompt The message to show the user.
+     * @param promptSeparator Whether to add a default separator (": ") after the prompt.
      * @return The entered boolean.
      */
     public static boolean readBoolean (String prompt, boolean promptSeparator) {
@@ -129,6 +133,7 @@ public final class ScannerAux {
      * Displays a prompt and reads the first character of the input.
      *
      * @param prompt The message to show the user.
+     * @param promptSeparator Whether to add a default separator (": ") after the prompt.
      * @return The first character entered.
      */
     public static char readChar (String prompt, boolean promptSeparator) {

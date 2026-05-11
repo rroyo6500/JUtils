@@ -37,6 +37,8 @@ public final class CustomFonts {
      * @param key The identifier for the font to be added. This will be used when retrieving the font later.
      * @param path The file system path pointing to the TrueType font file.
      * @param size The desired size of the font in points.
+     * @throws FontFormatException If the specified file does not contain a valid font format.
+     * @throws IOException If an I/O error occurs while reading the font file.
      */
     public static void addFont (String key, String path, float size) throws FontFormatException, IOException {
         Validator.notBlank(path, "Path cannot be blank");
@@ -50,6 +52,8 @@ public final class CustomFonts {
      * @param key The identifier for the font to be added. This name will be used for retrieving the font.
      * @param file The File object pointing to the TrueType font file.
      * @param size The desired font size to derive from the base font.
+     * @throws FontFormatException If the specified file does not contain a valid font format.
+     * @throws IOException If an I/O error occurs while reading the font file.
      */
     public static void addFont (String key, File file, float size) throws FontFormatException, IOException {
         Validator.notNull(file, "File cannot be null");

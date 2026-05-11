@@ -62,6 +62,7 @@ public final class DSLContextGenerator {
      *
      * @param connection Active {@link Connection} to the database.
      * @return A configured {@link DSLContext} instance.
+     * @throws SQLException If an error occurs trying to establish the database connection.
      */
     public static DSLContext createDSLContext (Connection connection) throws SQLException {
         return createDSLContext(connection, defaultDialect);
@@ -73,6 +74,7 @@ public final class DSLContextGenerator {
      * @param connection Active {@link Connection} to the database.
      * @param dialect    Specific SQL dialect.
      * @return A configured {@link DSLContext} instance.
+     * @throws SQLException If an error occurs trying to establish the database connection.
      */
     public static DSLContext createDSLContext (Connection connection, SQLDialect dialect) throws SQLException {
         Validator.notNull(connection, "Database Connection cannot be null");
