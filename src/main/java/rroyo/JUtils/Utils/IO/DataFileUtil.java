@@ -40,6 +40,9 @@ public final class DataFileUtil {
     *\
      */
 
+    /**
+     * Private constructor to prevent instantiation of this utility class.
+     */
     private DataFileUtil(){}
 
     /**

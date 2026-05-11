@@ -16,6 +16,9 @@ import java.util.Map;
  */
 public final class CustomFonts {
 
+    /**
+     * Private constructor to prevent instantiation of this utility class.
+     */
     private CustomFonts(){}
 
     /**

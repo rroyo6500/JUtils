@@ -22,6 +22,9 @@ import java.time.format.DateTimeFormatter;
  */
 public final class LoggerAux {
 
+    /**
+     * Private constructor to prevent instantiation of this utility class.
+     */
     private LoggerAux() {}
 
     /**
@@ -29,9 +32,24 @@ public final class LoggerAux {
      */
     private enum LogType {INFO, WARNING, ERROR, DEBUG}
 
+    /**
+     * Represents the directory on the 'LogFiles' that is going to be created.
+     */
     private static File logDirectory;
 
+    /**
+     * Text string where message logs are saved if a 'LogFile' does not exist.
+     */
+    private static final StringBuilder logs = new StringBuilder();
+
+    /**
+     * Indicates whether the 'debug logs' will be printed in the console.
+     */
     private static boolean debugEnabled = true;
+
+    /**
+     * Indicates whether the logs will be displayed in the console.
+     */
     private static boolean consoleOutputEnabled = true;
 
     /** Standard date and time formatter (Year-Month-Day Hour:Minute:Second). */
@@ -54,46 +72,62 @@ public final class LoggerAux {
         consoleOutputEnabled = enabled;
     }
 
+    /**
+     * Allows you to configure a directory to save 'LogFiles'
+     * @param path The directory path
+     */
     public static void setLogDirectory(String path) {
         Validator.notBlank(path, "Path cannot be blank");
         setLogDirectory(new File(path));
     }
 
+    /**
+     * Allows you to configure a directory to save 'LogFiles'
+     * @param directory The directory where log files will be saved.
+     *                  This method validates that the provided File object is not null
+     *                  and is indeed a directory before setting it as the log directory.
+     *                  If the validation fails, an IllegalArgumentException is thrown with an appropriate message.
+     */
     public static void setLogDirectory(File directory) {
         Validator.notNull(directory, "Directory cannot be null");
         Validator.assertTrue(directory.isDirectory(), "Require an Directory");
 
         logDirectory = directory;
 
-        File logFile = new File(String.format("%s%sLog_%s.log",
-                logDirectory.getAbsolutePath(),
-                File.separator,
-                LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
-        ));
+        String logsStr = logs.toString();
+        logs.delete(0, logs.length());
 
-        try {
-            FileUtilHandler.writeFile(logFile, String.format("""
+        logs.append(String.format("""
                     \n+--------------------------------------------------------------+
                     | %s |
                     +--------------------------------------------------------------+%n
                     """,
-                    String.format("Execution log started at: %s", TextFormatter.center(LocalDateTime.now().format(formatter), 34))
-                    ), true);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+                String.format("Execution log started at: %s", TextFormatter.center(logsStr.substring(1, 20), 34))
+        )).append(logsStr);
 
         info("LogDirectory added [" + directory.getAbsolutePath() + "]");
     }
 
+    /**
+     * Return the configured 'Log Directory'
+     * @return Log Directory
+     */
     public static File getLogDirectory() {
         return logDirectory;
     }
 
+    /**
+     * Indicates whether the 'debug logs' will be printed in the console.
+     * @return True if console debug is enabled
+     */
     public static boolean isDebugEnabled() {
         return debugEnabled;
     }
 
+    /**
+     * Indicates whether the logs will be displayed in the console.
+     * @return True if console logging is enabled
+     */
     public static boolean isConsoleOutputEnabled() {
         return consoleOutputEnabled;
     }
@@ -206,6 +240,7 @@ public final class LoggerAux {
                 System.out.print(log);
             }
         }
+        logs.append(TStyle.clearStyle(log));
         if (logDirectory != null) {
             File logFile = new File(String.format("%s%sLog_%s.log",
                     logDirectory.getAbsolutePath(),
@@ -214,7 +249,8 @@ public final class LoggerAux {
             ));
 
             try (java.io.FileWriter fw = new java.io.FileWriter(logFile, true)) {
-                fw.write(TStyle.clearStyle(log));
+                fw.write(logs.toString());
+                logs.delete(0, logs.length());
             } catch (IOException ignored) {
                 System.err.println("Critical: Could not write to log file.");
             }

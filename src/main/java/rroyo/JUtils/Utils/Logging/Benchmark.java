@@ -14,6 +14,9 @@ import java.util.Map;
  */
 public final class Benchmark {
 
+    /**
+     * Map that stores active benchmarks, associating each benchmark name with its BenchData.
+     */
     private static final Map<String, BenchData> activeBenchmarks = new HashMap<>();
 
     /**
@@ -41,10 +44,7 @@ public final class Benchmark {
         double memUsedMB = (memBean.getHeapMemoryUsage().getUsed() - data.startMem) / (1024.0 * 1024.0);
         long cpuTimeNs = threadBean.getCurrentThreadCpuTime() - data.startCpuTime;
 
-        String benchStr = String.format("""
-                        [BENCHMARK: %s] ▶
-                        %s
-                        """,
+        String benchStr = String.format("[BENCHMARK: %s] ▶ \n%s",
                 TStyle.bold(TStyle.underline(name)),
                 TStyle.white(String.format("""
                                 \t> Time:  \t%s ms

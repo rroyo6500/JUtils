@@ -15,6 +15,9 @@ import java.util.Scanner;
  */
 public final class ScannerAux {
 
+    /**
+     * Private constructor to prevent instantiation of this utility class.
+     */
     private ScannerAux(){}
 
     /** Single Scanner instance linked to system standard input. */

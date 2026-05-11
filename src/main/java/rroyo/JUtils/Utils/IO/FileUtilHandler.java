@@ -17,13 +17,10 @@ import java.io.*;
  */
 public final class FileUtilHandler {
 
+    /**
+     * Private constructor to prevent instantiation of this utility class.
+     */
     private FileUtilHandler(){}
-
-    private static boolean logging = true;
-
-    public static void setLogging(boolean logging) {
-        FileUtilHandler.logging = logging;
-    }
 
     // Read
 
@@ -125,7 +122,7 @@ public final class FileUtilHandler {
         Validator.notNull(file, "File cannot be null");
         Validator.assertFalse(file.isDirectory(), "File cannot be a directory");
 
-        if (!file.exists() && logging) LoggerAux.info("File created: " + file.getName());
+        if (!file.exists()) LoggerAux.info("File created: " + file.getName());
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(file, append))) {
             bw.write(msg);
         }

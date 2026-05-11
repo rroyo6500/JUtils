@@ -372,7 +372,7 @@ public final class ConsoleListener implements Runnable{
             }
             if (showConfig) {
                 System.out.println("\n--- Logging Configuration ---");
-                System.out.println("Log Directory: " + LoggerAux.getLogDirectory().getAbsolutePath());
+                System.out.println("Log Directory: " + LoggerAux.getLogDirectory());
                 System.out.println("Console Output Enabled: " + LoggerAux.isConsoleOutputEnabled());
                 System.out.println("* Debug Output Enabled: " + LoggerAux.isDebugEnabled());
                 System.out.println("-----------------------------\n");

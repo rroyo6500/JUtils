@@ -19,6 +19,9 @@ import java.sql.SQLException;
  */
 public final class DSLContextGenerator {
 
+    /**
+     * Private constructor to prevent instantiation of this utility class.
+     */
     private DSLContextGenerator() {}
 
     /** Default SQL dialect used when none is explicitly specified. */

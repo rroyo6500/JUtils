@@ -12,36 +12,60 @@ package rroyo.JUtils.Utils.Console;
  */
 public final class TStyle {
 
+    /**
+     * Private constructor to prevent instantiation of this utility class.
+     */
     private TStyle() {}
 
     /** Sequence to reset all styles and colors to console default values. */
     public static final String RESET = "\u001B[0m";
 
     // TEXT COLORS (Foreground)
+    /** ANSI escape code for black foreground color. */
     public static final String _BLACK = "\u001B[30m";
+    /** ANSI escape code for red foreground color. */
     public static final String _RED = "\u001B[31m";
+    /** ANSI escape code for green foreground color. */
     public static final String _GREEN = "\u001B[32m";
+    /** ANSI escape code for yellow foreground color. */
     public static final String _YELLOW = "\u001B[33m";
+    /** ANSI escape code for blue foreground color. */
     public static final String _BLUE = "\u001B[34m";
+    /** ANSI escape code for magenta foreground color. */
     public static final String _MAGENTA = "\u001B[35m";
+    /** ANSI escape code for cyan foreground color. */
     public static final String _CYAN = "\u001B[36m";
+    /** ANSI escape code for white foreground color. */
     public static final String _WHITE = "\u001B[37m";
 
     // BACKGROUND COLORS
+    /** ANSI escape code for black background color. */
     public static final String _BG_BLACK = "\u001B[40m";
+    /** ANSI escape code for red background color. */
     public static final String _BG_RED = "\u001B[41m";
+    /** ANSI escape code for green background color. */
     public static final String _BG_GREEN = "\u001B[42m";
+    /** ANSI escape code for yellow background color. */
     public static final String _BG_YELLOW = "\u001B[43m";
+    /** ANSI escape code for blue background color. */
     public static final String _BG_BLUE = "\u001B[44m";
+    /** ANSI escape code for magenta background color. */
     public static final String _BG_MAGENTA = "\u001B[45m";
+    /** ANSI escape code for cyan background color. */
     public static final String _BG_CYAN = "\u001B[46m";
+    /** ANSI escape code for white background color. */
     public static final String _BG_WHITE = "\u001B[47m";
 
     // TEXT STYLES
+    /** ANSI escape code for bold text style. */
     public static final String _BOLD = "\u001B[1m";
+    /** ANSI escape code for italic text style. */
     public static final String _ITALIC = "\u001B[3m";
+    /** ANSI escape code for underlined text style. */
     public static final String _UNDERLINE = "\u001B[4m";
+    /** ANSI escape code for reverse text style (Reverse the colors of the 'background' and the 'foreground'). */
     public static final String _REVERSE = "\u001B[7m";
+    /** ANSI escape code for strikethrough text style. */
     public static final String _STRIKETHROUGH = "\u001B[9m";
 
     /**
