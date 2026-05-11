@@ -86,6 +86,18 @@ public final class LoggerAux {
         info("LogDirectory added [" + directory.getAbsolutePath() + "]");
     }
 
+    public static File getLogDirectory() {
+        return logDirectory;
+    }
+
+    public static boolean isDebugEnabled() {
+        return debugEnabled;
+    }
+
+    public static boolean isConsoleOutputEnabled() {
+        return consoleOutputEnabled;
+    }
+
     /**
      * Logs an information message to the console.
      *

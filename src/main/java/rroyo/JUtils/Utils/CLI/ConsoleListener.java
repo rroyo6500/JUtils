@@ -3,11 +3,12 @@ package rroyo.JUtils.Utils.CLI;
 import rroyo.JUtils.Anotations.CLI.JCommand;
 import rroyo.JUtils.Anotations.CLI.JOption;
 import rroyo.JUtils.Enums.CLI.DataTypes;
+import rroyo.JUtils.Utils.Core.Validator;
 import rroyo.JUtils.Utils.IO.ScannerAux;
 import rroyo.JUtils.Utils.Logging.Benchmark;
 import rroyo.JUtils.Utils.Logging.LoggerAux;
 
-import javax.xml.crypto.Data;
+import java.io.File;
 import java.lang.reflect.Method;
 import java.util.*;
 
@@ -197,19 +198,28 @@ public final class ConsoleListener implements Runnable{
                     if (p.isAnnotationPresent(JOption.class)) {
                         JOption opt = p.getAnnotation(JOption.class);
                         String flag = opt.name().startsWith("-") ? opt.name() : "-" + opt.name();
-                        System.out.print("\n    [" + flag + " (" + opt.type() + ")] " + opt.description());
+                        System.out.printf("%n    %-20s %s", String.format("[%s (%s)]", flag, opt.type()), opt.description());
                     }
                 }
-                System.out.println();
+                System.out.println("\n");
             }
         });
-        System.out.println("- benchmark  : Starts a simple benchmark with the specified name");
-        System.out.println("    [-n (STRING)] Name of the benchmark");
-        System.out.println("    [-stop (BOOLEAN)] Whether to stop the benchmark");
-        System.out.println("- exit       : Exits the CLI system or the entire application");
-        System.out.println("    [-sE (BOOLEAN)] Stops the program");
-        System.out.println("- help       : Shows this help menu");
-        System.out.println("---------------------------\n");
+        System.out.println("""
+                \n---- Default Commands  ----
+                - logconfig  : Allows to change the configuration of the logging system and see the current configuration
+                    [-d (STRING)]        Assigns the path to the 'loggingDirectory
+                    [-conf (BOOLEAN)]    Shows the current logging configuration
+                
+                - benchmark  : Starts a simple benchmark with the specified name
+                    [-n (STRING)]        Name of the benchmark
+                    [-stop (BOOLEAN)]    Whether to stop the benchmark
+                
+                - exit       : Exits the CLI system or the entire application
+                    [-sE (BOOLEAN)]      Stops the program
+                
+                - help       : Shows this help menu
+                ---------------------------
+                """);
     }
 
     /**
@@ -320,14 +330,53 @@ public final class ConsoleListener implements Runnable{
                 description = "Starts a simple benchmark with the specified name",
                 showInHelp = false
         )
-        public void Benchmark(
+        public void benchmark(
                 @JOption(name = "n", description = "Name of the benchmark", defaultValue = "CLI_Benchmark")
                 String name,
                 @JOption(name = "stop", description = "Whether to stop the benchmark", type = DataTypes.BOOLEAN)
                 boolean stop
         ) {
+            boolean debugState = LoggerAux.isDebugEnabled();
+            if (!debugState)
+                LoggerAux.setDebugEnabled(true);
+            LoggerAux.setConsoleOutputEnabled(true);
             if (stop) Benchmark.stop(name);
             else Benchmark.start(name);
+            LoggerAux.setConsoleOutputEnabled(false);
+            if (!debugState)
+                LoggerAux.setDebugEnabled(false);
+        }
+
+        @JCommand(
+                name = "logconfig",
+                description = "Allows to change the configuration of the logging system and see the current configuration",
+                showInHelp = false
+        )
+        public void log(
+                @JOption(
+                        name = "conf",
+                        description = "Shows the current logging configuration",
+                        type = DataTypes.BOOLEAN
+                )
+                boolean showConfig,
+                @JOption(
+                        name = "d",
+                        description = "Assigns the path to the 'loggingDirectory'"
+                )
+                String dirPath
+        ) {
+            if (dirPath != null && !dirPath.trim().isEmpty()) {
+                File dir = new File(dirPath);
+                Validator.assertTrue(dir.exists() && dir.isDirectory(), "The provided path is not a valid directory");
+                LoggerAux.setLogDirectory(dir);
+            }
+            if (showConfig) {
+                System.out.println("\n--- Logging Configuration ---");
+                System.out.println("Log Directory: " + LoggerAux.getLogDirectory().getAbsolutePath());
+                System.out.println("Console Output Enabled: " + LoggerAux.isConsoleOutputEnabled());
+                System.out.println("* Debug Output Enabled: " + LoggerAux.isDebugEnabled());
+                System.out.println("-----------------------------\n");
+            }
         }
 
     }
