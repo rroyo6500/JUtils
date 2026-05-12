@@ -22,16 +22,40 @@ public final class BBDDConnection implements AutoCloseable {
     private final Connection conexion;
 
     /**
+     * JDDBC Driver class name
+     */
+    private static String jdbcDriverClass = "com.mysql.cj.jdbc.Driver";
+
+    /**
+     * Returns the JDBC Driver class name
+     * @return JDBC Driver class name
+     */
+    public static String getJdbcDriverClass() {
+        return jdbcDriverClass;
+    }
+
+    /**
+     * Set the JDBC Driver class name
+     * @param driverClassName JDBC Driver class name
+     */
+    public static void setJdbcDriverClass(String driverClassName) {
+        Validator.notBlank(driverClassName, "Driver class name cannot be blank");
+        BBDDConnection.jdbcDriverClass = driverClassName;
+    }
+
+    /**
      * Constructor initializing the database connection.
      *
      * @param url  JDBC connection URL (e.g., jdbc:mysql://localhost:3306/db).
      * @param user Username for authentication.
      * @param pass Password for authentication.
      * @throws SQLException If an error occurs establishing the connection.
+     * @throws ClassNotFoundException If the JDBC driver class is not found.
      */
-    public BBDDConnection(String url, String user, String pass) throws SQLException {
+    public BBDDConnection(String url, String user, String pass) throws SQLException, ClassNotFoundException {
         Validator.notBlank(url, "URL cannot be empty");
         Validator.notBlank(user, "Database user cannot be empty");
+        Class.forName(jdbcDriverClass);
         conexion = DriverManager.getConnection(url, user, pass);
         LoggerAux.info("Connection established [" + url + "]");
     }
@@ -55,12 +79,11 @@ public final class BBDDConnection implements AutoCloseable {
         }
         LoggerAux.info(String.format("""
                 SQL query executed:
-                
-                %s--------
+                ```
                 %s
+                ```
                 """,
-                sql,
-                List.of(params)
+                String.format(sql.replace("?", "%s"), params).trim()
         ));
         return pstmt.executeQuery();
     }
@@ -89,7 +112,7 @@ public final class BBDDConnection implements AutoCloseable {
                 %s
                 ```
                 """,
-                sql
+                String.format(sql.replace("?", "%s"), params).trim()
         ));
     }
 
