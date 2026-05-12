@@ -19,6 +19,9 @@ import java.awt.event.MouseEvent;
  */
 public final class Mouse {
 
+    /**
+     * Private constructor to prevent instantiation of this utility class.
+     */
     private Mouse(){}
 
     /**

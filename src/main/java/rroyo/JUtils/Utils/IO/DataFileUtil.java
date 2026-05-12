@@ -40,6 +40,9 @@ public final class DataFileUtil {
     *\
      */
 
+    /**
+     * Private constructor to prevent instantiation of this utility class.
+     */
     private DataFileUtil(){}
 
     /**
@@ -97,6 +100,7 @@ public final class DataFileUtil {
      *         are strings, trimmed of any unnecessary white spaces.
      * @throws IllegalArgumentException If the input file is null, does not exist,
      *                                  is a directory, or cannot be read.
+     * @throws IOException If an I/O error occurs while reading the file.
      */
     public static Map<String, String> readDataFile (File file) throws IOException {
         String content = FileUtilHandler.readFile(file);
@@ -114,6 +118,7 @@ public final class DataFileUtil {
      *         are strings, trimmed of any unnecessary white spaces.
      * @throws IllegalArgumentException If the path is null, blank, does not point to a valid file,
      *                                  or the file cannot be read.
+     * @throws IOException If an I/O error occurs while reading the file.
      */
     public static Map<String, String> readDataFile (String path) throws IOException {
         Validator.notBlank(path, "Path cannot be blank");
@@ -129,6 +134,7 @@ public final class DataFileUtil {
      *             The path must also point to a valid, writable file location.
      * @param dataMessage The data to be written into the file. It must not be null or blank.
      * @throws IllegalArgumentException If the path is null, blank, or if the dataMessage is null or blank.
+     * @throws IOException If an I/O error occurs while reading the file.
      */
     public static void writeDataFile(String path, String dataMessage) throws IOException {
         Validator.notBlank(path, "Path cannot be blank");
@@ -145,6 +151,7 @@ public final class DataFileUtil {
      *             to a valid, writable file.
      * @param data The data string to write into the file. It must not be null or blank.
      * @throws IllegalArgumentException If the data is null or blank.
+     * @throws IOException If an I/O error occurs while reading the file.
      */
     public static void writeDataFile(File file, String data) throws IOException {
         Validator.notBlank(data, "Data cannot be blank");
@@ -164,6 +171,7 @@ public final class DataFileUtil {
      * @throws IllegalArgumentException If the dataMap is null, if a map entry contains a
      *                                  null key or value, or if a key contains reserved
      *                                  delimiter characters ('¡', ':').
+     * @throws IOException If an I/O error occurs while reading the file.
      */
     public static void writeDataFile (Map<String, String> dataMap, File file) throws IOException {
         Validator.notNull(dataMap, "DataMap cannot be null");
@@ -197,6 +205,7 @@ public final class DataFileUtil {
      * @param path    The file path where the map data will be written. It must not be null,
      *                blank, or point to an invalid location.
      * @throws IllegalArgumentException If the path is null, blank, or if the dataMap is null.
+     * @throws IOException If an I/O error occurs while reading the file.
      */
     public static void writeDataFile (Map<String, String> dataMap, String path) throws IOException {
         Validator.notBlank(path, "Path cannot be blank");

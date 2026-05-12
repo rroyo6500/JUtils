@@ -13,9 +13,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Test class for FileUtilHandler utility.
+ * Verifies file reading, writing, appending, whitespace trimming, and error handling.
  */
 class FileUtilHandlerTest {
 
+    /** Temporary directory for test file operations. */
     @TempDir
     Path tempDir;
 
@@ -25,11 +27,10 @@ class FileUtilHandlerTest {
     @BeforeEach
     void silenceLoggers() {
         LoggerAux.setConsoleOutputEnabled(false);
-        FileUtilHandler.setLogging(false);
     }
 
     /**
-     * Verifies that writeFile creates and overwrites content.
+     * Verifies that writeFile creates a new file and overwrites existing content.
      */
     @Test
     void writeFileCreatesAndOverwritesContent() throws IOException {
@@ -42,7 +43,7 @@ class FileUtilHandlerTest {
     }
 
     /**
-     * Verifies that writeFile can append content.
+     * Verifies that writeFile can append content to existing files.
      */
     @Test
     void writeFileCanAppendContent() throws IOException {
@@ -55,7 +56,7 @@ class FileUtilHandlerTest {
     }
 
     /**
-     * Verifies that readFile trims trailing whitespace.
+     * Verifies that readFile trims trailing whitespace and newlines correctly.
      */
     @Test
     void readFileTrimsTrailingWhitespace() throws IOException {
@@ -67,7 +68,8 @@ class FileUtilHandlerTest {
     }
 
     /**
-     * Verifies that invalid inputs throw IllegalArgumentException.
+     * Verifies that the utility throws IllegalArgumentException for invalid inputs
+     * (null, blank, missing files, directories, etc.).
      */
     @Test
     void invalidInputsThrowIllegalArgumentException() {

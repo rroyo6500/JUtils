@@ -11,17 +11,29 @@ import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Test class for LoggerAux utility.
+ * Verifies logging functionality including message formatting, file output, and directory validation.
+ */
 class LoggerAuxTest {
 
+    /** Temporary directory for test file operations. */
     @TempDir
     Path tempDir;
 
+    /**
+     * Disables console output and enables debug mode before each test.
+     */
     @BeforeEach
     void silenceLogger() {
         LoggerAux.setConsoleOutputEnabled(false);
         LoggerAux.setDebugEnabled(true);
     }
 
+    /**
+     * Verifies that all logging methods (info, warn, error, debug) return timestamped messages
+     * with the expected severity level and content.
+     */
     @Test
     void logMethodsReturnTimestampedMessagesWithExpectedSeverity() {
         String info = LoggerAux.info("hello");
@@ -38,6 +50,10 @@ class LoggerAuxTest {
         );
     }
 
+    /**
+     * Verifies that when a log directory is set, log messages are written to a plain text log file
+     * without ANSI escape codes.
+     */
     @Test
     void setLogDirectoryWritesPlainTextLogFile() throws IOException {
         LoggerAux.setLogDirectory(tempDir.toFile());
@@ -53,6 +69,10 @@ class LoggerAuxTest {
         assertFalse(content.contains("\u001B["));
     }
 
+    /**
+     * Verifies that setLogDirectory rejects a non-directory file path
+     * and throws IllegalArgumentException.
+     */
     @Test
     void setLogDirectoryRejectsNonDirectory() {
         Path file = tempDir.resolve("not-dir.txt");

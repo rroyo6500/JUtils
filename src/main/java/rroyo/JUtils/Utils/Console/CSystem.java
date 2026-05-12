@@ -17,6 +17,9 @@ import java.io.IOException;
  */
 public final class CSystem {
 
+    /**
+     *
+     */
     private CSystem() {}
 
     /**
@@ -32,11 +35,10 @@ public final class CSystem {
         try {
             String os = System.getProperty("os.name");
 
+            System.out.println("\n".repeat(50));
             if (os.contains("Windows")) {
-                // Invokes the Windows Command Processor to execute 'cls'
                 new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
             } else {
-                // Sends standard ANSI escape sequences to the terminal
                 System.out.print("\033[H\033[2J");
                 System.out.flush();
             }

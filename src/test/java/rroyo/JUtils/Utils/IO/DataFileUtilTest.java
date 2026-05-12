@@ -15,9 +15,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Test class for DataFileUtil utility.
+ * Verifies parsing of custom data files, handling of duplicate keys, key sorting, and error handling.
  */
 class DataFileUtilTest {
 
+    /** Temporary directory for test file operations. */
     @TempDir
     Path tempDir;
 
@@ -27,7 +29,6 @@ class DataFileUtilTest {
     @BeforeEach
     void silenceLoggers() {
         LoggerAux.setConsoleOutputEnabled(false);
-        FileUtilHandler.setLogging(false);
     }
 
     /**

@@ -28,6 +28,17 @@ public final class ResultTable {
     /** Formatted ASCII table string. */
     private final String strTable;
 
+    /**
+     * Constructs a new ResultTable by processing an active {@link ResultSet}.
+     * <p>
+     * It extracts metadata to identify columns and iterates through all rows
+     * to populate the internal map.
+     * </p>
+     * Closes the 'ResultSet' after processing.
+     *
+     * @param resultSet The active database result set to process.
+     * @throws SQLException If a database access error occurs.
+     */
     public ResultTable(ResultSet resultSet) throws SQLException {
         this(resultSet, true);
     }
@@ -40,6 +51,7 @@ public final class ResultTable {
      * </p>
      *
      * @param resultSet The active database result set to process.
+     * @param closeResultSet If true, the ResultSet will be closed after processing.
      * @throws SQLException If a database access error occurs.
      */
     public ResultTable(ResultSet resultSet, boolean closeResultSet) throws SQLException {
