@@ -3,7 +3,7 @@ package rroyo.JUtils.Utils.IO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
-import rroyo.JUtils.Utils.Logging.LoggerAux;
+import rroyo.JUtils.Utils.Logging.Log;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,7 +26,7 @@ class FileUtilHandlerTest {
      */
     @BeforeEach
     void silenceLoggers() {
-        LoggerAux.setConsoleOutputEnabled(false);
+        Log.setConsoleOutputEnabled(false);
     }
 
     /**

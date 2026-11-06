@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import rroyo.JUtils.Anotations.CLI.JCommand;
 import rroyo.JUtils.Anotations.CLI.JOption;
 import rroyo.JUtils.Enums.CLI.DataTypes;
-import rroyo.JUtils.Utils.Logging.LoggerAux;
+import rroyo.JUtils.Utils.Logging.Log;
 
 import java.lang.reflect.Field;
 
@@ -89,7 +89,7 @@ class ConsoleListenerTest {
      */
     @BeforeEach
     void setUp() {
-        LoggerAux.setConsoleOutputEnabled(false);
+        Log.setConsoleOutputEnabled(false);
         provider = new MockCommandProvider();
         listener = new ConsoleListener(provider);
     }
