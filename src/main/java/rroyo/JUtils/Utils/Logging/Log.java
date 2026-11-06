@@ -1,9 +1,6 @@
 package rroyo.JUtils.Utils.Logging;
 
-import org.w3c.dom.Text;
 import rroyo.JUtils.Utils.Console.TStyle;
-import rroyo.JUtils.Utils.Console.TextFormatter;
-import rroyo.JUtils.Utils.IO.FileUtilHandler;
 import rroyo.JUtils.Utils.Core.Validator;
 
 import java.io.File;
@@ -20,12 +17,12 @@ import java.time.format.DateTimeFormatter;
  *
  * @author rroyo
  */
-public final class LoggerAux {
+public final class Log {
 
     /**
      * Private constructor to prevent instantiation of this utility class.
      */
-    private LoggerAux() {}
+    private Log() {}
 
     /**
      * Enumerates the severity levels supported by the logger.
@@ -165,38 +162,6 @@ public final class LoggerAux {
      */
     public static String error(String msg) {
         return log(LogType.ERROR, msg);
-    }
-
-    /**
-     * Logs a critical error including an exception description.
-     *
-     * @param msg       Personalized error message.
-     * @param exception Captured exception from which the technical message will be extracted.
-     * @return The log message
-     */
-    public static String error(String msg, Exception exception) {
-        Validator.notNull(exception, "Exception cannot be null");
-        return log(LogType.ERROR, String.format("%s%n%s", msg,
-                (exception.getMessage() != null)
-                        ? exception.getMessage() : exception.toString()
-        ));
-    }
-
-    /**
-     * Logs a critical error by extracting information directly from an Exception object.
-     * <p>
-     * This method validates that the exception is not null using {@link Validator}
-     * before processing. It attempts to retrieve the specific error message;
-     * if unavailable, it defaults to the exception's string representation.
-     * </p>
-     *
-     * @param exception The exception to be logged.
-     * @return The formatted error message string as processed by the internal log system.
-     * @throws IllegalArgumentException if the provided exception is null.
-     */
-    public static String error(Exception exception) {
-        Validator.notNull(exception, "Exception cannot be null");
-        return log(LogType.ERROR, exception.toString());
     }
 
     /**

@@ -23,22 +23,11 @@ La biblioteca se divide en varios paquetes especializados:
 
 ### 📁 IO (Entrada/Salida y Archivos)
 *   **`FileUtilHandler.java`**: Centraliza operaciones de lectura y escritura de archivos de texto. Maneja automáticamente el buffering y ofrece opciones para sobreescribir o añadir contenido (`append`) a archivos existentes.
-*   **`DataFileUtil.java`**: Implementa un motor de parsing para un formato de datos personalizado (usando delimitadores como `¡`, `:`, `^` y `~`). Permite guardar y cargar mapas (`Map<String, String>`) de forma estructurada.
 *   **`ScannerAux.java`**: Un envoltorio (*wrapper*) para la clase `Scanner` estándar que permite solicitar datos al usuario por consola (String, int, double, etc.) mostrando un mensaje de guía de forma limpia.
 
 ### 🖼️ GUI (Interfaz Gráfica)
 *   **`CustomFonts.java`**: Un gestor de fuentes TrueType (.ttf). Permite cargar archivos de fuentes externas, almacenarlas en un caché interno por nombre y recuperarlas con diferentes tamaños para su uso en la interfaz.
-*   **`Mouse.java`**: Facilita el rastreo de la posición del ratón y el estado de los clics sobre cualquier componente de Swing, simplificando la lógica de interacción en aplicaciones gráficas.
-
-### 📊 Data Structures & Objects
-*   **`Board.java`**: Una estructura genérica de tablero bidimensional ($T[][]$). Es ideal para juegos o aplicaciones que requieran una rejilla de tamaño fijo. Incluye métodos para obtener/establecer posiciones con validación de límites y copias profundas del tablero.
 
 ### 📝 Logging
-*   **`LoggerAux.java`**: Un sistema de registro de eventos que imprime mensajes formateados en la consola (con fecha, hora y nivel de severidad) y, opcionalmente, los guarda en archivos `.log` diarios de forma automática.
-*   **`Benchmark.java`**: Una herramienta de diagnóstico diseñada para el perfilado de rendimiento y el monitoreo de recursos. Mide con precisión el tiempo de ejecución de bloques de código (Wall Clock Time), calcula el tiempo real de uso de CPU del hilo (Thread CPU Time) y registra la variación en el uso de la memoria Heap durante el proceso. Es ideal para detectar cuellos de botella y analizar el impacto de memoria de operaciones pesadas.
-
-### 🗄️ BBDD (Bases de Datos)
-*   **`BBDDConnection.java`**: Una abstracción de JDBC para gestionar conexiones a bases de datos. Facilita la ejecución de consultas (`SELECT`) y actualizaciones (`INSERT`, `UPDATE`, `DELETE`) mediante *PreparedStatements* para evitar inyecciones SQL.
-*   **`DSLContextGenerator.java`**: Utilidad específica para proyectos que usen **jOOQ**. Simplifica la creación del `DSLContext` necesario para realizar consultas fluidas, permitiendo configurar el dialecto SQL (MySQL, PostgreSQL, etc.) fácilmente.
-*   **`ResultTable.java`**: Estructura de datos que transforma un `ResultSet` de JDBC en una tabla en memoria. Permite cerrar la conexión a la base de datos inmediatamente y ofrece una visualización en formato ASCII profesional y optimizada, manejando automáticamente alineaciones, valores nulos y casos de tablas sin resultados.
+* **`Log.java`**: Un sistema de registro de eventos que imprime mensajes formateados en la consola (con fecha, hora y nivel de severidad) y, opcionalmente, los guarda en archivos `.log` diarios de forma automática.
 

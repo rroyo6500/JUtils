@@ -1,6 +1,6 @@
 package rroyo.JUtils.Utils.IO;
 
-import rroyo.JUtils.Utils.Logging.LoggerAux;
+import rroyo.JUtils.Utils.Logging.Log;
 import rroyo.JUtils.Utils.Core.Validator;
 
 import java.io.*;
@@ -149,7 +149,7 @@ public final class FileUtilHandler {
         Validator.notNull(file, "File cannot be null");
         Validator.assertFalse(file.isDirectory(), "File cannot be a directory");
 
-        if (!file.exists() && logging) LoggerAux.info("File created: " + file.getName());
+        if (!file.exists() && logging) Log.info("File created: " + file.getName());
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(file, append))) {
             bw.write(msg);
         }
