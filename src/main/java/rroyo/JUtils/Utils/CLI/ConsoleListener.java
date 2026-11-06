@@ -5,8 +5,7 @@ import rroyo.JUtils.Anotations.CLI.JOption;
 import rroyo.JUtils.Enums.CLI.DataTypes;
 import rroyo.JUtils.Utils.Core.Validator;
 import rroyo.JUtils.Utils.IO.ScannerAux;
-import rroyo.JUtils.Utils.Logging.Benchmark;
-import rroyo.JUtils.Utils.Logging.LoggerAux;
+import rroyo.JUtils.Utils.Logging.Log;
 
 import java.io.File;
 import java.lang.reflect.Method;
@@ -80,8 +79,8 @@ public final class ConsoleListener implements Runnable{
      */
     @Override
     public void run() {
-        LoggerAux.info("CLI System started");
-        LoggerAux.setConsoleOutputEnabled(false);
+        Log.info("CLI System started");
+        Log.setConsoleOutputEnabled(false);
 
         while (running) {
             processInput(ScannerAux.readString(prompt, false));
@@ -179,9 +178,9 @@ public final class ConsoleListener implements Runnable{
      * @param message The error message.
      */
     private void showError(String message) {
-        LoggerAux.setConsoleOutputEnabled(true);
-        LoggerAux.error(message);
-        LoggerAux.setConsoleOutputEnabled(false);
+        Log.setConsoleOutputEnabled(true);
+        Log.error(message);
+        Log.setConsoleOutputEnabled(false);
     }
 
     /**
@@ -209,10 +208,6 @@ public final class ConsoleListener implements Runnable{
                 - logconfig  : Allows to change the configuration of the logging system and see the current configuration
                     [-d (STRING)]        Assigns the path to the 'loggingDirectory
                     [-conf (BOOLEAN)]    Shows the current logging configuration
-                
-                - benchmark  : Starts a simple benchmark with the specified name
-                    [-n (STRING)]        Name of the benchmark
-                    [-stop (BOOLEAN)]    Whether to stop the benchmark
                 
                 - exit       : Exits the CLI system or the entire application
                     [-sE (BOOLEAN)]      Stops the program
@@ -316,34 +311,12 @@ public final class ConsoleListener implements Runnable{
                 boolean systemExit
         ) {
             running = false;
-            LoggerAux.setConsoleOutputEnabled(true);
-            LoggerAux.info("CLI System stopped");
+            Log.setConsoleOutputEnabled(true);
+            Log.info("CLI System stopped");
             if (systemExit) {
-                LoggerAux.info("Exiting application...");
+                Log.info("Exiting application...");
                 System.exit(0);
             }
-        }
-
-        @JCommand(
-                name = "benchmark",
-                description = "Starts a simple benchmark with the specified name",
-                showInHelp = false
-        )
-        public void benchmark(
-                @JOption(name = "n", description = "Name of the benchmark", defaultValue = "CLI_Benchmark")
-                String name,
-                @JOption(name = "stop", description = "Whether to stop the benchmark", type = DataTypes.BOOLEAN)
-                boolean stop
-        ) {
-            boolean debugState = LoggerAux.isDebugEnabled();
-            if (!debugState)
-                LoggerAux.setDebugEnabled(true);
-            LoggerAux.setConsoleOutputEnabled(true);
-            if (stop) Benchmark.stop(name);
-            else Benchmark.start(name);
-            LoggerAux.setConsoleOutputEnabled(false);
-            if (!debugState)
-                LoggerAux.setDebugEnabled(false);
         }
 
         @JCommand(
@@ -367,13 +340,13 @@ public final class ConsoleListener implements Runnable{
             if (dirPath != null && !dirPath.trim().isEmpty()) {
                 File dir = new File(dirPath);
                 Validator.assertTrue(dir.exists() && dir.isDirectory(), "The provided path is not a valid directory");
-                LoggerAux.setLogDirectory(dir);
+                Log.setLogDirectory(dir);
             }
             if (showConfig) {
                 System.out.println("\n--- Logging Configuration ---");
-                System.out.println("Log Directory: " + LoggerAux.getLogDirectory());
-                System.out.println("Console Output Enabled: " + LoggerAux.isConsoleOutputEnabled());
-                System.out.println("* Debug Output Enabled: " + LoggerAux.isDebugEnabled());
+                System.out.println("Log Directory: " + Log.getLogDirectory());
+                System.out.println("Console Output Enabled: " + Log.isConsoleOutputEnabled());
+                System.out.println("* Debug Output Enabled: " + Log.isDebugEnabled());
                 System.out.println("-----------------------------\n");
             }
         }

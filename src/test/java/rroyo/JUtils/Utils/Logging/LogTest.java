@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * Test class for LoggerAux utility.
  * Verifies logging functionality including message formatting, file output, and directory validation.
  */
-class LoggerAuxTest {
+class LogTest {
 
     /** Temporary directory for test file operations. */
     @TempDir
@@ -26,8 +26,8 @@ class LoggerAuxTest {
      */
     @BeforeEach
     void silenceLogger() {
-        LoggerAux.setConsoleOutputEnabled(false);
-        LoggerAux.setDebugEnabled(true);
+        Log.setConsoleOutputEnabled(false);
+        Log.setDebugEnabled(true);
     }
 
     /**
@@ -36,10 +36,10 @@ class LoggerAuxTest {
      */
     @Test
     void logMethodsReturnTimestampedMessagesWithExpectedSeverity() {
-        String info = LoggerAux.info("hello");
-        String warn = LoggerAux.warn("careful");
-        String error = LoggerAux.error("broken");
-        String debug = LoggerAux.debug("trace");
+        String info = Log.info("hello");
+        String warn = Log.warn("careful");
+        String error = Log.error("broken");
+        String debug = Log.debug("trace");
 
         assertAll(
                 () -> assertTrue(TStyle.clearStyle(info).contains("[INFO]")),
@@ -56,9 +56,9 @@ class LoggerAuxTest {
      */
     @Test
     void setLogDirectoryWritesPlainTextLogFile() throws IOException {
-        LoggerAux.setLogDirectory(tempDir.toFile());
+        Log.setLogDirectory(tempDir.toFile());
 
-        LoggerAux.info("persist me");
+        Log.info("persist me");
 
         Path logFile = Files.list(tempDir)
                 .filter(path -> path.getFileName().toString().endsWith(".log"))
@@ -78,6 +78,6 @@ class LoggerAuxTest {
         Path file = tempDir.resolve("not-dir.txt");
 
         assertDoesNotThrow(() -> Files.writeString(file, "x"));
-        assertThrows(IllegalArgumentException.class, () -> LoggerAux.setLogDirectory(file.toFile()));
+        assertThrows(IllegalArgumentException.class, () -> Log.setLogDirectory(file.toFile()));
     }
 }

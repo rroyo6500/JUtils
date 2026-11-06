@@ -2,7 +2,7 @@ package rroyo.JUtils.Utils.Core;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import rroyo.JUtils.Utils.Logging.LoggerAux;
+import rroyo.JUtils.Utils.Logging.Log;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -16,7 +16,7 @@ class ValidatorTest {
      */
     @BeforeEach
     void silenceLogger() {
-        LoggerAux.setConsoleOutputEnabled(false);
+        Log.setConsoleOutputEnabled(false);
     }
 
     /**

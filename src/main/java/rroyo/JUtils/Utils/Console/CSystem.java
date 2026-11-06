@@ -1,7 +1,7 @@
 package rroyo.JUtils.Utils.Console;
 
 import rroyo.JUtils.Utils.Core.Validator;
-import rroyo.JUtils.Utils.Logging.LoggerAux;
+import rroyo.JUtils.Utils.Logging.Log;
 
 import java.io.IOException;
 
@@ -43,9 +43,9 @@ public final class CSystem {
                 System.out.flush();
             }
 
-            LoggerAux.info("Console cleared");
+            Log.info("Console cleared");
         } catch (IOException | InterruptedException e) {
-            LoggerAux.error("Failed to clear console: " + e.getMessage());
+            Log.error("Failed to clear console: " + e.getMessage());
         }
     }
 
@@ -55,7 +55,7 @@ public final class CSystem {
      */
     public static void beep() {
         java.awt.Toolkit.getDefaultToolkit().beep();
-        LoggerAux.info("Beep sound triggered");
+        Log.info("Beep sound triggered");
     }
 
     /**
@@ -66,12 +66,12 @@ public final class CSystem {
      */
     public static void pause(String message) {
         System.out.println("\n" + (message.isEmpty() ? "Press Enter to continue..." : message));
-        LoggerAux.info("Execution paused");
+        Log.info("Execution paused");
         try {
             System.in.read();
-            LoggerAux.info("Execution continued");
+            Log.info("Execution continued");
         } catch (IOException e) {
-            LoggerAux.error(e);
+            Log.error(e);
         }
     }
 
@@ -104,14 +104,14 @@ public final class CSystem {
                 // Updates Windows CMD/PowerShell title using internal command
                 new ProcessBuilder("cmd", "/c", "title", title).inheritIO().start().waitFor();
             } catch (Exception e) {
-                LoggerAux.error(e);
+                Log.error(e);
             }
         } else {
             // Uses XTerm control sequence to update Unix-based terminal titles
             System.out.print("\033]0;" + title + "\007");
             System.out.flush();
         }
-        LoggerAux.info("Console title setted to: " + title);
+        Log.info("Console title setted to: " + title);
     }
 
     /**
@@ -120,7 +120,7 @@ public final class CSystem {
      * @return A string containing OS name, architecture, Java version, and current username.
      */
     public static String getSystemSummary() {
-        return LoggerAux.info(String.format("OS: %s (%s) | Java: %s | User: %s",
+        return Log.info(String.format("OS: %s (%s) | Java: %s | User: %s",
                 System.getProperty("os.name"),
                 System.getProperty("os.arch"),
                 System.getProperty("java.version"),
@@ -135,7 +135,7 @@ public final class CSystem {
      */
     public static void exit(int status) {
         System.out.println(status == 0 ? "Exiting application..." : "Application terminated with errors.");
-        LoggerAux.info("Application exitted with status: " + status);
+        Log.info("Application exitted with status: " + status);
         System.exit(status);
     }
 }
