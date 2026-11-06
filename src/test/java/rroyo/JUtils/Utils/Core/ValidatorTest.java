@@ -2,6 +2,7 @@ package rroyo.JUtils.Utils.Core;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import rroyo.JUtils.Exceptions.ValidationException;
 import rroyo.JUtils.Utils.Logging.Log;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -26,8 +27,8 @@ class ValidatorTest {
     void notNullAcceptsObjectsAndRejectsNull() {
         assertDoesNotThrow(() -> Validator.notNull("value", "must exist"));
 
-        IllegalArgumentException exception = assertThrows(
-                IllegalArgumentException.class,
+        ValidationException exception = assertThrows(
+                ValidationException.class,
                 () -> Validator.notNull(null, "must exist")
         );
         assertEquals("must exist", exception.getMessage());
@@ -41,9 +42,9 @@ class ValidatorTest {
         assertDoesNotThrow(() -> Validator.notBlank(" value ", "required"));
 
         assertAll(
-                () -> assertThrows(IllegalArgumentException.class, () -> Validator.notBlank(null, "required")),
-                () -> assertThrows(IllegalArgumentException.class, () -> Validator.notBlank("", "required")),
-                () -> assertThrows(IllegalArgumentException.class, () -> Validator.notBlank("   ", "required"))
+                () -> assertThrows(ValidationException.class, () -> Validator.notBlank(null, "required")),
+                () -> assertThrows(ValidationException.class, () -> Validator.notBlank("", "required")),
+                () -> assertThrows(ValidationException.class, () -> Validator.notBlank("   ", "required"))
         );
     }
 
@@ -60,10 +61,10 @@ class ValidatorTest {
         );
 
         assertAll(
-                () -> assertThrows(IllegalArgumentException.class, () -> Validator.inRange(0, 1, 3, "range")),
-                () -> assertThrows(IllegalArgumentException.class, () -> Validator.inRange(4, 1, 3, "range")),
-                () -> assertThrows(IllegalArgumentException.class, () -> Validator.inRange(1.4, 1.5, 2.5, "range")),
-                () -> assertThrows(IllegalArgumentException.class, () -> Validator.inRange(2.6, 1.5, 2.5, "range"))
+                () -> assertThrows(ValidationException.class, () -> Validator.inRange(0, 1, 3, "range")),
+                () -> assertThrows(ValidationException.class, () -> Validator.inRange(4, 1, 3, "range")),
+                () -> assertThrows(ValidationException.class, () -> Validator.inRange(1.4, 1.5, 2.5, "range")),
+                () -> assertThrows(ValidationException.class, () -> Validator.inRange(2.6, 1.5, 2.5, "range"))
         );
     }
 
@@ -76,10 +77,10 @@ class ValidatorTest {
                 () -> assertDoesNotThrow(() -> Validator.isPositive(0.1, "positive")),
                 () -> assertDoesNotThrow(() -> Validator.assertTrue(true, "true")),
                 () -> assertDoesNotThrow(() -> Validator.assertFalse(false, "false")),
-                () -> assertThrows(IllegalArgumentException.class, () -> Validator.isPositive(0, "positive")),
-                () -> assertThrows(IllegalArgumentException.class, () -> Validator.isPositive(-1, "positive")),
-                () -> assertThrows(IllegalArgumentException.class, () -> Validator.assertTrue(false, "true")),
-                () -> assertThrows(IllegalArgumentException.class, () -> Validator.assertFalse(true, "false"))
+                () -> assertThrows(ValidationException.class, () -> Validator.isPositive(0, "positive")),
+                () -> assertThrows(ValidationException.class, () -> Validator.isPositive(-1, "positive")),
+                () -> assertThrows(ValidationException.class, () -> Validator.assertTrue(false, "true")),
+                () -> assertThrows(ValidationException.class, () -> Validator.assertFalse(true, "false"))
         );
     }
 }

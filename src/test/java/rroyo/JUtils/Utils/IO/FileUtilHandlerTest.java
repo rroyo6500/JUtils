@@ -3,6 +3,7 @@ package rroyo.JUtils.Utils.IO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import rroyo.JUtils.Exceptions.ValidationException;
 import rroyo.JUtils.Utils.Logging.Log;
 
 import java.io.File;
@@ -77,11 +78,11 @@ class FileUtilHandlerTest {
         File missing = tempDir.resolve("missing.txt").toFile();
 
         assertAll(
-                () -> assertThrows(IllegalArgumentException.class, () -> FileUtilHandler.readFile((String) null)),
-                () -> assertThrows(IllegalArgumentException.class, () -> FileUtilHandler.readFile("   ")),
-                () -> assertThrows(IllegalArgumentException.class, () -> FileUtilHandler.readFile(missing)),
-                () -> assertThrows(IllegalArgumentException.class, () -> FileUtilHandler.readFile(directory)),
-                () -> assertThrows(IllegalArgumentException.class, () -> FileUtilHandler.writeFile(directory, "data"))
+                () -> assertThrows(ValidationException.class, () -> FileUtilHandler.readFile((String) null)),
+                () -> assertThrows(ValidationException.class, () -> FileUtilHandler.readFile("   ")),
+                () -> assertThrows(ValidationException.class, () -> FileUtilHandler.readFile(missing)),
+                () -> assertThrows(ValidationException.class, () -> FileUtilHandler.readFile(directory)),
+                () -> assertThrows(ValidationException.class, () -> FileUtilHandler.writeFile(directory, "data"))
         );
     }
 }

@@ -3,6 +3,7 @@ package rroyo.JUtils.Utils.Logging;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import rroyo.JUtils.Exceptions.ValidationException;
 import rroyo.JUtils.Utils.Console.TStyle;
 
 import java.io.IOException;
@@ -71,13 +72,13 @@ class LogTest {
 
     /**
      * Verifies that setLogDirectory rejects a non-directory file path
-     * and throws IllegalArgumentException.
+     * and throws ValidationException.
      */
     @Test
     void setLogDirectoryRejectsNonDirectory() {
         Path file = tempDir.resolve("not-dir.txt");
 
         assertDoesNotThrow(() -> Files.writeString(file, "x"));
-        assertThrows(IllegalArgumentException.class, () -> Log.setLogDirectory(file.toFile()));
+        assertThrows(ValidationException.class, () -> Log.setLogDirectory(file.toFile()));
     }
 }

@@ -2,6 +2,7 @@ package rroyo.JUtils.Utils.Console;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import rroyo.JUtils.Exceptions.ValidationException;
 import rroyo.JUtils.Utils.Logging.Log;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -45,7 +46,7 @@ class TextFormatterTest {
     void truncateLeavesShortTextAndAddsEllipsisForLongText() {
         assertEquals("abc", TextFormatter.truncate("abc", 3));
         assertEquals("ab...", TextFormatter.truncate("abcdef", 5));
-        assertThrows(IllegalArgumentException.class, () -> TextFormatter.truncate(null, 5));
+        assertThrows(ValidationException.class, () -> TextFormatter.truncate(null, 5));
     }
 
     /**
