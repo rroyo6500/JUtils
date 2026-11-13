@@ -1,7 +1,7 @@
-package rroyo.JUtils.Utils.Core;
+package net.rroyo.jutils.utils.core;
 
-import rroyo.JUtils.Exceptions.ValidationException;
-import rroyo.JUtils.Utils.Logging.Log;
+import net.rroyo.jutils.exceptions.ValidationException;
+import net.rroyo.jutils.utils.logging.Log;
 
 /**
  * Utility class for data validation and constraint enforcement.

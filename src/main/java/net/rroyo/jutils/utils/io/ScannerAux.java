@@ -1,6 +1,6 @@
-package rroyo.JUtils.Utils.IO;
+package net.rroyo.jutils.utils.io;
 
-import rroyo.JUtils.Utils.Core.Validator;
+import net.rroyo.jutils.utils.core.Validator;
 
 import java.util.Scanner;
 
