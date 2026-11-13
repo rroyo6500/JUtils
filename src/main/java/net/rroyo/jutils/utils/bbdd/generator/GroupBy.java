@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
-public class GroupBy extends SQLSyntax{
+public class GroupBy extends SQLSyntax {
 
     protected GroupBy(SQLBuilder sqlBuilder, Field... field) throws SQLException {
         super(sqlBuilder);

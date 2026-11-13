@@ -1,13 +1,12 @@
 package net.rroyo.jutils.utils.bbdd.generator;
 
 import net.rroyo.jutils.utils.bbdd.Syntax;
-import net.rroyo.jutils.utils.bbdd.condition.Condition;
 import net.rroyo.jutils.utils.bbdd.data.field.Field;
 
 import java.sql.SQLException;
 import java.util.List;
 
-public class Where extends SQLSyntax{
+public class Where extends SQLSyntax {
 
     protected Where(SQLBuilder sqlBuilder, Condition condition) {
         super(sqlBuilder);

@@ -2,13 +2,12 @@ package net.rroyo.jutils.utils.bbdd.generator;
 
 import net.rroyo.jutils.enums.bbdd.SQLJoin;
 import net.rroyo.jutils.utils.bbdd.Syntax;
-import net.rroyo.jutils.utils.bbdd.condition.Condition;
 import net.rroyo.jutils.utils.bbdd.data.field.Field;
 import net.rroyo.jutils.utils.bbdd.data.table.Table;
 
 import java.sql.SQLException;
 
-public class Join extends SQLSyntax{
+public class Join extends SQLSyntax {
 
     private final SQLJoin joinType;
 

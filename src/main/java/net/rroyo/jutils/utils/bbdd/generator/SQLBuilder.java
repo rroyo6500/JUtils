@@ -1,18 +1,14 @@
 package net.rroyo.jutils.utils.bbdd.generator;
 
-import net.rroyo.jutils.enums.bbdd.SQLInstruction;
-
 import java.util.ArrayList;
 import java.util.List;
 
-class SQLBuilder {
+public final class SQLBuilder {
 
     private final StringBuilder sql = new StringBuilder();
-    private final SQLInstruction instruction;
-    private List<Object> values;
+    private final List<Object> values = new ArrayList<>();
 
-    public SQLBuilder(SQLInstruction instruction) {
-        this.instruction = instruction;
+    public SQLBuilder() {
     }
 
     public SQLBuilder append(String... string) {
@@ -24,11 +20,7 @@ class SQLBuilder {
     }
 
     public void addValues(List<Object> value) {
-        this.values = value;
-    }
-
-    public SQLInstruction getInstruction() {
-        return instruction;
+        this.values.addAll(value);
     }
 
     public List<Object> getValues() {

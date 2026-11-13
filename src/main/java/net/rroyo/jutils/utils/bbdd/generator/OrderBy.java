@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
-public class OrderBy extends SQLSyntax{
+public class OrderBy extends SQLSyntax {
 
     protected OrderBy(SQLBuilder sqlBuilder, Field... field) throws SQLException {
         super(sqlBuilder);

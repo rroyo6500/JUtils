@@ -7,7 +7,7 @@ import net.rroyo.jutils.utils.bbdd.data.table.Table;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
-public class Select extends SQLSyntax{
+public class Select extends SQLSyntax {
 
     protected Select(SQLBuilder sqlBuilder, Field... field) {
         super(sqlBuilder);

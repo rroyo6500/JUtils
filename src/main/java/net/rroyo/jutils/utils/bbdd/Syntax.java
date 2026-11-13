@@ -12,9 +12,10 @@ public final class Syntax {
     public static final String GROUP_BY = "GROUP BY";
     public static final String ORDER_BY = "ORDER BY";
     public static final String INSERT_INTO = "INSERT INTO";
-    public static final String DELETE = "DELETE";
-    public static final String CREATE_TABLE = "CREATE TABLE";
-    public static final String DROP_TABLE = "DROP TABLE";
+    public static final String VALUES = "VALUES";
+    public static final String UPDATE = "UPDATE";
+    public static final String SET = "SET";
+    public static final String DELETE = "DELETE FROM";
 
     public static final class Conditions {
 
@@ -25,7 +26,7 @@ public final class Syntax {
         public static final String IS_NULL = "IS NULL";
         public static final String IS_NOT_NULL = "IS NOT NULL";
         public static final String NOT_EQUAL = "<>";
-        public static final String BETWEEN = "BETWEEN ? AND ?";
+        public static final String BETWEEN = "BETWEEN ? AND ";
         public static final String IN = "IN";
         public static final String LIKE = "LIKE";
 
