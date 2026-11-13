@@ -1,30 +1,38 @@
 package net.rroyo.jutils.utils.bbdd.generator;
 
-import net.rroyo.jutils.utils.bbdd.data.Condition;
-import net.rroyo.jutils.utils.bbdd.data.Field;
+import net.rroyo.jutils.utils.bbdd.Syntax;
+import net.rroyo.jutils.utils.bbdd.condition.Condition;
+import net.rroyo.jutils.utils.bbdd.data.field.Field;
 
 import java.sql.SQLException;
+import java.util.List;
 
 public class Where extends SQLSyntax{
 
     protected Where(SQLBuilder sqlBuilder, Condition condition) {
         super(sqlBuilder);
 
-        sqlBuilder.append(syntax(), condition.toString());
+        init(syntax(), condition);
+    }
+
+    private void init(String syntax, Condition condition) {
+        sqlBuilder.append(syntax, condition.toString());
+        List<Object> values = condition.getValues();
+        if (values != null && !values.isEmpty()) sqlBuilder.addValues(values);
     }
 
     @Override
     protected String syntax() {
-        return "WHERE";
+        return Syntax.WHERE;
     }
 
     public Where and(Condition condition) {
-        sqlBuilder.append("AND", condition.toString());
+        init(Syntax.AND, condition);
         return this;
     }
 
     public Where or(Condition condition) {
-        sqlBuilder.append("OR", condition.toString());
+        init(Syntax.OR, condition);
         return this;
     }
 

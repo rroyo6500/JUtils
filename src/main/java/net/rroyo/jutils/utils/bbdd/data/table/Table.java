@@ -1,4 +1,4 @@
-package net.rroyo.jutils.utils.bbdd.data;
+package net.rroyo.jutils.utils.bbdd.data.table;
 
 public final class Table {
 

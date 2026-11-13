@@ -1,26 +1,28 @@
 package net.rroyo.jutils.utils.bbdd.generator;
 
-import net.rroyo.jutils.utils.bbdd.data.Field;
+import net.rroyo.jutils.utils.bbdd.Syntax;
+import net.rroyo.jutils.utils.bbdd.data.field.Field;
 
 import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 public class OrderBy extends SQLSyntax{
 
     protected OrderBy(SQLBuilder sqlBuilder, Field... field) throws SQLException {
         super(sqlBuilder);
 
-        StringBuilder f = new StringBuilder();
-        if (field.length == 0) throw new SQLException("ORDER BY requires a field");
-        else if (field.length == 1) f.append(field[0]);
-        else for (int i = 0; i < field.length; i++) {
-                f.append(field[i]);
-                if (i != field.length-1) f.append(", ");
+        if (field.length == 0) sqlBuilder.append(syntax(), "*");
+        else {
+            String fieldsString = Arrays.stream(field)
+                    .map(Field::toString)
+                    .collect(Collectors.joining(", "));
+            sqlBuilder.append(syntax(), fieldsString);
         }
-        sqlBuilder.append(syntax(), f.toString());
     }
 
     @Override
     protected String syntax() {
-        return "ORDER BY";
+        return Syntax.ORDER_BY;
     }
 }

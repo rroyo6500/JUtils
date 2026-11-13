@@ -1,9 +1,10 @@
 package net.rroyo.jutils.utils.bbdd.generator;
 
 import net.rroyo.jutils.enums.bbdd.SQLJoin;
-import net.rroyo.jutils.utils.bbdd.data.Condition;
-import net.rroyo.jutils.utils.bbdd.data.Field;
-import net.rroyo.jutils.utils.bbdd.data.Table;
+import net.rroyo.jutils.utils.bbdd.Syntax;
+import net.rroyo.jutils.utils.bbdd.condition.Condition;
+import net.rroyo.jutils.utils.bbdd.data.field.Field;
+import net.rroyo.jutils.utils.bbdd.data.table.Table;
 
 import java.sql.SQLException;
 
@@ -17,7 +18,7 @@ public class From extends SQLSyntax{
 
     @Override
     protected String syntax() {
-        return "FROM";
+        return Syntax.FROM;
     }
 
     public Where where(Condition condition) {

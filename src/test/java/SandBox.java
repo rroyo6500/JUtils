@@ -1,38 +1,47 @@
 import net.rroyo.jutils.enums.bbdd.OrderBy;
+import net.rroyo.jutils.utils.bbdd.ConnectionManager;
 import net.rroyo.jutils.utils.bbdd.SQL;
-import net.rroyo.jutils.utils.bbdd.data.Condition;
-
-import java.sql.SQLException;
 
 import static net.rroyo.jutils.utils.bbdd.generator.SQLGenerator.*;
 
 public class SandBox {
 
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args) {
+        ConnectionManager.setDatabase("homecontroldb");
+        ConnectionManager.setUser("root");
+        ConnectionManager.setPassword("");
 
-        SQL sql = sql()
+        String name = "Robert";
+        int age = 18;
+
+        try (SQL sql = sql()
                 .select(
-                        field("a"),
-                        field("b"),
-                        field("c"),
-                        field("d")
+                        field("name"),
+                        field("age"),
+                        field("email")
                 )
-                .from(table("TestTable"))
-                .innerJoin(table("Test2"))
-                .on(Condition.equals(field("f1"), field("f2")))
-                .where(Condition.not(Condition.equals(field("f1"))))
-                .groupBy(
-                        field("a"),
-                        field("b")
-                )
-                .orderBy(
-                        field("a"),
-                        field("b", OrderBy.ASC),
-                        field("c", OrderBy.DESC)
-                )
-                .build();
+                .from(table("users"))
+                .innerJoin(table("departments"))
+                .on(field("users.department_id").equal().field("departments.id"))
+                .where(field("users.id").equal().subQuery(
+                        sql().select().from(table("departments")).build()
+                ))
+                .and(field("users.id").equal().value(10))
+                //.and(isNotNull(field("users.email")))
+                .orderBy(field("users.name", OrderBy.ASC))
+                .build()
+        ) {
 
-        System.out.println(sql);
+            String finalSQL = sql.getPreparedStatement().toString();
+
+            System.out.println();
+            System.out.println(finalSQL);
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+
 
     }
 

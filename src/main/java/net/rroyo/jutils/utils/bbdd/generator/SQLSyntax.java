@@ -13,7 +13,7 @@ abstract class SQLSyntax {
     protected abstract String syntax();
 
     public SQL build() {
-        return new SQL(sqlBuilder.toString());
+        return new SQL(sqlBuilder.toString(), sqlBuilder.getInstruction(), sqlBuilder.getValues());
     }
 
 }

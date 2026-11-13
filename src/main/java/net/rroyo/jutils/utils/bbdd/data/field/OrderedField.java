@@ -1,4 +1,4 @@
-package net.rroyo.jutils.utils.bbdd.data;
+package net.rroyo.jutils.utils.bbdd.data.field;
 
 import net.rroyo.jutils.enums.bbdd.OrderBy;
 
@@ -6,7 +6,7 @@ public class OrderedField extends Field{
 
     private final OrderBy order;
 
-    protected OrderedField(String fieldName, OrderBy order) {
+    public OrderedField(String fieldName, OrderBy order) {
         super(fieldName);
         this.order = order;
     }
