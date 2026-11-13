@@ -1,7 +1,7 @@
-package rroyo.JUtils.Utils.IO;
+package net.rroyo.jutils.utils.io;
 
-import rroyo.JUtils.Utils.Logging.Log;
-import rroyo.JUtils.Utils.Core.Validator;
+import net.rroyo.jutils.utils.logging.Log;
+import net.rroyo.jutils.utils.core.Validator;
 
 import java.io.*;
 

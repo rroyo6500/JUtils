@@ -1,9 +1,10 @@
 package rroyo.JUtils.Utils.Core;
 
+import net.rroyo.jutils.utils.core.Validator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import rroyo.JUtils.Exceptions.ValidationException;
-import rroyo.JUtils.Utils.Logging.Log;
+import net.rroyo.jutils.exceptions.ValidationException;
+import net.rroyo.jutils.utils.logging.Log;
 
 import static org.junit.jupiter.api.Assertions.*;
 

@@ -1,11 +1,11 @@
-package rroyo.JUtils.Utils.CLI;
+package net.rroyo.jutils.utils.cli;
 
-import rroyo.JUtils.Anotations.CLI.JCommand;
-import rroyo.JUtils.Anotations.CLI.JOption;
-import rroyo.JUtils.Enums.CLI.DataTypes;
-import rroyo.JUtils.Utils.Core.Validator;
-import rroyo.JUtils.Utils.IO.ScannerAux;
-import rroyo.JUtils.Utils.Logging.Log;
+import net.rroyo.jutils.anotations.CLI.JCommand;
+import net.rroyo.jutils.anotations.CLI.JOption;
+import net.rroyo.jutils.enums.CLI.DataTypes;
+import net.rroyo.jutils.utils.core.Validator;
+import net.rroyo.jutils.utils.io.ScannerAux;
+import net.rroyo.jutils.utils.logging.Log;
 
 import java.io.File;
 import java.lang.reflect.Method;

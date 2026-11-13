@@ -1,6 +1,6 @@
-package rroyo.JUtils.Utils.Console;
+package net.rroyo.jutils.utils.console;
 
-import rroyo.JUtils.Utils.Core.Validator;
+import net.rroyo.jutils.utils.core.Validator;
 
 /**
  * Utility class for text manipulation, alignment, and terminal visual components.

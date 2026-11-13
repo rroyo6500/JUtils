@@ -1,7 +1,7 @@
-package rroyo.JUtils.Utils.Console;
+package net.rroyo.jutils.utils.console;
 
-import rroyo.JUtils.Utils.Core.Validator;
-import rroyo.JUtils.Utils.Logging.Log;
+import net.rroyo.jutils.utils.core.Validator;
+import net.rroyo.jutils.utils.logging.Log;
 
 import java.io.IOException;
 

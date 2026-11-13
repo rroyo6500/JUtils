@@ -1,10 +1,11 @@
 package rroyo.JUtils.Utils.Logging;
 
+import net.rroyo.jutils.utils.logging.Log;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
-import rroyo.JUtils.Exceptions.ValidationException;
-import rroyo.JUtils.Utils.Console.TStyle;
+import net.rroyo.jutils.exceptions.ValidationException;
+import net.rroyo.jutils.utils.console.TStyle;
 
 import java.io.IOException;
 import java.nio.file.Files;

@@ -1,5 +1,6 @@
 package rroyo.JUtils.Utils.Console;
 
+import net.rroyo.jutils.utils.console.TStyle;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

@@ -1,4 +1,4 @@
-package rroyo.JUtils.Utils.Console;
+package net.rroyo.jutils.utils.console;
 
 /**
  * Utility class to apply ANSI styles and colors to text in supported consoles.

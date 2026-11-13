@@ -1,9 +1,11 @@
 package rroyo.JUtils.Utils.Console;
 
+import net.rroyo.jutils.utils.console.TStyle;
+import net.rroyo.jutils.utils.console.TextFormatter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import rroyo.JUtils.Exceptions.ValidationException;
-import rroyo.JUtils.Utils.Logging.Log;
+import net.rroyo.jutils.exceptions.ValidationException;
+import net.rroyo.jutils.utils.logging.Log;
 
 import static org.junit.jupiter.api.Assertions.*;
 

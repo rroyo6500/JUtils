@@ -1,4 +1,4 @@
-package rroyo.JUtils.Enums.CLI;
+package net.rroyo.jutils.enums.CLI;
 
 /**
  * Represents the supported primitive and standard data types for command options.

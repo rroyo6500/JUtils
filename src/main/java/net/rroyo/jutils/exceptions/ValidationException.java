@@ -1,4 +1,4 @@
-package rroyo.JUtils.Exceptions;
+package net.rroyo.jutils.exceptions;
 
 public class ValidationException extends RuntimeException {
     public ValidationException(String message) {
