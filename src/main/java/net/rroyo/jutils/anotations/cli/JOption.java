@@ -1,4 +1,4 @@
-package net.rroyo.jutils.anotations.CLI;
+package net.rroyo.jutils.anotations.cli;
 
 import net.rroyo.jutils.enums.cli.DataTypes;
 
