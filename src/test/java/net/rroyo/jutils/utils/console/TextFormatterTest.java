@@ -1,7 +1,5 @@
-package rroyo.JUtils.Utils.Console;
+package net.rroyo.jutils.utils.console;
 
-import net.rroyo.jutils.utils.console.TStyle;
-import net.rroyo.jutils.utils.console.TextFormatter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import net.rroyo.jutils.exceptions.ValidationException;

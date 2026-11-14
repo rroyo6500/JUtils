@@ -1,6 +1,5 @@
-package rroyo.JUtils.Utils.Core;
+package net.rroyo.jutils.utils.core;
 
-import net.rroyo.jutils.utils.core.Validator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import net.rroyo.jutils.exceptions.ValidationException;
