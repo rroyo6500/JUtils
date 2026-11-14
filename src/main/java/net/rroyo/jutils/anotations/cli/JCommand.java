@@ -1,4 +1,4 @@
-package net.rroyo.jutils.anotations.CLI;
+package net.rroyo.jutils.anotations.cli;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
