@@ -269,7 +269,7 @@ public final class ConsoleListener implements Runnable{
 
         if (matchList.isEmpty()) return;
 
-        String commandName = matchList.getFirst().toLowerCase();
+        String commandName = matchList.get(0).toLowerCase();
         String[] args = matchList.subList(1, matchList.size()).toArray(new String[0]);
 
         executeCommand(commandName, args);
