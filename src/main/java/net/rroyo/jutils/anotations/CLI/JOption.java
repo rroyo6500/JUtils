@@ -1,6 +1,6 @@
-package net.rroyo.jutils.anotations.cli;
+package net.rroyo.jutils.anotations.CLI;
 
-import net.rroyo.jutils.enums.cli.DataTypes;
+import net.rroyo.jutils.enums.CLI.DataTypes;
 
 import java.lang.annotation.*;
 

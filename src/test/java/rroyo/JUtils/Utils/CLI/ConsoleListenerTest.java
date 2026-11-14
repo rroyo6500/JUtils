@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import net.rroyo.jutils.anotations.CLI.JCommand;
 import net.rroyo.jutils.anotations.CLI.JOption;
-import net.rroyo.jutils.enums.cli.DataTypes;
+import net.rroyo.jutils.enums.CLI.DataTypes;
 import net.rroyo.jutils.utils.logging.Log;
 
 import java.lang.reflect.Field;
