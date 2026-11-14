@@ -1,6 +1,5 @@
-package rroyo.JUtils.Utils.Logging;
+package net.rroyo.jutils.utils.logging;
 
-import net.rroyo.jutils.utils.logging.Log;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;

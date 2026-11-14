@@ -1,12 +1,11 @@
-package rroyo.JUtils.Utils.CLI;
+package net.rroyo.jutils.utils.cli;
 
-import net.rroyo.jutils.utils.cli.ConsoleListener;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import net.rroyo.jutils.anotations.CLI.JCommand;
-import net.rroyo.jutils.anotations.CLI.JOption;
+import net.rroyo.jutils.anotations.cli.JCommand;
+import net.rroyo.jutils.anotations.cli.JOption;
 import net.rroyo.jutils.enums.cli.DataTypes;
 import net.rroyo.jutils.utils.logging.Log;
 

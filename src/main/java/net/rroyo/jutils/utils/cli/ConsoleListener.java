@@ -1,7 +1,7 @@
 package net.rroyo.jutils.utils.cli;
 
-import net.rroyo.jutils.anotations.CLI.JCommand;
-import net.rroyo.jutils.anotations.CLI.JOption;
+import net.rroyo.jutils.anotations.cli.JCommand;
+import net.rroyo.jutils.anotations.cli.JOption;
 import net.rroyo.jutils.enums.cli.DataTypes;
 import net.rroyo.jutils.utils.core.Validator;
 import net.rroyo.jutils.utils.io.ScannerAux;
@@ -269,7 +269,7 @@ public final class ConsoleListener implements Runnable{
 
         if (matchList.isEmpty()) return;
 
-        String commandName = matchList.get(0).toLowerCase();
+        String commandName = matchList.getFirst().toLowerCase();
         String[] args = matchList.subList(1, matchList.size()).toArray(new String[0]);
 
         executeCommand(commandName, args);
