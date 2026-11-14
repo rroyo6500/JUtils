@@ -1,6 +1,5 @@
-package rroyo.JUtils.Utils.IO;
+package net.rroyo.jutils.utils.io;
 
-import net.rroyo.jutils.utils.io.FileUtilHandler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
