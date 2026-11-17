@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class ConnectionManager {
+public final class ConnectionManager {
 
     private static String url = "jdbc:mysql://localhost:3306/";
     private static String database = "";
@@ -13,6 +13,8 @@ public class ConnectionManager {
     private static String password = "";
 
     private static Connection con;
+
+    private ConnectionManager() {}
 
     public static void connect() throws SQLException {
         con = DriverManager.getConnection(url + database, user, password);

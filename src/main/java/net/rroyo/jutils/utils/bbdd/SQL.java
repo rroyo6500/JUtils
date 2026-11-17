@@ -1,13 +1,12 @@
 package net.rroyo.jutils.utils.bbdd;
 
-import net.rroyo.jutils.utils.logging.Log;
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-public class SQL implements AutoCloseable{
+public final class SQL implements AutoCloseable{
+
     private final String sql;
     private final List<Object> values;
     private PreparedStatement ps;

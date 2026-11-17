@@ -14,10 +14,24 @@ public class Field {
     private final Table table;
     private final String fieldName;
 
+    private final String fieldStr;
+
     public Field(Table table, String fieldName) {
         this.table = table;
         this.fieldName = fieldName;
+
+        fieldStr = table + "." + fieldName;
     }
+
+    // Constructor privado para funciones
+    private Field(String function, Field field) {
+        this.table = field.table;
+        this.fieldName = field.fieldName;
+
+        fieldStr = function + '(' + field + ')';
+    }
+
+    // --- Condiciones ---
 
     public Condition eq(Object value) {
         if (value == null) return isNull();
@@ -59,7 +73,7 @@ public class Field {
 
     public Condition in(Collection<?> values) {
         if (values == null || values.isEmpty()) {
-            return new Condition("1 = 0"); // Evita error de sintaxis SQL IN ()
+            return new Condition("1 = 0");
         }
         String placeholders = values.stream()
                 .map(v -> "?")
@@ -88,13 +102,31 @@ public class Field {
         return new Condition(fieldName + " " + Syntax.Conditions.NOT_EQUAL + " " + otherField.toString());
     }
 
+    // --- Funciones SELECT ---
+
+    public Field min() {
+        return new Field(Syntax.Functions.MIN, this);
+    }
+
+    public Field max() {
+        return new Field(Syntax.Functions.MAX, this);
+    }
+
+    public Field sum() {
+        return new Field(Syntax.Functions.SUM, this);
+    }
+
+    public Field avg() {
+        return new Field(Syntax.Functions.AVG, this);
+    }
+
     public Table getTable() {
         return table;
     }
 
     @Override
     public String toString() {
-        return table + "." + fieldName;
+        return fieldStr;
     }
 
 }

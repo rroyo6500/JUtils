@@ -33,5 +33,14 @@ public final class Syntax {
 
     }
 
+    public static final class Functions {
+
+        public static final String MIN = "MIN";
+        public static final String MAX = "MAX";
+        public static final String SUM = "SUM";
+        public static final String AVG = "AVG";
+
+    }
+
 
 }
