@@ -20,9 +20,12 @@ public class InsertInto extends SQLSyntax {
 
         sqlBuilder.append(syntax(), table.toString());
         if (field.length > 0) {
-            fieldNum = field.length;
+            Field[] f = new Field[table.getColNum()];
+            System.arraycopy(field, 0, f, 0, table.getColNum());
+
+            fieldNum = f.length;
             sqlBuilder.append("(");
-            String fieldsString = Arrays.stream(field)
+            String fieldsString = Arrays.stream(f)
                     .map(Field::toString)
                     .collect(Collectors.joining(", "));
             sqlBuilder.append(fieldsString);

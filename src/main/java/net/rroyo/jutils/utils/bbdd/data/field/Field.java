@@ -1,6 +1,7 @@
 package net.rroyo.jutils.utils.bbdd.data.field;
 
 import net.rroyo.jutils.utils.bbdd.Syntax;
+import net.rroyo.jutils.utils.bbdd.data.table.Table;
 import net.rroyo.jutils.utils.bbdd.generator.Condition;
 
 import java.util.Arrays;
@@ -10,12 +11,13 @@ import java.util.stream.Collectors;
 
 public class Field {
 
+    private final Table table;
     private final String fieldName;
 
-    public Field(String fieldName) {
+    public Field(Table table, String fieldName) {
+        this.table = table;
         this.fieldName = fieldName;
     }
-
 
     public Condition eq(Object value) {
         if (value == null) return isNull();
@@ -86,10 +88,13 @@ public class Field {
         return new Condition(fieldName + " " + Syntax.Conditions.NOT_EQUAL + " " + otherField.toString());
     }
 
+    public Table getTable() {
+        return table;
+    }
 
     @Override
     public String toString() {
-        return fieldName;
+        return table + "." + fieldName;
     }
 
 }

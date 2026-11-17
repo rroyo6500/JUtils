@@ -42,4 +42,9 @@ public class Where extends SQLSyntax {
     public OrderBy orderBy(Field... field) throws SQLException {
         return new OrderBy(sqlBuilder, field);
     }
+
+    public Limit limit(int limit) {
+        return new Limit(sqlBuilder, limit);
+    }
+
 }

@@ -18,11 +18,11 @@ public final class SQLGenerator {
         return new SQLGenerator();
     }
 
-    public static Field field(String fieldName) {
-        return new Field(fieldName);
+    public static Field field(Table table, String fieldName) {
+        return new Field(table, fieldName);
     }
-    public static OrderedField field(String fieldName, OrderBy order) {
-        return new OrderedField(fieldName, order);
+    public static OrderedField field(Table table, String fieldName, OrderBy order) {
+        return new OrderedField(table, fieldName, order);
     }
     public static Table table(String tableName) {
         return Table.table(tableName);
@@ -57,8 +57,8 @@ public final class SQLGenerator {
         return new InsertInto(sqlBuilder, table, field);
     }
 
-    public Delete delete(Table table) {
-        return new Delete(sqlBuilder, table);
+    public DeleteFrom deleteFrom(Table table) {
+        return new DeleteFrom(sqlBuilder, table);
     }
 
     public Update update(Table table) {

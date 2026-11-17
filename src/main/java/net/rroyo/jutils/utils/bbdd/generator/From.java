@@ -45,4 +45,8 @@ public class From extends SQLSyntax {
         return new OrderBy(sqlBuilder, field);
     }
 
+    public Limit limit(int limit) {
+        return new Limit(sqlBuilder, limit);
+    }
+
 }

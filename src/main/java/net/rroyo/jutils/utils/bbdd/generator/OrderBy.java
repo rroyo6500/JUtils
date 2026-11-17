@@ -25,4 +25,9 @@ public class OrderBy extends SQLSyntax {
     protected String syntax() {
         return Syntax.ORDER_BY;
     }
+
+    public Limit limit(int limit) {
+        return new Limit(sqlBuilder, limit);
+    }
+
 }

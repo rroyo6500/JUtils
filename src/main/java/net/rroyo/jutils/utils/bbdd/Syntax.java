@@ -11,6 +11,7 @@ public final class Syntax {
     public static final String OR = "OR";
     public static final String GROUP_BY = "GROUP BY";
     public static final String ORDER_BY = "ORDER BY";
+    public static final String LIMIT = "LIMIT";
     public static final String INSERT_INTO = "INSERT INTO";
     public static final String VALUES = "VALUES";
     public static final String UPDATE = "UPDATE";

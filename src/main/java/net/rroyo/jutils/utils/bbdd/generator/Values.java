@@ -12,10 +12,10 @@ public class Values extends SQLSyntax {
     private final Table table;
     private int cols;
 
-    protected Values(SQLBuilder sqlBuilder, int fieldNum, Table table, Object... values) throws SQLException {
+    protected Values(SQLBuilder sqlBuilder, int colNum, Table table, Object... values) throws SQLException {
         super(sqlBuilder);
 
-        this.cols = fieldNum;
+        this.cols = colNum;
         this.table = table;
 
         sqlBuilder.append(syntax());
@@ -31,11 +31,7 @@ public class Values extends SQLSyntax {
             }
             sqlBuilder.append(")");
         } else {
-            cols = SQLGenerator.sql()
-                    .select()
-                    .from(table)
-                    .build().executeQuery()
-                    .getMetaData().getColumnCount();
+            cols = table.getColNum();
 
             sqlBuilder.append("(");
             for (int i = 1; i <= cols; i++) {

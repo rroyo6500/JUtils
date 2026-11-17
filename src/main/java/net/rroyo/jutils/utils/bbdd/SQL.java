@@ -8,7 +8,6 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class SQL implements AutoCloseable{
-
     private final String sql;
     private final List<Object> values;
     private PreparedStatement ps;
@@ -16,7 +15,6 @@ public class SQL implements AutoCloseable{
     public SQL(String sql, List<Object> values) {
         this.sql = sql;
         this.values = values;
-        Log.info("Generated SQL: " + sql);
     }
 
     public PreparedStatement getPreparedStatement() throws SQLException {
@@ -51,7 +49,7 @@ public class SQL implements AutoCloseable{
     }
 
     @Override
-    public void close() throws Exception {
+    public void close() throws SQLException {
         if (ps != null) {
             ps.close();
         }

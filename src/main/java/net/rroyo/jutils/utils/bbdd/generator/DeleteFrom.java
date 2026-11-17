@@ -3,9 +3,9 @@ package net.rroyo.jutils.utils.bbdd.generator;
 import net.rroyo.jutils.utils.bbdd.Syntax;
 import net.rroyo.jutils.utils.bbdd.data.table.Table;
 
-public class Delete extends SQLSyntax {
+public class DeleteFrom extends SQLSyntax {
 
-    protected Delete(SQLBuilder sqlBuilder, Table table) {
+    protected DeleteFrom(SQLBuilder sqlBuilder, Table table) {
         super(sqlBuilder);
 
         sqlBuilder.append(syntax(), table.toString());
