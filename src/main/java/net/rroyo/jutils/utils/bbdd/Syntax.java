@@ -3,6 +3,7 @@ package net.rroyo.jutils.utils.bbdd;
 public final class Syntax {
 
     public static final String SELECT = "SELECT";
+    public static final String DISTINCT = "DISTINCT";
     public static final String FROM = "FROM";
     public static final String WHERE = "WHERE";
     public static final String JOIN = "JOIN";
@@ -39,6 +40,7 @@ public final class Syntax {
         public static final String MAX = "MAX";
         public static final String SUM = "SUM";
         public static final String AVG = "AVG";
+        public static final String COUNT = "COUNT";
 
     }
 

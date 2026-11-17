@@ -11,10 +11,10 @@ import java.util.stream.Collectors;
 
 public class Field {
 
-    private final Table table;
-    private final String fieldName;
+    protected final Table table;
+    protected final String fieldName;
 
-    private final String fieldStr;
+    protected String fieldStr;
 
     public Field(Table table, String fieldName) {
         this.table = table;
@@ -23,12 +23,9 @@ public class Field {
         fieldStr = table + "." + fieldName;
     }
 
-    // Constructor privado para funciones
-    private Field(String function, Field field) {
-        this.table = field.table;
-        this.fieldName = field.fieldName;
-
-        fieldStr = function + '(' + field + ')';
+    public Field as(String colName) {
+        fieldStr = this + " AS " + colName;
+        return this;
     }
 
     // --- Condiciones ---
@@ -102,26 +99,12 @@ public class Field {
         return new Condition(fieldName + " " + Syntax.Conditions.NOT_EQUAL + " " + otherField.toString());
     }
 
-    // --- Funciones SELECT ---
-
-    public Field min() {
-        return new Field(Syntax.Functions.MIN, this);
-    }
-
-    public Field max() {
-        return new Field(Syntax.Functions.MAX, this);
-    }
-
-    public Field sum() {
-        return new Field(Syntax.Functions.SUM, this);
-    }
-
-    public Field avg() {
-        return new Field(Syntax.Functions.AVG, this);
-    }
-
     public Table getTable() {
         return table;
+    }
+
+    public String getFieldName() {
+        return fieldName;
     }
 
     @Override
