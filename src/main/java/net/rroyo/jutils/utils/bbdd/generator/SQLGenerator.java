@@ -2,6 +2,7 @@ package net.rroyo.jutils.utils.bbdd.generator;
 
 import net.rroyo.jutils.enums.bbdd.OrderBy;
 import net.rroyo.jutils.utils.bbdd.Syntax;
+import net.rroyo.jutils.utils.bbdd.data.Procedure;
 import net.rroyo.jutils.utils.bbdd.data.field.Field;
 import net.rroyo.jutils.utils.bbdd.data.field.FunctionField;
 import net.rroyo.jutils.utils.bbdd.data.table.Table;
@@ -92,6 +93,10 @@ public final class SQLGenerator {
 
     public Update update(Table table) {
         return new Update(sqlBuilder, table);
+    }
+
+    public Call call(Procedure procedure) {
+        return new Call(sqlBuilder, procedure);
     }
 
 }

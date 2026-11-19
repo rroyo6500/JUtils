@@ -12,7 +12,7 @@ public class From extends SQLSyntax {
     protected From(SQLBuilder sqlBuilder, Table table) {
         super(sqlBuilder);
 
-        sqlBuilder.append(syntax(), table.toString());
+        sqlBuilder.append(table.toString());
     }
 
     @Override

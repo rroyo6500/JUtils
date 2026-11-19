@@ -18,6 +18,7 @@ public final class Syntax {
     public static final String UPDATE = "UPDATE";
     public static final String SET = "SET";
     public static final String DELETE = "DELETE FROM";
+    public static final String CALL = "CALL";
 
     public static final class Conditions {
 

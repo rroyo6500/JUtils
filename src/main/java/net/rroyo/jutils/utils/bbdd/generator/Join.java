@@ -15,7 +15,7 @@ public class Join extends SQLSyntax {
         super(sqlBuilder);
         this.joinType = joinType;
 
-        sqlBuilder.append(syntax(), table.toString());
+        sqlBuilder.append(table.toString());
     }
 
     @Override

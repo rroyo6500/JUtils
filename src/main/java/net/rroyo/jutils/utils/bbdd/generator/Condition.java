@@ -1,6 +1,7 @@
 package net.rroyo.jutils.utils.bbdd.generator;
 
 import net.rroyo.jutils.utils.bbdd.Syntax;
+import net.rroyo.jutils.utils.bbdd.data.value.Value;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -9,14 +10,14 @@ import java.util.List;
 public class Condition {
 
     private final String sql;
-    private final List<Object> values;
+    private final List<Value> values;
 
-    public Condition(String sql, List<Object> values) {
+    public Condition(String sql, List<Value> values) {
         this.sql = sql;
         this.values = values != null ? new ArrayList<>(values) : new ArrayList<>();
     }
 
-    public Condition(String sql, Object... values) {
+    public Condition(String sql, Value... values) {
         this.sql = sql;
         this.values = new ArrayList<>();
         if (values != null) {
@@ -41,13 +42,13 @@ public class Condition {
 
         // Agrupamos con paréntesis si se combina con OR para respetar precedencia SQL
         String combinedSql = "(" + this.sql + " " + operator + " " + other.sql + ")";
-        List<Object> combinedValues = new ArrayList<>(this.values);
+        List<Value> combinedValues = new ArrayList<>(this.values);
         combinedValues.addAll(other.values);
 
         return new Condition(combinedSql, combinedValues);
     }
 
-    public List<Object> getValues() {
+    public List<Value> getValues() {
         return Collections.unmodifiableList(values);
     }
 

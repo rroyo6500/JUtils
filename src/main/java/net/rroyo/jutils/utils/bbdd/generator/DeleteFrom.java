@@ -8,7 +8,7 @@ public class DeleteFrom extends SQLSyntax {
     protected DeleteFrom(SQLBuilder sqlBuilder, Table table) {
         super(sqlBuilder);
 
-        sqlBuilder.append(syntax(), table.toString());
+        sqlBuilder.append(table.toString());
     }
 
     @Override

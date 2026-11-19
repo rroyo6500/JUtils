@@ -12,7 +12,6 @@ public class Select extends SQLSyntax {
     protected Select(SQLBuilder sqlBuilder, boolean distinct, Field... field) {
         super(sqlBuilder);
 
-        sqlBuilder.append(syntax());
         if (distinct) sqlBuilder.append(Syntax.DISTINCT);
         if (field.length == 0) sqlBuilder.append("*");
         else {

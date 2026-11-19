@@ -1,6 +1,7 @@
 package net.rroyo.jutils.utils.bbdd.generator;
 
 import net.rroyo.jutils.utils.bbdd.Syntax;
+import net.rroyo.jutils.utils.bbdd.data.value.Value;
 import net.rroyo.jutils.utils.bbdd.data.field.Field;
 
 import java.sql.SQLException;
@@ -9,14 +10,14 @@ import java.util.List;
 public class Where extends SQLSyntax {
 
     protected Where(SQLBuilder sqlBuilder, Condition condition) {
-        super(sqlBuilder);
+        super(sqlBuilder, false);
 
         init(syntax(), condition);
     }
 
     private void init(String syntax, Condition condition) {
         sqlBuilder.append(syntax, condition.toString());
-        List<Object> values = condition.getValues();
+        List<Value> values = condition.getValues();
         if (values != null && !values.isEmpty()) sqlBuilder.addValues(values);
     }
 

@@ -3,6 +3,7 @@ package net.rroyo.jutils.utils.bbdd.data.table;
 import net.rroyo.jutils.utils.bbdd.SQL;
 import net.rroyo.jutils.utils.bbdd.data.field.Field;
 
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -19,7 +20,7 @@ public final class Table {
 
     private int getTableColumnCount() {
         int columnCount = 0;
-        try (SQL sql = new SQL("SELECT * FROM " + tableName + " LIMIT 0", List.of())) {
+        try (SQL sql = new SQL("SELECT * FROM " + tableName + " LIMIT 0", List.of(), PreparedStatement.class)) {
             columnCount = sql.executeQuery().getMetaData().getColumnCount();
             error = false;
         } catch (SQLException ignored) {

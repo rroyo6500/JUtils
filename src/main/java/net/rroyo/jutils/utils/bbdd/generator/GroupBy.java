@@ -12,12 +12,12 @@ public class GroupBy extends SQLSyntax {
     protected GroupBy(SQLBuilder sqlBuilder, Field... field) throws SQLException {
         super(sqlBuilder);
 
-        if (field.length == 0) sqlBuilder.append(syntax(), "*");
+        if (field.length == 0) sqlBuilder.append("*");
         else {
             String fieldsString = Arrays.stream(field)
                     .map(Field::toString)
                     .collect(Collectors.joining(", "));
-            sqlBuilder.append(syntax(), fieldsString);
+            sqlBuilder.append(fieldsString);
         }
     }
 
