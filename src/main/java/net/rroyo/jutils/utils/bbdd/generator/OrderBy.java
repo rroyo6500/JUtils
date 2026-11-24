@@ -12,12 +12,12 @@ public class OrderBy extends SQLSyntax {
     protected OrderBy(SQLBuilder sqlBuilder, Field... field) throws SQLException {
         super(sqlBuilder);
 
-        if (field.length == 0) sqlBuilder.append(syntax(), "*");
+        if (field.length == 0) sqlBuilder.append("*");
         else {
             String fieldsString = Arrays.stream(field)
                     .map(Field::toString)
                     .collect(Collectors.joining(", "));
-            sqlBuilder.append(syntax(), fieldsString);
+            sqlBuilder.append(fieldsString);
         }
     }
 
@@ -25,4 +25,9 @@ public class OrderBy extends SQLSyntax {
     protected String syntax() {
         return Syntax.ORDER_BY;
     }
+
+    public Limit limit(int limit) {
+        return new Limit(sqlBuilder, limit);
+    }
+
 }

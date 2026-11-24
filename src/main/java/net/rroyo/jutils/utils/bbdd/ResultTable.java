@@ -25,6 +25,8 @@ public final class ResultTable {
      */
     private final Map<String, ArrayList<Object>> table = new LinkedHashMap<>();
 
+    private final ResultSet resultSet;
+
     /** Formatted ASCII table string. */
     private final String strTable;
 
@@ -58,7 +60,7 @@ public final class ResultTable {
         Validator.assertTrue(resultSet.getType() == ResultSet.TYPE_SCROLL_INSENSITIVE,
                 "ResultTable requires a ResultSet - 'TYPE_SCROLL_INSENSITIVE");
 
-        resultSet.beforeFirst();
+        this.resultSet = resultSet;
 
         ResultSetMetaData rsmd = resultSet.getMetaData();
         int columnCount = rsmd.getColumnCount();

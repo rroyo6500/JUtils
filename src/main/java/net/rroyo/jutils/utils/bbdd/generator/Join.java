@@ -15,7 +15,7 @@ public class Join extends SQLSyntax {
         super(sqlBuilder);
         this.joinType = joinType;
 
-        sqlBuilder.append(syntax(), table.toString());
+        sqlBuilder.append(table.toString());
     }
 
     @Override
@@ -39,6 +39,10 @@ public class Join extends SQLSyntax {
 
     public OrderBy orderBy(Field... field) throws SQLException {
         return new OrderBy(sqlBuilder, field);
+    }
+
+    public Limit limit(int limit) {
+        return new Limit(sqlBuilder, limit);
     }
 
 }
