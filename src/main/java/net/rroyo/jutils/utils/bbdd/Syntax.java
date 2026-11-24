@@ -3,6 +3,7 @@ package net.rroyo.jutils.utils.bbdd;
 public final class Syntax {
 
     public static final String SELECT = "SELECT";
+    public static final String DISTINCT = "DISTINCT";
     public static final String FROM = "FROM";
     public static final String WHERE = "WHERE";
     public static final String JOIN = "JOIN";
@@ -11,11 +12,13 @@ public final class Syntax {
     public static final String OR = "OR";
     public static final String GROUP_BY = "GROUP BY";
     public static final String ORDER_BY = "ORDER BY";
+    public static final String LIMIT = "LIMIT";
     public static final String INSERT_INTO = "INSERT INTO";
     public static final String VALUES = "VALUES";
     public static final String UPDATE = "UPDATE";
     public static final String SET = "SET";
     public static final String DELETE = "DELETE FROM";
+    public static final String CALL = "CALL";
 
     public static final class Conditions {
 
@@ -29,6 +32,16 @@ public final class Syntax {
         public static final String BETWEEN = "BETWEEN ? AND ";
         public static final String IN = "IN";
         public static final String LIKE = "LIKE";
+
+    }
+
+    public static final class Functions {
+
+        public static final String MIN = "MIN";
+        public static final String MAX = "MAX";
+        public static final String SUM = "SUM";
+        public static final String AVG = "AVG";
+        public static final String COUNT = "COUNT";
 
     }
 

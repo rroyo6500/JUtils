@@ -9,15 +9,16 @@ import java.util.stream.Collectors;
 
 public class Select extends SQLSyntax {
 
-    protected Select(SQLBuilder sqlBuilder, Field... field) {
+    protected Select(SQLBuilder sqlBuilder, boolean distinct, Field... field) {
         super(sqlBuilder);
 
-        if (field.length == 0) sqlBuilder.append(syntax(), "*");
+        if (distinct) sqlBuilder.append(Syntax.DISTINCT);
+        if (field.length == 0) sqlBuilder.append("*");
         else {
             String fieldsString = Arrays.stream(field)
                     .map(Field::toString)
                     .collect(Collectors.joining(", "));
-            sqlBuilder.append(syntax(), fieldsString);
+            sqlBuilder.append(fieldsString);
         }
 
     }

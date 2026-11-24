@@ -1,6 +1,7 @@
 package net.rroyo.jutils.utils.bbdd.generator;
 
 import net.rroyo.jutils.utils.bbdd.Syntax;
+import net.rroyo.jutils.utils.bbdd.data.value.Value;
 import net.rroyo.jutils.utils.bbdd.data.field.Field;
 import net.rroyo.jutils.utils.bbdd.data.table.Table;
 
@@ -18,11 +19,14 @@ public class InsertInto extends SQLSyntax {
 
         this.table = table;
 
-        sqlBuilder.append(syntax(), table.toString());
+        sqlBuilder.append(table.toString());
         if (field.length > 0) {
-            fieldNum = field.length;
+            Field[] f = new Field[table.getColNum()];
+            System.arraycopy(field, 0, f, 0, table.getColNum());
+
+            fieldNum = f.length;
             sqlBuilder.append("(");
-            String fieldsString = Arrays.stream(field)
+            String fieldsString = Arrays.stream(f)
                     .map(Field::toString)
                     .collect(Collectors.joining(", "));
             sqlBuilder.append(fieldsString);
@@ -37,6 +41,11 @@ public class InsertInto extends SQLSyntax {
     }
 
     public Values values(Object... values) throws SQLException {
+        Value[] v = Value.toArray(values);
+        return new Values(sqlBuilder, fieldNum, table, v);
+    }
+
+    public Values values(Value... values) throws SQLException {
         return new Values(sqlBuilder, fieldNum, table, values);
     }
 
