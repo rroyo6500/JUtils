@@ -1,12 +1,14 @@
 package net.rroyo.jutils.utils.bbdd.generator;
 
+import net.rroyo.jutils.utils.bbdd.data.value.Value;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public final class SQLBuilder {
 
     private final StringBuilder sql = new StringBuilder();
-    private final List<Object> values = new ArrayList<>();
+    private final List<Value> values = new ArrayList<>();
 
     public SQLBuilder() {
     }
@@ -19,11 +21,11 @@ public final class SQLBuilder {
         return this;
     }
 
-    public void addValues(List<Object> value) {
+    public void addValues(List<Value> value) {
         this.values.addAll(value);
     }
 
-    public List<Object> getValues() {
+    public List<Value> getValues() {
         return values;
     }
 

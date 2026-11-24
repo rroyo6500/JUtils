@@ -8,7 +8,7 @@ public class Update extends SQLSyntax{
     public Update(SQLBuilder sqlBuilder, Table table) {
         super(sqlBuilder);
 
-        sqlBuilder.append(syntax(), table.toString());
+        sqlBuilder.append(table.toString());
     }
 
     @Override
